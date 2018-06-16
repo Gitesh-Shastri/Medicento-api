@@ -1,9 +1,10 @@
 {
   "development": {
-    "username": "root",
-    "password": null,
+    "server": "db4free.net",
+    "username": "gitesh",
+    "password": "shastribr",
     "database": "medicento",
-    "host": "127.0.0.1",
+    "host": "db4free.net",
     "dialect": "mysql"
   },
   "test": {
