@@ -18,11 +18,6 @@ app.use(express.static("app/public"));
 areaRoutes(app, db);
 pharmaRoutes(app, db);
 
-app.use('/', (req, res, next) => {
-	res.send('Helow');
-});
-
-
 db.sequelize.sync().then(function () {
 	app.listen(PORT, function () {
         console.log(`listening on PORT ${PORT}`);
