@@ -15,10 +15,11 @@
     "dialect": "mysql"
   },
   "production": {
+    "server": "medicento.com",
     "username": "root",
-    "password": null,
-    "database": "database_production",
-    "host": "127.0.0.1",
+    "password": "root",
+    "database": "medicento",
+    "host": "medicento.com",
     "dialect": "mysql"
   }
 }

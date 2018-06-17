@@ -28,7 +28,7 @@ module.exports = function (app, db) {
 
     // Find Pharmacy By AreaID
     app.get('/pharmaByArea/:area_id', function (req, res) {
-        db.Pharmacy.find({
+        db.Pharmacy.findAll({
             where: {
                 AreaId: req.params.area_id
             }
