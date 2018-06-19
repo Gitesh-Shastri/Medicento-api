@@ -5,9 +5,33 @@ module.exports = function (app) {
 
     //Fetch All The Pharmacy
     app.get('/pharma', function (req, res) {
-        res.status(200).json({
-            message: "Handling get request to pharma"
-        });
+        Pharmacy.find()
+                .select('pharma_name pharma_address area')
+                .exec()
+                .then(docs => {
+                const response = {
+                    count: docs.length,
+                    areas: docs.map(doc => {
+                        return {
+                            pharma_name: doc.pharma_name,
+                            pharma_address: doc.pharma_address,
+                            _id: doc._id,
+                            area_id: doc.area,
+                            request: {
+                                type: 'GET',
+                                url: 'https://medicento-api.herokuapp.com/pharma/' + doc._id
+                            }
+                        }
+                    })
+                }
+                res.status(200).json(response);
+            })
+            .catch(err => {
+                console.log(err);
+                res.status(500).json({
+                    error: err
+                })
+            });   
     });
 
     // Add A New Pharmacy
