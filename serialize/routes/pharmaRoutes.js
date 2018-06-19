@@ -1,3 +1,6 @@
+const mongoose = require('mongoose');
+const Pharmacy = require('../models/pharmacy');
+
 module.exports = function (app) {
 
     //Fetch All The Pharmacy
@@ -9,9 +12,23 @@ module.exports = function (app) {
 
     // Add A New Pharmacy
     app.post('/pharma/new', function (req, res) {
-        res.status(200).json({
-            message: "Creating new  pharma"
+        const pharma = new Pharmacy({
+            _id: mongoose.Types.ObjectId(),
+            pharma_name: req.body.pharma_name,
+            area: req.body.area_id,
+            pharma_address: req.body.pharma_address
         });
+        pharma.save()
+              .then(result => {
+                console.log(result);
+                res.status(200).json(result);
+              })
+              .catch(err => {
+                console.log(err);
+                res.status(500).json({
+                    error: err
+                });
+              });
     });
 
     // Find Pharmacy By AreaID

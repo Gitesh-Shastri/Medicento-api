@@ -8,6 +8,8 @@ const mongoose = require('mongoose');
 
 const PORT = process.env.PORT || 3000;
 mongoose.connect('mongodb+srv://Gitesh:shastri1@cluster0-pwon0.mongodb.net/test?retryWrites=true');
+mongoose.Promise = global.Promise;
+
 app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
