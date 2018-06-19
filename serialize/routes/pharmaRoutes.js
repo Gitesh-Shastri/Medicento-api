@@ -57,9 +57,19 @@ module.exports = function (app) {
 
     // Find Pharmacy By AreaID
     app.get('/pharmaByArea/:area_id', function (req, res) {
-        res.status(200).json({
-            message: "Searching pharma by area_id"
-        });
+        const id = req.params.area_id;
+        Pharmacy.find({area: id})
+            .select('pharma_name pharma_address area')
+            .exec()
+            .then(doc => {
+                res.status(200).json(doc);
+            })
+            .catch(err => {
+                console.log(err);
+                res.status(404).json({
+                    message: "No Valid Entry for provided ID"
+                });
+            });
     });
 
     // Find Pharmacy By Name
