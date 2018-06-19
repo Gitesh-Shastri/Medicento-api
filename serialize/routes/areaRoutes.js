@@ -18,7 +18,7 @@ module.exports = function(app) {
                             _id: doc._id,
                             request: {
                                 type: 'GET',
-                                url: 'http://localhost:3000/area/' + doc._id
+                                url: 'https://medicento-api.herokuapp.com/area/' + doc._id
                             }
                         }
                     })
@@ -52,7 +52,7 @@ module.exports = function(app) {
                     _id: result._id,
                     request: {
                         type: 'GET',
-                        url: 'http://localhost:3000/area/' + result._id
+                        url: 'https://medicento-api.herokuapp.com/area/' + result._id
                     }
                 }
             });
