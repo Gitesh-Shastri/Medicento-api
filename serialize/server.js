@@ -4,9 +4,10 @@ const bodyParser = require('body-parser');
 const areaRoutes = require('./routes/areaRoutes.js');
 const pharmaRoutes = require('./routes/pharmaRoutes.js');
 const morgan = require('morgan');
+const mongoose = require('mongoose');
 
 const PORT = process.env.PORT || 3000;
-
+mongoose.connect('mongodb+srv://Gitesh:shastri1@cluster0-pwon0.mongodb.net/test?retryWrites=true');
 app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
