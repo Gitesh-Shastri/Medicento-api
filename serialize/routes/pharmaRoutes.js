@@ -65,7 +65,7 @@ module.exports = function (app) {
     // Find Pharmacy By Name
     app.get('/pharma/:id', function (req, res) {
         const id = req.params.id;
-        Area.findById(id)
+        pharmacy.findById(id)
             .select('pharma_name pharma_address area')
             .exec()
             .then(doc => {
