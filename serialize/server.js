@@ -1,7 +1,6 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
-const db = require('./models');
 const areaRoutes = require('./routes/areaRoutes.js');
 const pharmaRoutes = require('./routes/pharmaRoutes.js');
 const morgan = require('morgan');
@@ -25,8 +24,8 @@ app.use((req, res, next) => {
 	next();
 });
 
-areaRoutes(app, db);
-pharmaRoutes(app, db);
+areaRoutes(app);
+pharmaRoutes(app);
 
 app.use((req, res, next) => {
 	const error = new Error('Not Found');
@@ -43,9 +42,6 @@ app.use((error, req, res, next) => {
 	});
 });
 
-db.sequelize.sync().then(function () {
-	app.listen(PORT, function () {
-        console.log(`listening on PORT ${PORT}`);
-	});    
+app.listen(PORT, function () {
+    console.log(`listening on PORT ${PORT}`);
 });
-
