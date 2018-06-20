@@ -7,12 +7,11 @@ module.exports = function (app) {
     app.get('/pharma', function (req, res) {
         Pharmacy.find()
             .select('pharma_name pharma_address area')
-            .populate('area', 'area_name area_city area_state area_pincode')
                 .exec()
                 .then(docs => {
                 const response = {
                     count: docs.length,
-                    areas: docs.map(doc => {
+                    pharmas: docs.map(doc => {
                         return {
                             pharma_name: doc.pharma_name,
                             pharma_address: doc.pharma_address,
@@ -61,7 +60,6 @@ module.exports = function (app) {
         const id = req.params.area_id;
         Pharmacy.find({ area: id })
             .select('pharma_name pharma_address area')
-            .populate('area', 'area_name area_city area_state area_pincode')
             .exec()
             .then(doc => {
                 res.status(200).json(doc);
@@ -79,7 +77,6 @@ module.exports = function (app) {
         const id = req.params.id;
         Pharmacy.findById(id)
             .select('pharma_name pharma_address area')
-            .populate('area', 'area_name area_city area_state area_pincode')
             .exec()
             .then(doc => {
                 res.status(200).json(doc);
