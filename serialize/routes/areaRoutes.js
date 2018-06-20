@@ -19,7 +19,7 @@ router.get('/', function (req, res) {
                             _id: doc._id,
                             request: {
                                 type: 'GET',
-                                url: 'https://medicento-api.herokurouter.com/area/' + doc._id
+                                url: 'https://medicento-api.herokuapp.com/area/' + doc._id
                             }
                         }
                     })
