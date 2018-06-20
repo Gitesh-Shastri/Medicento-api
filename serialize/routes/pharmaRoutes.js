@@ -20,7 +20,7 @@ const router = express.Router();
                             area_id: doc.area,
                             request: {
                                 type: 'GET',
-                                url: 'https://medicento-api.herokurouter.com//' + doc._id
+                                url: 'https://medicento-api.herokurouter.com/pharma/' + doc._id
                             }
                         }
                     })
