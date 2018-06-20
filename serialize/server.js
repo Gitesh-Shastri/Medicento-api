@@ -1,9 +1,9 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
-const areaRoutes = require('./routes/areaRoutes.js');
-const pharmaRoutes = require('./routes/pharmaRoutes.js');
-const userRoutes = require('./routes/userRoutes.js');
+const areaRoutes = require('./routes/areaRoutes');
+const pharmaRoutes = require('./routes/pharmaRoutes');
+const userRoutes = require('./routes/userRoutes');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 const MONGODB_URI = "mongodb://GiteshMedi:shastri1@ds263590.mlab.com:63590/medicento"
@@ -28,9 +28,9 @@ app.use((req, res, next) => {
 	next();
 });
 
-areaRoutes(app);
-userRoutes(app);
-pharmaRoutes(app);
+app.use('/area', areaRoutes);
+app.use('/user', userRoutes);
+app.use('/pharma', pharmaRoutes);
 
 app.use((req, res, next) => {
 	const error = new Error('Not Found');

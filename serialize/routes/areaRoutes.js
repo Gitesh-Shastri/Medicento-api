@@ -1,8 +1,9 @@
 const Area = require('../models/area');
 const mongoose = require('mongoose');
+const express= require('express');
+const router = express.Router();
 
-module.exports = function(app) {
-    app.get('/area', function (req, res) {
+router.get('/', function (req, res) {
         Area.find()
             .select('area_city area_state area_pincode area_name')
             .exec()
@@ -18,7 +19,7 @@ module.exports = function(app) {
                             _id: doc._id,
                             request: {
                                 type: 'GET',
-                                url: 'https://medicento-api.herokuapp.com/area/' + doc._id
+                                url: 'https://medicento-api.herokurouter.com/area/' + doc._id
                             }
                         }
                     })
@@ -30,9 +31,9 @@ module.exports = function(app) {
                 res.status(500).json({
                     error: err
                 })
-            });
-    });
-    app.post('/area/new', function (req, res) {
+        });
+});
+router.post('/new', function (req, res) {
         const area = new Area({
             area_id: new mongoose.Types.ObjectId(),
             area_name: req.body.area_name,
@@ -52,7 +53,7 @@ module.exports = function(app) {
                     _id: result._id,
                     request: {
                         type: 'GET',
-                        url: 'https://medicento-api.herokuapp.com/area/' + result._id
+                        url: 'https://medicento-api.herokurouter.com/area/' + result._id
                     }
                 }
             });
@@ -61,7 +62,7 @@ module.exports = function(app) {
             console.log(err);
         });
     });
-    app.get('/area/:areaId', function(req, res) {
+    router.get('/:areaId', function(req, res) {
         const id = req.params.areaId;
         Area.findById(id)
             .select('area_city area_state area_pincode area_name')
@@ -76,7 +77,7 @@ module.exports = function(app) {
                 });
             });
     });
-    app.post('/area/update/:areaId', function(req, res) {
+    router.post('/update/:areaId', function(req, res) {
         const id = req.params.areaId;
         const updateOps = {};
         for (const ops of req.body) {
@@ -92,7 +93,7 @@ module.exports = function(app) {
                     res.status(500).json(err);
                 });
     });
-    app.post('/area/delete/:areaName', function (req, res) {
+router.post('/delete/:areaName', function (req, res) {
         const area_name = req.params.areaName;
         Area.findOneAndRemove({area_name: area_name})
             .exec()
@@ -105,5 +106,5 @@ module.exports = function(app) {
                     error: err
                 });
             });
-    });
-}
+});
+module.exports = router;

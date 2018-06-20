@@ -1,10 +1,11 @@
 const mongoose = require('mongoose');
 const Pharmacy = require('../models/pharmacy');
+const express= require('express');
+const router = express.Router();
 
-module.exports = function (app) {
 
     //Fetch All The Pharmacy
-    app.get('/pharma', function (req, res) {
+    router.get('', function (req, res) {
         Pharmacy.find()
             .select('pharma_name pharma_address area')
                 .exec()
@@ -19,7 +20,7 @@ module.exports = function (app) {
                             area_id: doc.area,
                             request: {
                                 type: 'GET',
-                                url: 'https://medicento-api.herokuapp.com/pharma/' + doc._id
+                                url: 'https://medicento-api.herokurouter.com//' + doc._id
                             }
                         }
                     })
@@ -35,7 +36,7 @@ module.exports = function (app) {
     });
 
     // Add A New Pharmacy
-    app.post('/pharma/new', function (req, res) {
+    router.post('/new', function (req, res) {
         const pharma = new Pharmacy({
             _id: mongoose.Types.ObjectId(),
             pharma_name: req.body.pharma_name,
@@ -56,7 +57,7 @@ module.exports = function (app) {
     });
 
     // Find Pharmacy By AreaID
-    app.get('/pharmaByArea/:area_id', function (req, res) {
+    router.get('ByArea/:area_id', function (req, res) {
         const id = req.params.area_id;
         Pharmacy.find({ area: id })
             .select('pharma_name pharma_address area')
@@ -73,7 +74,7 @@ module.exports = function (app) {
     });
 
     // Find Pharmacy By Name
-    app.get('/pharma/:id', function (req, res) {
+    router.get('/:id', function (req, res) {
         const id = req.params.id;
         Pharmacy.findById(id)
             .select('pharma_name pharma_address area')
@@ -90,7 +91,7 @@ module.exports = function (app) {
     });
 
     // Update Pharmacy By Name
-    app.post('/pharma/update/:pharmaId', function (req, res) {
+    router.post('/update/:pharmaId', function (req, res) {
         const id = req.params.pharmaId;
         const updateOps = {};
         for (const ops of req.body) {
@@ -108,7 +109,7 @@ module.exports = function (app) {
     });
 
     // Delete Pharmacy By Name
-    app.delete('/pharma/delete/:pharmaId', function (req, res) {
+    router.delete('/delete/:pharmaId', function (req, res) {
         const id = req.params.pharmaId;
         Pharmacy.findOneAndRemove({ _id: id })
             .exec()
@@ -122,4 +123,4 @@ module.exports = function (app) {
                 });
             });
     });
-}
+module.exports = router;

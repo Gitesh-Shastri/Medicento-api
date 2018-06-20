@@ -1,9 +1,10 @@
 const User = require('../models/user');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+const express= require('express');
+const router = express.Router();
 
-module.exports = function (app) {
-    app.get('/user', (req, res, next) => {
+router.get('/', (req, res, next) => {
         User.find()
             .exec()
             .then(users => {
@@ -15,7 +16,7 @@ module.exports = function (app) {
                 error: err
             });
     });
-    app.post('/user/signup', (req, res, next) => {
+router.post('/signup', (req, res, next) => {
         User.find({ useremail: req.body.useremail })
             .exec()
             .then(user => {
@@ -53,7 +54,7 @@ module.exports = function (app) {
                 }
             });
     }); 
-    app.delete('/user/:userId', (req, res, next) => {
+router.delete('/:userId', (req, res, next) => {
         User.findByIdAndRemove({ _id: req.params.userId })
             .exec()
             .then(resut => {
@@ -68,4 +69,4 @@ module.exports = function (app) {
                 });
             });
     });
-};
+module.exports = router;
