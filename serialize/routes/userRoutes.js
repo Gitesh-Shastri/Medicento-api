@@ -54,7 +54,7 @@ router.post('/salesPerson', (req, res, next) => {
                 });
              
             }) });
-router.post('/login', (req, res, next) => {
+router.get('/login', (req, res, next) => {
     User.findOne({ useremail: req.query.useremail, password: req.query.password })
         .exec()
         .then(user => {
