@@ -6,7 +6,7 @@ const pharmaRoutes = require('./routes/pharmaRoutes');
 const userRoutes = require('./routes/userRoutes');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
-const MONGODB_URI = "mongodb://GiteshMedi:shastri1@ds263590.mlab.com:63590/medicento"
+const MONGODB_URI = "mongodb://GiteshMedi:shastri1@ds263590.mlab.com:63590/medicento";
 const PORT = process.env.PORT || 3000;
 mongoose.connect(MONGODB_URI);
 mongoose.Promise = global.Promise;
