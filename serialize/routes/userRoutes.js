@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
 const express= require('express');
 const router = express.Router();
 const User = require('../models/user');
@@ -25,16 +24,10 @@ router.post('/signup', (req, res, next) => {
                         message: "Mail Exists"
                     });
                 } else {
-                    bcrypt.hash(req.body.password, 10, (err, hash) => {
-                        if (err) {
-                            return res.status(500).json({
-                                error: err
-                            })
-                        } else {
-                            const user = new User({
+                    const user = new User({
                                 _id: mongoose.Types.ObjectId(),
                                 useremail: req.body.useremail,
-                                password: hash
+                                password: req.body.password
                             });
                             user.save()
                                 .then(result => {
@@ -49,10 +42,8 @@ router.post('/signup', (req, res, next) => {
                                         error: err
                                     });
                                 });
-                        }
-                    });
                 }
-            });
+    });
     }); 
 router.delete('/:userId', (req, res, next) => {
         User.findByIdAndRemove({ _id: req.params.userId })
