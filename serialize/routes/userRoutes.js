@@ -55,11 +55,7 @@ router.post('/salesPerson', (req, res, next) => {
              
             }) });
 router.post('/login', (req, res, next) => {
-<<<<<<< HEAD
-    User.findOne({ useremail: req.query.useremail ,password: req.query.password})
-=======
     User.findOne({ useremail: req.query.useremail, password: req.query.password })
->>>>>>> fdc21bb2441d73407f1178efab09efb46724d577
         .exec()
         .then(user => {
             console.log(user);
