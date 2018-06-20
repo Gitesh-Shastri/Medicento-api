@@ -11,6 +11,11 @@ const personSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    Allocated_Area: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Area",
+        required: true
+    },
     Total_sales: {
         type: Number,
         default: 0

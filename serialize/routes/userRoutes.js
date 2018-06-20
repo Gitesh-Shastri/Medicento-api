@@ -18,11 +18,11 @@ router.get('/', (req, res, next) => {
             });
     });
 router.get('/salesPerson', (req, res, next) => {
-        Person.find()
-            .exec()
+    Person.find()
+             .exec()
             .then(users => {
                 res.status(200).json({
-                    user: users
+                    SalesPersons: users
                 });
             })
             .catch(err => {
@@ -34,6 +34,7 @@ router.post('/salesPerson', (req, res, next) => {
         _id: mongoose.Types.ObjectId(),
         user: req.body.userid,
         Name: req.body.name,
+        Allocated_Area: req.body.areaid,
         Total_sales: req.body.tsales,
         No_of_order: req.body.orders,
         Returns: req.body.returns,
