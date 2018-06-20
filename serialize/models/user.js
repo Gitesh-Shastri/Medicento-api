@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+/*const mongoose = require('mongoose');
 
 const userSchema = mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
@@ -14,3 +14,4 @@ const userSchema = mongoose.Schema({
 });
 
 module.exports = mongoose.model('User', userSchema);
+*/

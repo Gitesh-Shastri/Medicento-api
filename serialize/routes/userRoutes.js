@@ -1,4 +1,4 @@
-const User = require('../models/user');
+/*const User = require('../models/user');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const express= require('express');
@@ -71,3 +71,4 @@ router.delete('/:userId', (req, res, next) => {
     });
 
 module.exports = router;
+*/
