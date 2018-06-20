@@ -6,7 +6,8 @@ module.exports = function (app) {
     //Fetch All The Pharmacy
     app.get('/pharma', function (req, res) {
         Pharmacy.find()
-                .select('pharma_name pharma_address area')
+            .select('pharma_name pharma_address area')
+            .populate('area', 'area_name area_city area_state area_pincode')
                 .exec()
                 .then(docs => {
                 const response = {
@@ -58,8 +59,9 @@ module.exports = function (app) {
     // Find Pharmacy By AreaID
     app.get('/pharmaByArea/:area_id', function (req, res) {
         const id = req.params.area_id;
-        Pharmacy.find({area: id})
+        Pharmacy.find({ area: id })
             .select('pharma_name pharma_address area')
+            .populate('area', 'area_name area_city area_state area_pincode')
             .exec()
             .then(doc => {
                 res.status(200).json(doc);
@@ -77,6 +79,7 @@ module.exports = function (app) {
         const id = req.params.id;
         Pharmacy.findById(id)
             .select('pharma_name pharma_address area')
+            .populate('area', 'area_name area_city area_state area_pincode')
             .exec()
             .then(doc => {
                 res.status(200).json(doc);
@@ -90,16 +93,36 @@ module.exports = function (app) {
     });
 
     // Update Pharmacy By Name
-    app.post('/pharma/update/:pharmaName', function (req, res) {
-        res.status(200).json({
-            message: "Updating pharma"
-        });
+    app.post('/pharma/update/:pharmaId', function (req, res) {
+        const id = req.params.pharmaId;
+        const updateOps = {};
+        for (const ops of req.body) {
+            updateOps[ops.propName] = ops.value;
+        }
+        Pharmacy.update({ _id: id }, { $set: updateOps })
+            .exec()
+            .then(result => {
+                console.log(result);
+                res.status(200).json(result);
+            })
+            .catch(err => {
+                res.status(500).json(err);
+            });
     });
 
     // Delete Pharmacy By Name
-    app.delete('/pharma/delete/:pharmaName', function (req, res) {
-        res.status(200).json({
-            message: "Deleting pharma"
-        });
+    app.delete('/pharma/delete/:pharmaId', function (req, res) {
+        const id = req.params.pharmaId;
+        Pharmacy.findOneAndRemove({ _id: id })
+            .exec()
+            .then(result => {
+                res.status(200).json(result);
+            })
+            .catch(err => {
+                console.log(err);
+                res.status(500).json({
+                    error: err
+                });
+            });
     });
 }
