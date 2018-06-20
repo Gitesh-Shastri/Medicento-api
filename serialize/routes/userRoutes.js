@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 const express= require('express');
 const router = express.Router();
 const User = require('../models/user');
+const Area = require('../models/area');
+const Person = require('../models/sperson');
 
 router.get('/', (req, res, next) => {
         User.find()
@@ -15,6 +17,61 @@ router.get('/', (req, res, next) => {
                 error: err
             });
     });
+router.get('/salesPerson', (req, res, next) => {
+        Person.find()
+            .exec()
+            .then(users => {
+                res.status(200).json({
+                    user: users
+                });
+            })
+            .catch(err => {
+                error: err
+            });
+    });
+router.post('/salesPerson', (req, res, next) => {
+    const person = new Person({
+        _id: mongoose.Types.ObjectId(),
+        user: req.body.userid,
+        Name: req.body.name,
+        Total_sales: req.body.tsales,
+        No_of_order: req.body.orders,
+        Returns: req.body.returns,
+        Earnings: req.body.earnings
+    });
+    person.save()
+          .then(result => {
+                console.log(result);
+                res.status(201).json({
+                    message: "Sales Person Details !"
+                });
+                })
+          .catch(err => { 
+                console.log(err);
+                res.status(500).json({
+                    error: err
+                });
+             
+            }) });
+router.post('/login', (req, res, next) => {
+    User.findOne({ useremail: req.body.useremail })
+        .exec()
+        .then(user => {
+            console.log(user);
+            Person.find({user: user._id})
+                  .exec()
+                  .then(doc => {
+                    res.status(200).json({
+                        Sales_Person: doc
+                    })  
+                  });
+        })
+        .catch(err => {
+            res.status(500).json({
+                message: "Invalid Useremail or password"
+            });
+        });
+});
 router.post('/signup', (req, res, next) => {
         User.find({ useremail: req.body.useremail })
             .exec()
