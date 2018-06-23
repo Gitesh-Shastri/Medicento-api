@@ -9,7 +9,7 @@ const router = express.Router();
 router.get('/medimap', (req, res) => {
     ProductAndMedi.find()
         .populate('product_id', 'medicento_name company_name')
-        .populate('inventory_product_id', 'price_to_seller product_name')
+        .populate('inventory_product_id', 'price_to_seller')
         .exec()
          .then(docs => {
          res.status(200).json({
