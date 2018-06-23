@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const areaRoutes = require('./routes/areaRoutes');
 const pharmaRoutes = require('./routes/pharmaRoutes');
 const userRoutes = require('./routes/userRoutes');
+const productRoutes = require('./routes/productRoutes');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 const MONGODB_URI = "mongodb://GiteshMedi:shastri1@ds263590.mlab.com:63590/medicento";
@@ -29,6 +30,7 @@ app.use((req, res, next) => {
 });
 
 app.use('/area', areaRoutes);
+app.use('/product', productRoutes);
 app.use('/user', userRoutes);
 app.use('/pharma', pharmaRoutes);
 
