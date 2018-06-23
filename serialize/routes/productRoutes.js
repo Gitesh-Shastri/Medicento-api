@@ -12,9 +12,18 @@ router.get('/medimap', (req, res) => {
         .populate('inventory_product_id', 'price_to_seller')
         .exec()
          .then(docs => {
-         res.status(200).json({
-             Product: docs
-         });
+            const response = {
+                    count: docs.length,
+                    products: docs.map(doc => {
+                        return {
+                            medicento_name: doc.product_id.medicento_name,
+                            company_name: doc.product_id.company_name,
+                            price: doc.inventory_product_id.price_to_seller,
+                            _id: doc._id
+                        }
+                    })
+                }
+                res.status(200).json(response);
         })
         .catch(err => {
             console.log(err);
