@@ -8,52 +8,48 @@ const SalesOrderSchema = mongoose.Schema({
 	},
 	pharmacy_id: {
 		type: mongoose.Schema.Types.ObjectId,
-		ref: 'Pharmacy'
+        ref: 'Pharmacy',
+        required: true
 	},
 	payment_id: {
-		type: String,
-		required: true
+		type: String
 	},
 	order_code: {
-		type: String,
-		required: true
+		type: String
 	},
 	payment_type: {
-		type: String,
-		required: true
+		type: String
 	},
 	delivery_person_id: {
-		type: String,
-		required: true
+		type: String
 	},
 	sales_person_id: {
 		type: mongoose.Schema.Types.ObjectId,
-		ref: 'Person'
+        ref: 'Person',
+        required: true
 	},
 	status: {
-		type: String,
-		required: true
+        type: String,
+        required: true
 	},
 	invoice_id: {
-		type: String,
-		required: true
+		type: String
 	},
 	tax_amount: {
-		type: String,
-		required: true
+		type: String
 	},
 	grand_total: {
 		type: String,
 		required: true
-	},
-	timestamps: true,
+    },
+    created_at: {
+        type: Date
+    },
 	shipping_address_id: {
-		type: String,
-		required: true
+		type: String
 	},
 	billing_address: {
-		type: String,
-		required: true
+		type: String
 	},
 	customer_session_id: {
 		type: String

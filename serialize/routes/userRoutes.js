@@ -28,7 +28,7 @@ router.get('/salesPerson', (req, res, next) => {
             .catch(err => {
                 error: err
             });
-    });
+});
 router.post('/salesPerson', (req, res, next) => {
     const person = new Person({
         _id: mongoose.Types.ObjectId(),
