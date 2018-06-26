@@ -69,7 +69,11 @@ router.post('/order', (req, res, next) => {
             total_amount: req.body[i].cost
         }).save();
     }
-    res.send('Order Placed with order_id:' + orderid + ' Delivery Date : ' + delivery_date);
+    res.status(200).json({
+        message: "Order has been placed successfully",
+        order_id: orderid,
+        delivery_date: delivery_date 
+    });
 });
 router.get('/order', (req, res, next) => {
     Order.find()
