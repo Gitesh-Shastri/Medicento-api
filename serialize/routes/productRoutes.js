@@ -55,7 +55,13 @@ router.post('/order', (req, res, next) => {
     order.sales_person_id = req.body[0].salesperson_id;
     order.grand_total = total;
     order.status = 'active';
-    order.save();
+    order.save()
+         .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                error: err;
+            });
+    });
     orderid = order._id;
     for (i = 0; i < count; i++) {
         const orderItem = new OrderItem({
