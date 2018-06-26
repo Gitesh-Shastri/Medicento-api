@@ -56,7 +56,6 @@ router.post('/order', (req, res, next) => {
     order.grand_total = total;
     order.status = 'active';
     order.save();
-    });
     orderid = order._id;
     for (i = 0; i < count; i++) {
         const orderItem = new OrderItem({
