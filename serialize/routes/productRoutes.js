@@ -72,7 +72,7 @@ router.post('/order', (req, res, next) => {
     res.status(200).json({
         message: "Order has been placed successfully",
         order_id: orderid,
-        delivery_date: delivery_date 
+        delivery_date: delivery_date.toDateString()
     });
 });
 router.get('/order', (req, res, next) => {
