@@ -37,7 +37,7 @@ router.get('/medimap', (req, res) => {
 
 router.post('/order', (req, res, next) => {
     date = new Date(); 
-    delivery_date = date + 3*24*60*60*1000);
+    delivery_date = date + 3*24*60*60*1000;
     date.toLocaleString();  
     localDate = "" + date;
     count = req.body.length;
