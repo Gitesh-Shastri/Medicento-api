@@ -4,6 +4,7 @@ const router = express.Router();
 const User = require('../models/user');
 const Area = require('../models/area');
 const Person = require('../models/sperson');
+const jwt = require('jsonwebtoken');
 
 router.get('/', (req, res, next) => {
         User.find()
@@ -16,7 +17,8 @@ router.get('/', (req, res, next) => {
             .catch(err => {
                 error: err
             });
-    });
+});
+
 router.get('/salesPerson', (req, res, next) => {
     Person.find()
              .exec()
@@ -29,6 +31,7 @@ router.get('/salesPerson', (req, res, next) => {
                 error: err
             });
 });
+
 router.post('/salesPerson', (req, res, next) => {
     const person = new Person({
         _id: mongoose.Types.ObjectId(),
@@ -52,8 +55,9 @@ router.post('/salesPerson', (req, res, next) => {
                 res.status(500).json({
                     error: err
                 });
-             
+         
             }) });
+
 router.get('/login', (req, res, next) => {
     User.findOne({ useremail: req.query.useremail, password: req.query.password })
         .exec()
@@ -73,6 +77,46 @@ router.get('/login', (req, res, next) => {
             });
         });
 });
+
+router.post('/login', (req, res, next) => {
+    console.log(req.body);
+    User.findOne({ useremail: req.body.useremail })
+        .exec()
+        .then(user => {
+            if (user.length < 1) {
+                return res.status(401).json({
+                    message: 'Auth failed'
+                });
+            } else {
+                if (user.password == req.body.password) {
+                    const token = jwt.sign({
+                        useremail: user.useremail,
+                        userId: user._id
+                    },
+                        process.env.JWT_KEY,
+                        {
+                            expiresIn: "2 days"
+                        }
+                    );
+                    return res.status(200).json({
+                        message: 'Auth successful',
+                        token: token
+                    });
+                } else {
+                    return res.status(401).json({
+                        message: 'Auth failed'
+                    });
+                }
+            }
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                error: err
+            });
+        });
+});
+
 router.post('/signup', (req, res, next) => {
         User.find({ useremail: req.body.useremail })
             .exec()
@@ -102,7 +146,8 @@ router.post('/signup', (req, res, next) => {
                                 });
                 }
     });
-    }); 
+});
+
 router.delete('/:userId', (req, res, next) => {
         User.findByIdAndRemove({ _id: req.params.userId })
             .exec()

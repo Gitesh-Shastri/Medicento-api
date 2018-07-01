@@ -7,9 +7,11 @@ const userRoutes = require('./routes/userRoutes');
 const productRoutes = require('./routes/productRoutes');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
-const MONGODB_URI = "mongodb://GiteshMedi:shastri1@ds263590.mlab.com:63590/medicento";
+const MONGODB_URI = process.env.MONGODB_URI;
 const PORT = process.env.PORT || 3000;
-mongoose.connect(MONGODB_URI);
+mongoose.connect(MONGODB_URI, function () {
+    console.log('connected to DB');
+});
 mongoose.Promise = global.Promise;
 
 app.use(morgan('dev'));
@@ -33,6 +35,12 @@ app.use('/area', areaRoutes);
 app.use('/product', productRoutes);
 app.use('/user', userRoutes);
 app.use('/pharma', pharmaRoutes);
+
+app.use('/', (req, res, next) => {
+	res.status(200).json({
+		message: "API Documentation"
+	})
+});
 
 app.use((req, res, next) => {
 	const error = new Error('Not Found');

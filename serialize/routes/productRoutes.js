@@ -1,4 +1,5 @@
 const Product = require('../models/Product');
+const Person = require('../models/sperson');
 const InventoryProduct = require('../models/InventoryProduct');
 const ProductAndMedi = require('../models/productandmedi');
 const Inventory = require('../models/Inventory');
@@ -36,14 +37,13 @@ router.get('/medimap', (req, res) => {
 });
 
 router.post('/order', (req, res, next) => {
-    date = new Date(); 
-    delivery_date = new Date(+new Date() + 3*24*60*60*1000);
-    date.toLocaleTimeString();  
+    date = new Date();
+    delivery_date = new Date(+new Date() + 3 * 24 * 60 * 60 * 1000);
+    date.toLocaleTimeString();
     localDate = "" + date;
     count = req.body.length;
     total = 0;
     orderid = '';
-    console.log(count);
     for (i = 0; i < count; i++) {
         cost = Number(req.body[i].cost);
         total += cost;
@@ -69,8 +69,20 @@ router.post('/order', (req, res, next) => {
             total_amount: req.body[i].cost
         }).save();
     }
-    res.send('Order Placed with order_id:' + orderid + ' Delivery Date : ' + delivery_date);
+    console.log(req.body[0].salesperson_id);
+    Person.findOne({ _id:req.body[0].salesperson_id })
+        .exec()
+        .then(sales => {
+            console.log(sales._id);
+            Person.findByIdAndUpdate(sales._id,
+                { Total_sales: sales.Total_sales + 1, No_of_order: sales.No_of_order + 1, Earnings: sales.Earnings + 20 },
+                { new: true }, (err, updated) => {
+                    console.log(updated);
+                    res.send('Order Placed with order_id:' + orderid + ' Delivery Date : ' + delivery_date);
+                });
+        })
 });
+
 router.get('/order', (req, res, next) => {
     Order.find()
         .exec()

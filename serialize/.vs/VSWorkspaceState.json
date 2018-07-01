@@ -1,9 +1,10 @@
 {
   "ExpandedNodes": [
     "",
+    "\\controllers",
     "\\models",
     "\\routes"
   ],
-  "SelectedNode": "\\routes\\productRoutes.js",
+  "SelectedNode": "\\controllers\\areas.js",
   "PreviewInSolutionExplorer": false
 }

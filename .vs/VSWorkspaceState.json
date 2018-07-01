@@ -1,0 +1,11 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\serialize",
+    "\\serialize\\controllers",
+    "\\serialize\\middleware",
+    "\\serialize\\routes"
+  ],
+  "SelectedNode": "\\serialize\\controllers\\areas.js",
+  "PreviewInSolutionExplorer": false
+}
