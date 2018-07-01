@@ -78,7 +78,7 @@ router.post('/order', (req, res, next) => {
         .then(sales => {
             console.log(sales._id);
             Person.findByIdAndUpdate(sales._id,
-                { Total_sales: sales.Total_sales + 1, No_of_order: sales.No_of_order + 1, Earnings: sales.Earnings + 20 },
+                { Total_sales: sales.Total_sales+total, No_of_order: sales.No_of_order + 1, Earnings: sales.Earnings + 20 },
                 { new: true }, (err, updated) => {
                     console.log(updated);
                     res.status(200).json({
