@@ -72,7 +72,6 @@ router.post('/order', (req, res, next) => {
             total_amount: req.body[i].cost
         }).save();
     }
-<<<<<<< HEAD
     console.log(req.body[0].salesperson_id);
     Person.findOne({ _id:req.body[0].salesperson_id })
         .exec()
@@ -82,16 +81,14 @@ router.post('/order', (req, res, next) => {
                 { Total_sales: sales.Total_sales + 1, No_of_order: sales.No_of_order + 1, Earnings: sales.Earnings + 20 },
                 { new: true }, (err, updated) => {
                     console.log(updated);
-                    res.send('Order Placed with order_id:' + orderid + ' Delivery Date : ' + delivery_date);
-                });
-        })
-=======
-    res.status(200).json({
+                    res.status(200).json({
         message: "Order has been placed successfully",
         order_id: orderid,
         delivery_date: delivery_date.toDateString()
-    });
->>>>>>> c06ac946c63fdfa8b68c99c5eb57c4547a900c4e
+                });
+            });
+        })
+    
 });
 
 router.get('/order', (req, res, next) => {
