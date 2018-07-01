@@ -4,7 +4,7 @@ const router = express.Router();
 const checkAuth = require('../middleware/check-auth');
 const AreasController = require('../controllers/areas');
 
-router.get('/', checkAuth, AreasController.area_get_all);
+router.get('/', AreasController.area_get_all);
 router.post('/new', AreasController.orders_create_area);
     router.get('/:areaId', function(req, res) {
         const id = req.params.areaId;
