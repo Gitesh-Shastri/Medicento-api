@@ -1,4 +1,5 @@
 const Product = require('../models/Product');
+const Delivery = require('../models/deliveryPerson');
 const Person = require('../models/sperson');
 const InventoryProduct = require('../models/InventoryProduct');
 const ProductAndMedi = require('../models/productandmedi');
@@ -34,6 +35,36 @@ router.get('/medimap', (req, res) => {
                 error: err
             })
         });
+});
+
+router.get('/delivery', (req, res, next) => {
+    Delivery.findOne({ user_email: req.query.user_email, password: req.query.password }).exec().then(doc => {
+        res.status(201).json({
+            is_first_time_sign_in: doc.is_first_time_sign_in,
+            user_name: doc.user_name,
+            full_name: doc.full_name,
+            phone_no: doc.phone_no,
+            date_of_birth: doc.date_of_birth,
+            total_deliveries: doc.total_deliveries,
+            avg_delivery_time: doc.avg_delivery_time
+        })
+    })   
+});
+
+router.post('/delivery', (req, res, next) => {
+    const delivery = new Delivery(req.body).save()
+    .then( doc => {
+        console.log(doc);
+        res.status(201).json({
+            doc: doc
+        })
+    })
+    .catch( err => {
+        console.log(err);
+        res.status(500).json({
+            err: err
+        })
+    });
 });
 
 router.post('/order', (req, res, next) => {
