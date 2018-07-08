@@ -102,7 +102,7 @@ router.post('/order', (req, res, next) => {
     order.grand_total = total;
     order.status = 'active';
     for(i=0;i< count;i++){
-        order.orders.push(orders[i]);    
+        order.order_items.push(orders[i]);    
     }
     order.save();
     Person.findOne({ _id:req.body[0].salesperson_id })
