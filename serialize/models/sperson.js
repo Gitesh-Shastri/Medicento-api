@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+var Float = require('mongoose-float').loadType(mongoose);
 
 const personSchema = mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
@@ -18,7 +19,7 @@ const personSchema = mongoose.Schema({
     },
     commission: {
         type: Number,
-        default: 0
+        default: 0.22
     },
     Return_value: {
         type: Number,

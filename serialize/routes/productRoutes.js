@@ -103,15 +103,13 @@ router.post('/order', (req, res, next) => {
             total_amount: req.body[i].cost
         }).save();
     }
-    console.log(req.body[0].salesperson_id);
     Person.findOne({ _id:req.body[0].salesperson_id })
         .exec()
         .then(sales => {
-            console.log(sales._id);
-            Person.findByIdAndUpdate(sales._id,
-                { Total_sales: sales.Total_sales + total, No_of_order: sales.No_of_order + 1, Earnings: sales.Commission * sales.Total_sales },
-                { new: true }, (err, updated) => {
-                    console.log(updated);
+            console.log("Sales id : " , sales);
+            Person.update({_id: sales._id},
+                { Total_sales: sales.Total_sales+total, No_of_order: sales.No_of_order+1, Earnings: sales.commission*(sales.Total_sales+total)})
+                .exec().then((err, updated) => {
                     res.status(200).json({
         message: "Order has been placed successfully",
         order_id: orderid,

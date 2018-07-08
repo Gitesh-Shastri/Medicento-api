@@ -16,6 +16,7 @@
     "express": "^4.16.3",
     "jsonwebtoken": "^8.3.0",
     "mongoose": "^5.1.5",
+    "mongoose-float": "^1.0.2",
     "morgan": "^1.9.0",
     "mysql2": "^1.5.3",
     "nodemon": "^1.17.5",
