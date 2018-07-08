@@ -7,7 +7,7 @@ const Inventory = require('../models/Inventory');
 const OrderItem = require('../models/SalesOrderItem');
 const Order = require('../models/SalesOrder');
 const mongoose = require('mongoose');
-const express = require('express');
+const express = require('express'); 
 const router = express.Router();
 
 router.get('/medimap', (req, res) => {
@@ -109,7 +109,7 @@ router.post('/order', (req, res, next) => {
         .then(sales => {
             console.log(sales._id);
             Person.findByIdAndUpdate(sales._id,
-                { Total_sales: sales.Total_sales+total, No_of_order: sales.No_of_order + 1, Earnings: sales.Earnings + 20 },
+                { Total_sales: sales.Total_sales + total, No_of_order: sales.No_of_order + 1, Earnings: sales.Commission * sales.Total_sales },
                 { new: true }, (err, updated) => {
                     console.log(updated);
                     res.status(200).json({

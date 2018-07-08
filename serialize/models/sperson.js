@@ -16,6 +16,14 @@ const personSchema = mongoose.Schema({
         ref: "Area",
         required: true
     },
+    commission: {
+        type: Number,
+        default: 0
+    },
+    Return_value: {
+        type: Number,
+        default: 0
+    },
     Total_sales: {
         type: Number,
         default: 0
