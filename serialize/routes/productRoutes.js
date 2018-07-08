@@ -82,27 +82,29 @@ router.post('/order', (req, res, next) => {
         cost = Number(req.body[i].cost);
         total += cost;
     }
-    const order = new Order();
-    order.created_at = localDate;
-    order.sales_order_id = new mongoose.Types.ObjectId();
-    order.pharmacy_id = req.body[0].pharma_id;
-    order.sales_person_id = req.body[0].salesperson_id;
-    order.grand_total = total;
-    order.status = 'active';
-    order.save();
-    orderid = order._id;
+    orders = [];
     for (i = 0; i < count; i++) {
         const orderItem = new OrderItem({
-            sales_item_id: new mongoose.Types.ObjectId(),
-            sales_order_id: order.id,
             quantity: req.body[i].qty,
             paid_price: req.body[i].rate,
             created_at: localDate,
             medicento_name: req.body[i].medicento_name,
             company_name: req.body[i].company_name,
             total_amount: req.body[i].cost
-        }).save();
+        });
+        orderItem.save();
+        orders.push(orderItem._id);
     }
+    const order = new Order();
+    order.created_at = localDate;
+    order.pharmacy_id = req.body[0].pharma_id;
+    order.sales_person_id = req.body[0].salesperson_id;
+    order.grand_total = total;
+    order.status = 'active';
+    for(i=0;i< count;i++){
+        order.orders.push(orders[i]);    
+    }
+    order.save();
     Person.findOne({ _id:req.body[0].salesperson_id })
         .exec()
         .then(sales => {
@@ -112,7 +114,7 @@ router.post('/order', (req, res, next) => {
                 .exec().then((err, updated) => {
                     res.status(200).json({
         message: "Order has been placed successfully",
-        order_id: orderid,
+        order_id: order._id,
         delivery_date: delivery_date.toDateString()
                 });
             });

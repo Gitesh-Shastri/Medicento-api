@@ -12,11 +12,6 @@ const salesOrderItemsSchema = mongoose.Schema({
     medicento_name: {
         type: String
     },
-    sales_order_id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'SalesOrder',
-        required: true
-    },
     inventory_product_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Inventory'

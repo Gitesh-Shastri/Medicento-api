@@ -6,6 +6,12 @@ const SalesOrderSchema = mongoose.Schema({
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'SalesOrder'
 	},
+	orders: [
+		{
+			type: mongoose.Schema.Types.ObjectId,
+        	ref: 'SalesOrderItems'
+		}
+	],
 	pharmacy_id: {
 		type: mongoose.Schema.Types.ObjectId,
         ref: 'Pharmacy',
