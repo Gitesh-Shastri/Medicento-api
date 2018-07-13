@@ -10,7 +10,7 @@ const SalesOrderSchema = mongoose.Schema({
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'SalesOrder'
 	},
-	orders: [
+	order_items: [
 		{
 			type: mongoose.Schema.Types.ObjectId,
         	ref: 'SalesOrderItems'

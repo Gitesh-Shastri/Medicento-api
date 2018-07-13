@@ -96,7 +96,7 @@ router.post('/order', (req, res, next) => {
     order.delivery_date = delivery_date;
     order.status = 'active';
     for(i=0;i< count;i++){
-        order.orders.push(orders[i]);    
+        order.order_items.push(orders[i]);    
     }
     order.save();
     console.log(order);
