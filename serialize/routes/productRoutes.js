@@ -68,44 +68,39 @@ router.post('/delivery', (req, res, next) => {
 });
 
 router.post('/order', (req, res, next) => {
-    date = new Date();
-    delivery_date = new Date(+new Date() + 3 * 24 * 60 * 60 * 1000);
-    date.toLocaleTimeString();
-    date = new Date(); 
-    delivery_date = new Date(+new Date() + 3*24*60*60*1000);
-    date.toLocaleString();  
-    localDate = "" + date;
-    count = req.body.length;
+    delivery_date = new Date(new Date(+req.body.delivery_date.replace(/\/Date\((\d+)\)\//, '$1')));
+    count = req.body.items.length;
     total = 0;
     orderid = '';
     for (i = 0; i < count; i++) {
-        cost = Number(req.body[i].cost);
+        cost = Number(req.body.items[i].cost);
         total += cost;
     }
     orders = [];
-    for (i = 0; i < count; i++) {
-        const orderItem = new OrderItem({
-            quantity: req.body[i].qty,
-            paid_price: req.body[i].rate,
-            created_at: localDate,
-            medicento_name: req.body[i].medicento_name,
-            company_name: req.body[i].company_name,
-            total_amount: req.body[i].cost
-        });
+    for (i = 0;i < count; i++) {
+        const orderItem = new OrderItem();
+            orderItem.quantity = req.body.items[i].qty,
+            orderItem.paid_price = req.body.items[i].rate,
+            orderItem.created_at = new Date(),
+            orderItem.medicento_name = req.body.items[i].medicento_name,
+            orderItem.company_name = req.body.items[i].company_name,
+            orderItem.total_amount = req.body.items[i].cost
         orderItem.save();
         orders.push(orderItem._id);
     }
     const order = new Order();
-    order.created_at = localDate;
-    order.pharmacy_id = req.body[0].pharma_id;
-    order.sales_person_id = req.body[0].salesperson_id;
+    order.created_at = new Date();
+    order.pharmacy_id = req.body.pharma_id;
+    order.sales_person_id = req.body.salesperson_id;
     order.grand_total = total;
+    order.delivery_date = delivery_date;
     order.status = 'active';
     for(i=0;i< count;i++){
         order.orders.push(orders[i]);    
     }
     order.save();
-    Person.findOne({ _id:req.body[0].salesperson_id })
+    console.log(order);
+    Person.findOne({ _id:req.body.salesperson_id })
         .exec()
         .then(sales => {
             console.log("Sales id : " , sales);
@@ -114,8 +109,8 @@ router.post('/order', (req, res, next) => {
                 .exec().then((err, updated) => {
                     res.status(200).json({
         message: "Order has been placed successfully",
-        order_id: order._id,
-        delivery_date: delivery_date.toDateString()
+        delivery_date: order.delivery_date.toLocaleString(),
+        order_id: order._id
                 });
             });
         })

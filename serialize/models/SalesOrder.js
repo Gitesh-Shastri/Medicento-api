@@ -1,4 +1,8 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose'),
+autoIncrement = require('mongoose-auto-increment');
+
+var connection = mongoose.createConnection(process.env.MONGODB_URI);
+autoIncrement.initialize(connection);
 
 const SalesOrderSchema = mongoose.Schema({
 	sales_order_id: mongoose.Schema.Types.ObjectId,
@@ -71,7 +75,12 @@ const SalesOrderSchema = mongoose.Schema({
 	},
 	google_analytics_track_id: {
 		type: String
+	},
+	delivery_date: {
+		type: Date,
+		required: true
 	}
 });
+SalesOrderSchema.plugin(autoIncrement.plugin, 'SalesOrder');
 
 module.exports = mongoose.model('SalesOrder', SalesOrderSchema);
