@@ -12,7 +12,7 @@ const router = express.Router();
 
 router.get('/medi',(req, res) => {
     res.status(200).json({
-        result: res
+        result: req.body
     });
 });
 
