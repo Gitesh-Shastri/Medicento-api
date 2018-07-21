@@ -68,7 +68,8 @@ router.post('/delivery', (req, res, next) => {
 });
 
 router.post('/order', (req, res, next) => {
-    delivery_date = new Date(new Date(+req.body.delivery_date.replace(/\/Date\((\d+)\)\//, '$1')));
+    deliverdate = ""+req.body.delivery_date;
+    delivery_date = new Date(new Date(+deliverdate.replace(/\/Date\((\d+)\)\//, '$1')));
     count = req.body.items.length;
     total = 0;
     orderid = '';
