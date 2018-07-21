@@ -10,6 +10,12 @@ const mongoose = require('mongoose');
 const express = require('express'); 
 const router = express.Router();
 
+router.get('/medi',(req, res) => {
+    res.status(200).json({
+        result: res
+    });
+});
+
 router.get('/medimap', (req, res) => {
     ProductAndMedi.find()
         .populate('product_id', 'medicento_name company_name')
