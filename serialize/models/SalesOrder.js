@@ -1,9 +1,4 @@
 const mongoose = require('mongoose'),
-autoIncrement = require('mongoose-auto-increment');
-
-var connection = mongoose.createConnection(process.env.MONGODB_URI);
-autoIncrement.initialize(connection);
-
 const SalesOrderSchema = mongoose.Schema({
 	sales_order_id: mongoose.Schema.Types.ObjectId,
 	parent_order_id: {
@@ -81,6 +76,5 @@ const SalesOrderSchema = mongoose.Schema({
 		required: true
 	}
 });
-SalesOrderSchema.plugin(autoIncrement.plugin, 'SalesOrder');
 
 module.exports = mongoose.model('SalesOrder', SalesOrderSchema);
