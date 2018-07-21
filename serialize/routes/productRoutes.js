@@ -177,7 +177,7 @@ router.post('/inventoryProduct', (req, res) => {
     });
 });
 
-router.get('/inventoryProduct', (req, res) => {
+router.get('/inventoryProductc', (req, res) => {
     InventoryProduct.findOneAndUpdate({ product_name: req.body.proname }, {$set: {stock_left: req.body.stock, cost_for_medicento: req.body.price, price_to_seller: req.body.price, price_to_retailer: req.body.price}}, function(err, doc) {
         console.log(doc); 
     });
