@@ -11,7 +11,7 @@ const express = require('express');
 const router = express.Router();
 
 router.get('/medi',(req, res) => {
-    const inventoryProduct = InventoryProduct({
+    const inventoryProduct = new InventoryProduct({
         inventory_product_id: new mongoose.Types.ObjectId(),
         inventory_id: req.body.inventory_id,
         product_name: req.body.product_name,
@@ -29,7 +29,7 @@ router.get('/medi',(req, res) => {
         batch_number: req.body.batch_number
     });
     inventoryProduct.save();
-    const product = Product({
+    const product = new Product({
         product_id: new mongoose.Types.ObjectId(),
         medicento_name: req.body.medicento_name,
         product_code: req.body.product_code,
