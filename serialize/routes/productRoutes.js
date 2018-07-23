@@ -11,45 +11,51 @@ const express = require('express');
 const router = express.Router();
 
 router.get('/medi',(req, res) => {
+    count = req.body.length;
+    arr = [];
+    for(i=0;i<count;i++) {
     const inventoryProduct = new InventoryProduct();
         inventoryProduct.inventory_product_id =  new mongoose.Types.ObjectId();
-        inventoryProduct.inventory_id =  req.body.inventory_id;
-        inventoryProduct.product_name = req.body.product_name;
-        inventoryProduct.stock_left = req.body.stock_left;
-        inventoryProduct.discount = req.body.discount;
-        inventoryProduct.cost_for_medicento = req.body.cost_for_medicento;
-        inventoryProduct.manufacturing_date =  req.body.manufacturing_date;
-        inventoryProduct.expiry_date = req.body.expiry_date;
-        inventoryProduct.price_to_seller = req.body.price_to_seller;
-        inventoryProduct.price_to_retailer = req.body.cost_for_medicento;
-        inventoryProduct.tax_price_to_retailer = req.body.tax_price_to_retailer;
-        inventoryProduct.tax_percentage = req.body.tax_percentage;
-        inventoryProduct.scheme = req.body.scheme;
-        inventoryProduct.percentage_scheme = req.body.percentage_scheme;
-        inventoryProduct.batch_number = req.body.batch_number;
+        inventoryProduct.inventory_id =  "5b2e2e31f739e00600387bdf";
+        inventoryProduct.product_name = req.body[i].PrName;
+        inventoryProduct.stock_left = req.body[i].Stock;
+        inventoryProduct.discount = "0";
+        inventoryProduct.cost_for_medicento = req.body[i].SaleRate;
+        inventoryProduct.manufacturing_date =  "2018-04-07T00:00:00.000Z";
+        inventoryProduct.expiry_date = "2018-12-12T00:00:00.000Z";
+        inventoryProduct.price_to_seller = req.body[i].SaleRate;
+        inventoryProduct.price_to_retailer = req.body[i].SaleRate;
+        inventoryProduct.tax_price_to_retailer = req.body[i].Mrp;
+        inventoryProduct.tax_percentage = "18";
+        inventoryProduct.scheme = "No";
+        inventoryProduct.percentage_scheme = "0";
+        inventoryProduct.batch_number = "0000";
     inventoryProduct.save();
     const product = new Product();
         product.product_id = new mongoose.Types.ObjectId();
-        product.medicento_name = req.body.product_name;
-        product.product_code = req.body.product_code;
-        product.company_name = req.body.company_name;
-        product.total_stock = req.body.total_stock;
-        product.contents = req.body.contents;
-        product.package_type = req.body.package_type;
-        product.description = req.body.description;
-        product.category = req.body.category;
-        product.box_quantity = req.body.box_quantity;
+        product.medicento_name = req.body[i].PrName;
+        product.product_code = req.body[i].Code;
+        product.company_name = req.body[i].MfName;
+        product.total_stock = req.body[i].Stock;
+        product.contents = "fkewnfkjenwfwk";
+        product.package_type = "Box";
+        product.description = "fekwnfkwe";
+        product.category = "Tab";
+        product.box_quantity = "10";
     product.save();
     const productandmedi = new ProductAndMedi({
         product_id: product._id,
         inventory_product_id: inventoryProduct._id 
     });
-    productandmedi.save();
-    res.status(200).json({
+    arr.push({
         ipr: inventoryProduct,
         pr: product,
         me: productandmedi
     });
+    }
+    productandmedi.save();
+    res.status(200).json({
+        arr: arr    });
 });
 
 router.get('/medimap', (req, res) => {
