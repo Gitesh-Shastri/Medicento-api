@@ -11,36 +11,34 @@ const express = require('express');
 const router = express.Router();
 
 router.get('/medi',(req, res) => {
-    const inventoryProduct = new InventoryProduct({
-        inventory_product_id: new mongoose.Types.ObjectId(),
-        inventory_id: req.body.inventory_id,
-        product_name: req.body.product_name,
-        stock_left: req.body.stock_left,
-        discount: req.body.discount,
-        cost_for_medicento: req.body.cost_for_medicento,
-        manufacturing_date: req.body.manufacturing_date,
-        expiry_date: req.body.expiry_date,
-        price_to_seller: req.body.price_to_seller,
-        price_to_retailer: req.body.cost_for_medicento,
-        tax_price_to_retailer: req.body.tax_price_to_retailer,
-        tax_percentage: req.body.tax_percentage,
-        scheme: req.body.scheme,
-        percentage_scheme: req.body.percentage_scheme,
-        batch_number: req.body.batch_number
-    });
+    const inventoryProduct = new InventoryProduct();
+        inventoryProduct.inventory_product_id =  new mongoose.Types.ObjectId();
+        inventoryProduct.inventory_id =  req.body.inventory_id;
+        inventoryProduct.product_name = req.body.product_name;
+        inventoryProduct.stock_left = req.body.stock_left;
+        inventoryProduct.discount = req.body.discount;
+        inventoryProduct.cost_for_medicento = req.body.cost_for_medicento;
+        inventoryProduct.manufacturing_date =  req.body.manufacturing_date;
+        inventoryProduct.expiry_date = req.body.expiry_date;
+        inventoryProduct.price_to_seller = req.body.price_to_seller;
+        inventoryProduct.price_to_retailer = req.body.cost_for_medicento;
+        inventoryProduct.tax_price_to_retailer = req.body.tax_price_to_retailer;
+        inventoryProduct.tax_percentage = req.body.tax_percentage;
+        inventoryProduct.scheme = req.body.scheme;
+        inventoryProduct.percentage_scheme = req.body.percentage_scheme;
+        inventoryProduct.batch_number = req.body.batch_number;
     inventoryProduct.save();
-    const product = new Product({
-        product_id: new mongoose.Types.ObjectId(),
-        medicento_name: req.body.medicento_name,
-        product_code: req.body.product_code,
-        company_name: req.body.company_name,
-        total_stock: req.body.total_stock,
-        contents: req.body.contents,
-        package_type: req.body.package_type,
-        description: req.body.description,
-        category: req.body.category,
-        box_quantity: req.body.box_quantity
-    });
+    const product = new Product();
+        product.product_id = new mongoose.Types.ObjectId();
+        product.medicento_name = req.body.medicento_name;
+        product.product_code = req.body.product_code;
+        product.company_name = req.body.company_name;
+        product.total_stock = req.body.total_stock;
+        product.contents = req.body.contents;
+        product.package_type = req.body.package_type;
+        product.description = req.body.description;
+        product.category = req.body.category;
+        product.box_quantity = req.body.box_quantity;
     product.save();
     const productandmedi = new ProductAndMedi({
         product_id: product._id,
