@@ -12,7 +12,7 @@ const router = express.Router();
 
 router.get('/medi',(req, res) => {
     count = req.body.length;
-    arr = [];
+    a = 0;
     for(i=0;i<count;i++) {
     const inventoryProduct = new InventoryProduct();
         inventoryProduct.inventory_product_id =  new mongoose.Types.ObjectId();
@@ -47,15 +47,11 @@ router.get('/medi',(req, res) => {
         product_id: product._id,
         inventory_product_id: inventoryProduct._id 
     });
-    arr.push({
-        ipr: inventoryProduct,
-        pr: product,
-        me: productandmedi
-    });
+        a = a+1;
     }
     productandmedi.save();
     res.status(200).json({
-        arr: arr    });
+        arr: a    });
 });
 
 router.get('/medimap', (req, res) => {
