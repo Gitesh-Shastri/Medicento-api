@@ -30,7 +30,7 @@ router.get('/medi',(req, res) => {
     inventoryProduct.save();
     const product = new Product();
         product.product_id = new mongoose.Types.ObjectId();
-        product.medicento_name = req.body.medicento_name;
+        product.medicento_name = req.body.product_name;
         product.product_code = req.body.product_code;
         product.company_name = req.body.company_name;
         product.total_stock = req.body.total_stock;
