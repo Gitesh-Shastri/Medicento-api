@@ -47,9 +47,9 @@ router.get('/medi',(req, res) => {
         product_id: product._id,
         inventory_product_id: inventoryProduct._id 
     });
+    productandmedi.save();
         a = a+1;
     }
-    productandmedi.save();
     res.status(200).json({
         arr: a    });
 });
