@@ -79,7 +79,7 @@ router.get('/login', (req, res, next) => {
             });
         });
     } else {
-        User.findOne({ useremail: req.query.useremail, password: req.body.password })
+        User.findOne({ usercode: req.query.usercode })
         
         .exec()
         .then(user => {
