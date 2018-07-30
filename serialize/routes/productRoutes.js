@@ -112,7 +112,8 @@ router.post('/delivery', (req, res, next) => {
 });
 
 router.post('/order', (req, res, next) => {
-    deliverdate = new Date();
+    var deliverdate = new Date();
+    deliverdate.setDate(date.getDate() + 1);
     deliverdate = deliverdate.toLocaleString();
     count = req.body;
     total = 0;
@@ -138,7 +139,7 @@ router.post('/order', (req, res, next) => {
     order.pharmacy_id = req.body[0].pharma_id;
     order.sales_person_id = req.body[0].salesperson_id;
     order.grand_total = total;
-    order.delivery_date = delivery_date;
+    order.delivery_date = deliverdate;
     order.status = 'active';
     for(i=0;i< count;i++){
         order.order_items.push(orders[i]);    
