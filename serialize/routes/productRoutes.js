@@ -114,8 +114,8 @@ router.post('/delivery', (req, res, next) => {
 router.post('/order', (req, res, next) => {
     var deliverdate = new Date();
     deliverdate.setDate(deliverdate.getDate() + 1);
-    deliverdate = deliverdate.toLocaleString();
-    count = req.body;
+    deliverdate = deliverdate.toLocaleDateString();
+    count = req.body.length;
     total = 0;
     orderid = '';
     for (i = 0; i < count; i++) {
