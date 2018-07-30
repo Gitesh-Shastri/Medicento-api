@@ -112,31 +112,31 @@ router.post('/delivery', (req, res, next) => {
 });
 
 router.post('/order', (req, res, next) => {
-    deliverdate = ""+req.body.delivery_date;
-    delivery_date = new Date(new Date(+deliverdate.replace(/\/Date\((\d+)\)\//, '$1')));
-    count = req.body.items.length;
+    deliverdate = new Date();
+    deliverdate = deliverdate.toLocaleString();
+    count = req.body;
     total = 0;
     orderid = '';
     for (i = 0; i < count; i++) {
-        cost = Number(req.body.items[i].cost);
+        cost = Number(req.body[i].cost);
         total += cost;
     }
     orders = [];
     for (i = 0;i < count; i++) {
         const orderItem = new OrderItem();
-            orderItem.quantity = req.body.items[i].qty,
-            orderItem.paid_price = req.body.items[i].rate,
+            orderItem.quantity = req.body[i].qty,
+            orderItem.paid_price = req.body[i].rate,
             orderItem.created_at = new Date(),
-            orderItem.medicento_name = req.body.items[i].medicento_name,
-            orderItem.company_name = req.body.items[i].company_name,
-            orderItem.total_amount = req.body.items[i].cost
+            orderItem.medicento_name = req.body[i].medicento_name,
+            orderItem.company_name = req.body[i].company_name,
+            orderItem.total_amount = req.body[i].cost
         orderItem.save();
         orders.push(orderItem._id);
     }
     const order = new Order();
     order.created_at = new Date();
-    order.pharmacy_id = req.body.pharma_id;
-    order.sales_person_id = req.body.salesperson_id;
+    order.pharmacy_id = req.body[0].pharma_id;
+    order.sales_person_id = req.body[0].salesperson_id;
     order.grand_total = total;
     order.delivery_date = delivery_date;
     order.status = 'active';
