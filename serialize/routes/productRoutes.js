@@ -140,7 +140,7 @@ router.post('/order', (req, res, next) => {
     order.sales_person_id = req.body[0].salesperson_id;
     order.grand_total = total;
     order.delivery_date = deliverdate;
-    order.status = 'active';
+    order.status = 'Active';
     for(i=0;i< count;i++){
         order.order_items.push(orders[i]);    
     }
