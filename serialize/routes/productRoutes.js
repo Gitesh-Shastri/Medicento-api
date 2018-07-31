@@ -11,6 +11,7 @@ const Log = require('../models/logs');
 const mongoose = require('mongoose');
 const express = require('express'); 
 const router = express.Router();
+/*
 var nodemailer = require('nodemailer');
 const transporter = nodemailer.createTransport("SMTP", {
 	service: 'gmail',
@@ -19,7 +20,7 @@ const transporter = nodemailer.createTransport("SMTP", {
 		   pass: process.env.password
 	   }
 });
-
+*/
 router.get('/medi',(req, res) => {
     count = req.body.length;
     a = 0;
@@ -170,12 +171,12 @@ router.post('/order', (req, res, next) => {
     }
     order.save();
     console.log(order);
-    const mailOptions = {
+ /*   const mailOptions = {
 	    from: 'giteshmedicento@gmail.com', // sender address
 	    to: 'giteshshastri100@gmail.com,miniintl@rediffmail.com,arpandebasis@medicento.com,rohit@medicento.com', // list of receivers
 	    subject: 'Order has been placed by on '+order.delivery_date.toLocaleDateString(), // Subject line
         html: message + '<p>Grand Total = ' + total +'</p>'// plain text body
-    };
+    };*/
     Person.findOne({ _id:req.body[0].salesperson_id })
         .exec()
         .then(sales => {
@@ -183,12 +184,13 @@ router.post('/order', (req, res, next) => {
             Person.update({_id: sales._id},
                 { Total_sales: sales.Total_sales+total, No_of_order: sales.No_of_order+1, Earnings: sales.commission*(sales.Total_sales+total)})
                 .exec().then((err, updated) => {
-                    transporter.sendMail(mailOptions, function (err, info) {
+       /*            transporter.sendMail(mailOptions, function (err, info) {
                         if(err)
                           console.log(err)
                         else
                           console.log(info);
                      });
+		     */
                               res.status(200).json({
                                 message: "Order has been placed successfully",
                                 delivery_date: order.delivery_date.toLocaleString(),
