@@ -12,7 +12,7 @@ const mongoose = require('mongoose');
 const express = require('express'); 
 const router = express.Router();
 var nodemailer = require('nodemailer');
-const transporter = nodemailer.createTransport({
+const transporter = nodemailer.createTransport("SMTP", {
 	service: 'gmail',
 	auth: {
 		   user: process.env.gmailid,
