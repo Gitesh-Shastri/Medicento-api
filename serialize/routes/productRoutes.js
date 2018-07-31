@@ -6,10 +6,10 @@ const ProductAndMedi = require('../models/productandmedi');
 const Inventory = require('../models/Inventory');
 const OrderItem = require('../models/SalesOrderItem');
 const Order = require('../models/SalesOrder');
+const Log = require('../models/logs');
 const mongoose = require('mongoose');
 const express = require('express'); 
 const router = express.Router();
-const Log = require('../models/logs');
 
 router.get('/medi',(req, res) => {
     count = req.body.length;
@@ -55,6 +55,13 @@ router.get('/medi',(req, res) => {
         arr: a    });
 });
 
+router.get('/log', (req, res) => {
+    const log = Log();
+    log.logd = 'fekjbfjebf';
+    log.created_at = new Date();
+    log.save();
+    res.send(log);
+});
 router.get('/medimap', (req, res) => {
     ProductAndMedi.find()
         .populate('product_id', 'medicento_name company_name')
