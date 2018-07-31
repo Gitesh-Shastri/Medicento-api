@@ -11,6 +11,7 @@ const Log = require('../models/logs');
 const mongoose = require('mongoose');
 const express = require('express'); 
 const router = express.Router();
+<<<<<<< HEAD
 var nodemailer = require('nodemailer');
 const transporter = nodemailer.createTransport({
 	service: 'gmail',
@@ -20,6 +21,8 @@ const transporter = nodemailer.createTransport({
 	   }
 });
 
+=======
+>>>>>>> 4eb4889cbc53bb3135e636943f8ac0daa3bb6e05
 
 router.get('/medi',(req, res) => {
     count = req.body.length;
@@ -197,7 +200,7 @@ router.post('/order', (req, res, next) => {
                               });
                       });
                     });
-            });
+                });
 router.get('/order', (req, res, next) => {
     Order.find()
         .exec()
