@@ -10,6 +10,9 @@ const Log = require('../models/logs');
 const mongoose = require('mongoose');
 const express = require('express'); 
 const router = express.Router();
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey('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');
+
 
 router.get('/medi',(req, res) => {
     count = req.body.length;
@@ -166,15 +169,27 @@ router.post('/order', (req, res, next) => {
             Person.update({_id: sales._id},
                 { Total_sales: sales.Total_sales+total, No_of_order: sales.No_of_order+1, Earnings: sales.commission*(sales.Total_sales+total)})
                 .exec().then((err, updated) => {
-                    res.status(200).json({
-        message: "Order has been placed successfully",
-        delivery_date: order.delivery_date.toLocaleString(),
-        order_id: order._id
+                    const content = JSON.stringify(
+                        req.body
+                    );
+                    sgMail.send({
+                        to: ['giteshshastri96@gmail.com', 'miniintl@rediffmail.com','arpandebasis@medicento.com','rohit@medicento.com'],                       from: 'giteshshastri100@gmail.com',
+                        subject: 'Sending with SendGrid is Fun',
+                        text: content,
+                  }, (err, json) => {
+                          if(err) {
+                              res.send(err);
+                          } else {
+                              res.status(200).json({
+                                message: "Order has been placed successfully",
+                                delivery_date: order.delivery_date.toLocaleString(),
+                                order_id: order._id                        
+                              });
+                          }
+                      })
+                  });
                 });
             });
-        })
-    
-});
 
 router.get('/order', (req, res, next) => {
     Order.find()
