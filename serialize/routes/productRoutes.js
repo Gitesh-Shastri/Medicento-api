@@ -21,9 +21,6 @@ const transporter = nodemailer.createTransport({
 	   }
 });
 
-=======
->>>>>>> 4eb4889cbc53bb3135e636943f8ac0daa3bb6e05
-
 router.get('/medi',(req, res) => {
     count = req.body.length;
     a = 0;
