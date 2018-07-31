@@ -11,7 +11,6 @@ const Log = require('../models/logs');
 const mongoose = require('mongoose');
 const express = require('express'); 
 const router = express.Router();
-<<<<<<< HEAD
 var nodemailer = require('nodemailer');
 const transporter = nodemailer.createTransport({
 	service: 'gmail',
