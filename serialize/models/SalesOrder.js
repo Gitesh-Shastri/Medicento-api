@@ -33,6 +33,10 @@ const SalesOrderSchema = mongoose.Schema({
         ref: 'Person',
         required: true
 	},
+	state: {
+		type: String,
+		default: "Accepted"
+	},
 	status: {
         type: String,
         required: true
