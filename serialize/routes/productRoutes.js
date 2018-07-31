@@ -1,5 +1,6 @@
 const Product = require('../models/Product');
 const Delivery = require('../models/deliveryPerson');
+const Pharmacy = require('../models/pharmacy');
 const Person = require('../models/sperson');
 const InventoryProduct = require('../models/InventoryProduct');
 const ProductAndMedi = require('../models/productandmedi');
@@ -10,8 +11,14 @@ const Log = require('../models/logs');
 const mongoose = require('mongoose');
 const express = require('express'); 
 const router = express.Router();
-const sgMail = require('@sendgrid/mail');
-sgMail.setApiKey('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');
+var nodemailer = require('nodemailer');
+const transporter = nodemailer.createTransport({
+	service: 'gmail',
+	auth: {
+		   user: process.env.gmailid,
+		   pass: process.env.password
+	   }
+});
 
 
 router.get('/medi',(req, res) => {
@@ -128,6 +135,7 @@ router.post('/order', (req, res, next) => {
     log.created_at = new Date();
     log.save();
     console.log(log);
+    message = '<table><tr><th>Medicine Name</th><th>Quantity</th><th>Cost</th></tr>';
     var deliverdate = new Date();
     deliverdate.setDate(deliverdate.getDate() + 1);
     deliverdate = deliverdate.toLocaleDateString();
@@ -149,6 +157,7 @@ router.post('/order', (req, res, next) => {
             orderItem.total_amount = req.body[i].cost
         orderItem.save();
         orders.push(orderItem._id);
+        message += '<tr><td>'+req.body[i].medicento_name+'</td><td>'+req.body[i].qty+'</td><td>'+req.body[i].cost+'</td></tr>'
     }
     const order = new Order();
     order.created_at = new Date();
@@ -162,6 +171,12 @@ router.post('/order', (req, res, next) => {
     }
     order.save();
     console.log(order);
+    const mailOptions = {
+	    from: 'giteshmedicento@gmail.com', // sender address
+	    to: 'giteshshastri100@gmail.com,miniintl@rediffmail.com,arpandebasis@medicento.com,rohit@medicento.com', // list of receivers
+	    subject: 'Order has been placed by on '+order.delivery_date.toLocaleDateString(), // Subject line
+        html: message + '<p>Grand Total = ' + total +'</p>'// plain text body
+    };
     Person.findOne({ _id:req.body[0].salesperson_id })
         .exec()
         .then(sales => {
@@ -169,29 +184,20 @@ router.post('/order', (req, res, next) => {
             Person.update({_id: sales._id},
                 { Total_sales: sales.Total_sales+total, No_of_order: sales.No_of_order+1, Earnings: sales.commission*(sales.Total_sales+total)})
                 .exec().then((err, updated) => {
-                    const content = JSON.stringify(
-                        req.body
-                    );
-                    const message = 'Order has been placed by Order Id : ' + order._id + ' with delivery_date : ' + order.delivery_date.toLocaleString();
-                    sgMail.send({
-                        to: ['giteshshastri96@gmail.com', 'miniintl@rediffmail.com','arpandebasis@medicento.com','rohit@medicento.com'],                       from: 'giteshshastri100@gmail.com',
-                        subject: message,
-                        text: content,
-                  }, (err, json) => {
-                          if(err) {
-                              res.send(err);
-                          } else {
+                    transporter.sendMail(mailOptions, function (err, info) {
+                        if(err)
+                          console.log(err)
+                        else
+                          console.log(info);
+                     });
                               res.status(200).json({
                                 message: "Order has been placed successfully",
                                 delivery_date: order.delivery_date.toLocaleString(),
                                 order_id: order._id                        
                               });
-                          }
-                      })
-                  });
-                });
+                      });
+                    });
             });
-
 router.get('/order', (req, res, next) => {
     Order.find()
         .exec()
