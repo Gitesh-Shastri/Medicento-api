@@ -121,7 +121,7 @@ router.post('/delivery', (req, res, next) => {
 
 router.post('/order', (req, res, next) => {
     const log = new Log();
-    log.logd = req.body;
+    log.logd = JSON.stringify(req.body);
     log.created_at = new Date();
     log.save();
     console.log(log);
