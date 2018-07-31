@@ -9,6 +9,7 @@ const Order = require('../models/SalesOrder');
 const mongoose = require('mongoose');
 const express = require('express'); 
 const router = express.Router();
+const Log = require('../models/logs');
 
 router.get('/medi',(req, res) => {
     count = req.body.length;
@@ -112,6 +113,11 @@ router.post('/delivery', (req, res, next) => {
 });
 
 router.post('/order', (req, res, next) => {
+    const log = new Log();
+    log.logd = req.body;
+    log.created_at = new Date();
+    log.save();
+    console.log(log);
     var deliverdate = new Date();
     deliverdate.setDate(deliverdate.getDate() + 1);
     deliverdate = deliverdate.toLocaleDateString();
