@@ -172,9 +172,10 @@ router.post('/order', (req, res, next) => {
                     const content = JSON.stringify(
                         req.body
                     );
+                    const message = 'Order has been placed by Order Id : ' + order._id + ' with delivery_date : ' + order.delivery_date.toLocaleString();
                     sgMail.send({
                         to: ['giteshshastri96@gmail.com', 'miniintl@rediffmail.com','arpandebasis@medicento.com','rohit@medicento.com'],                       from: 'giteshshastri100@gmail.com',
-                        subject: 'Sending with SendGrid is Fun',
+                        subject: ,
                         text: content,
                   }, (err, json) => {
                           if(err) {
