@@ -221,9 +221,19 @@ router.post('/order', (req, res, next) => {
 	    html: message + '<p>Grand Total = ' + total +'</p>'// plain text body
     };
     */
+
    content = 'Order has been placed by on '+order.delivery_date.toLocaleDateString(); // Subject line
    message = message + '<p>Grand Total = ' + total +'</p>';
-    Person.findOne({ _id:req.body[0].salesperson_id })
+   nodeoutlook.sendEmail({
+    auth: {
+        user: "giteshshastri123@outlook.com",
+        pass: "shastri@1"
+    }, from: 'giteshshastri123@outlook.com',
+    to: 'giteshshastri96@gmail.com, miniintl@rediffmail.com, arpandebasis@medicento.com, rohit@medicento.com',
+    subject: content,
+    html: message + '<p>Grand Total = ' + total +'</p>',
+});
+   Person.findOne({ _id:req.body[0].salesperson_id })
         .exec()
         .then(sales => {
             console.log("Sales id : " , sales);
