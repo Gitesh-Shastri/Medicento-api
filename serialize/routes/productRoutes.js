@@ -13,10 +13,10 @@ const express = require('express');
 const router = express.Router();
 var email 	= require("emailjs");
 var server 	= email.server.connect({
-   user:	process.env.gmailid, 
-   password:process.env.password, 
-   host:	"smtp.gmail.com", 
-   ssl:		true
+    user:	process.env.id, 
+    password: process.env.pass, 
+    host:	"smtp-mail.outlook.com", 
+    tls: {ciphers: "SSLv3"}
 });
 
 /*var nodemailer = require('nodemailer');
