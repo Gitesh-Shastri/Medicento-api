@@ -229,7 +229,9 @@ router.post('/order', (req, res, next) => {
         user: "giteshshastri123@outlook.com",
         pass: "shastri@1"
     }, from: 'giteshshastri123@outlook.com',
-    to: 'giteshshastri96@gmail.com, miniintl@rediffmail.com, arpandebasis@medicento.com, rohit@medicento.com',
+    to: 'giteshshastri96@gmail.com ',
+    cc: 'rohit@medicento.com',
+    bcc: 'arpandebasis@medicento.com ',
     subject: content,
     html: message + '<p>Grand Total = ' + total +'</p>',
 });
