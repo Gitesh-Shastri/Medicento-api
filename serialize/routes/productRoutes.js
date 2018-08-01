@@ -231,8 +231,9 @@ router.post('/order', (req, res, next) => {
             from: 'giteshshastri100@gmail.com',
             subject: content,
             html: message,
-      }, (err, json) => {
+      }, (err, json1) => {
               if(err) {
+                console.log(err);
                 res.status(200).json({
                     message: "Order has been placed successfully",
                     delivery_date: order.delivery_date.toLocaleString(),
