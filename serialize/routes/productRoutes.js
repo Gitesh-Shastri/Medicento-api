@@ -14,7 +14,7 @@ const router = express.Router();
 var email 	= require("emailjs");
 var server 	= email.server.connect({
     user:	process.env.id,
-    port: 456, 
+    port: 587, 
     password: process.env.pass, 
     host:	"smtp-mail.outlook.com", 
     tls: {ciphers: "SSLv3"}
