@@ -11,8 +11,6 @@ const Log = require('../models/logs');
 const mongoose = require('mongoose');
 const express = require('express'); 
 const router = express.Router();
-const sgMail = require('@sendgrid/mail');
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 /*
 var email 	= require("emailjs");
@@ -226,26 +224,10 @@ router.post('/order', (req, res, next) => {
                           console.log(info);
                      });
 		*/   
-        sgMail.send({
-            to: 'giteshshastri96@gmail.com',            
-            from: 'giteshshastri100@gmail.com',
-            subject: content,
-            html: message,
-      }, (err, json1) => {
-              if(err) {
-                console.log(err);
                 res.status(200).json({
                     message: "Order has been placed successfully",
                     delivery_date: order.delivery_date.toLocaleString(),
                     order_id: order._id                        
-                });
-            } else {
-                                res.status(200).json({
-                                message: "Order has been placed successfully",
-                                delivery_date: order.delivery_date.toLocaleString(),
-                                order_id: order._id                        
-                              });
-                      }
                     });
                     });
                     });
