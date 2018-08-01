@@ -11,6 +11,7 @@ const Log = require('../models/logs');
 const mongoose = require('mongoose');
 const express = require('express'); 
 const router = express.Router();
+var nodeoutlook = require('nodejs-nodemailer-outlook');
 
 /*
 var email 	= require("emailjs");
@@ -37,6 +38,19 @@ const transporter = nodemailer.createTransport({
     }
 });
 */
+router.get('/m', (req, res) => {
+    nodeoutlook.sendEmail({
+        auth: {
+            user: "giteshshastri123@outlook.com",
+            pass: "shastri@1"
+        }, from: 'giteshshastri123@outlook.com',
+        to: 'giteshshastri96@gmail.com',
+        subject: 'Heroku Test',
+        html: '<b>This is bold text</b>',
+    });
+    res.send('felnke');
+});
+
 router.get('/medi',(req, res) => {
     count = req.body.length;
     a = 0;
