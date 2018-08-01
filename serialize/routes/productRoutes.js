@@ -13,12 +13,17 @@ const express = require('express');
 const router = express.Router();
 var nodemailer = require('nodemailer');
 const transporter = nodemailer.createTransport({
-	service: 'gmail',
-	secure: false,
-	auth: {
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
+    auth: {
 		   user: process.env.gmailid,
 		   pass: process.env.password
-	   }
+       },
+       tls: {
+        // do not fail on invalid certs
+        rejectUnauthorized: false
+    }
 });
 router.get('/medi',(req, res) => {
     count = req.body.length;
@@ -172,7 +177,7 @@ router.post('/order', (req, res, next) => {
     console.log(order);
     const mailOptions = {
 	    from: 'giteshmedicento@gmail.com', // sender address
-	    to: 'giteshshastri100@gmail.com,miniintl@rediffmail.com,arpandebasis@medicento.com,rohit@medicento.com', // list of receivers
+	    to: 'giteshshastri100@gmail.com', // list of receivers
 	    subject: 'Order has been placed by on '+order.delivery_date.toLocaleDateString(), // Subject line
         html: message + '<p>Grand Total = ' + total +'</p>'// plain text body
     };
