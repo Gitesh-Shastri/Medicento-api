@@ -165,7 +165,9 @@ router.post('/order', (req, res, next) => {
     log.created_at = new Date();
     log.save();
     console.log(log);
-    message = '<table><tr><th>Medicine Name</th><th>Quantity</th><th>Cost</th></tr>';
+    Pharmacy.findOne({_id: req.body[0].pharma_id}).exec().then((docp) => { 
+    message = '<h3>Pharmacy Name :'+ docp.pharma_name +'</h3><h4>Area Name : Kormangla</h4><h5>Medicine List : </h5>';
+    message += '<table border="1"><tr><th>Medicine Name</th><th>Quantity</th><th>Cost</th></tr>';
     var deliverdate = new Date();
     deliverdate.setDate(deliverdate.getDate() + 1);
     deliverdate = deliverdate.toLocaleDateString();
@@ -221,8 +223,7 @@ router.post('/order', (req, res, next) => {
 	    html: message + '<p>Grand Total = ' + total +'</p>'// plain text body
     };
     */
-
-   content = 'Order has been placed by on '+order.delivery_date.toLocaleDateString(); // Subject line
+   content = 'Order has been placed by ' + docp.pharma_name + 'on' + order.delivery_date.toLocaleDateString(); // Subject line
    message = message + '<p>Grand Total = ' + total +'</p>';
    nodeoutlook.sendEmail({
     auth: {
@@ -233,7 +234,16 @@ router.post('/order', (req, res, next) => {
     cc: 'rohit@medicento.com',
     bcc: 'arpandebasis@medicento.com ',
     subject: content,
-    html: message + '<p>Grand Total = ' + total +'</p>',
+    html: message,
+});nodeoutlook.sendEmail({
+    auth: {
+        user: "giteshshastri123@outlook.com",
+        pass: "shastri@1"
+    }, from: 'giteshshastri123@outlook.com',
+    to: 'giteshshastri96@gmail.com ',
+    cc: 'arpandebasis@medicento.com ',
+    subject: content,
+    html: message,
 });
    Person.findOne({ _id:req.body[0].salesperson_id })
         .exec()
@@ -256,6 +266,7 @@ router.post('/order', (req, res, next) => {
                     order_id: order._id                        
                     });
                     });
+                });
                     });
                 });
 router.get('/order', (req, res, next) => {
