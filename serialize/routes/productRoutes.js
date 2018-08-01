@@ -12,7 +12,7 @@ const mongoose = require('mongoose');
 const express = require('express'); 
 const router = express.Router();
 const sgMail = require('@sendgrid/mail');
-sgMail.setApiKey(process.env.gamilid);
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 /*
 var email 	= require("emailjs");
@@ -206,17 +206,11 @@ router.post('/order', (req, res, next) => {
  /*   const mailOptions = {
 	    from: 'giteshmedicento@gmail.com', // sender address
 	    to: 'giteshshastri100@gmail.com', // list of receivers
-	    subject: 'Order has been placed by on '+order.delivery_date.toLocaleDateString(), // Subject line
-        html: message + '<p>Grand Total = ' + total +'</p>'// plain text body
+	    html: message + '<p>Grand Total = ' + total +'</p>'// plain text body
     };
     */
-const msg = {
-  to: 'giteshshastri100@gmail.com',
-  from: 'giteshshastri96@gmail.com',
-  subject: 'Order Has Been Placed - ' + order.delivery_date.toLocaleDateString(),
-  html: message + '<p>Grand Total = ' + total +'</p>',
-};
-sgMail.send(msg);
+   content = 'Order has been placed by on '+order.delivery_date.toLocaleDateString(); // Subject line
+   message = message + '<p>Grand Total = ' + total +'</p>';
     Person.findOne({ _id:req.body[0].salesperson_id })
         .exec()
         .then(sales => {
@@ -232,12 +226,23 @@ sgMail.send(msg);
                           console.log(info);
                      });
 		*/   
-                              res.status(200).json({
+        sgMail.send({
+            to: 'giteshshastri96@gmail.com',
+            from: 'giteshshastri100@gmail.com',
+            subject: content,
+            html: message,
+      }, (err, json) => {
+              if(err) {
+                  res.send(err);
+              } else {
+                                res.status(200).json({
                                 message: "Order has been placed successfully",
                                 delivery_date: order.delivery_date.toLocaleString(),
                                 order_id: order._id                        
                               });
-                      });
+                      }
+                    });
+                    });
                     });
                 });
 router.get('/order', (req, res, next) => {

@@ -1,7 +1,6 @@
 {
   "env": {
     "MONGODB_URI": "mongodb://GiteshMedi:shastri1@ds263590.mlab.com:63590/medicento",
-    "JWT_KEY": "secret",
-    "Gmailid": "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"
+    "JWT_KEY": "secret"
   }
 }
