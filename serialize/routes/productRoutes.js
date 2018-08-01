@@ -11,6 +11,7 @@ const Log = require('../models/logs');
 const mongoose = require('mongoose');
 const express = require('express'); 
 const router = express.Router();
+
 var nodemailer = require('nodemailer');
 const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
@@ -175,6 +176,7 @@ router.post('/order', (req, res, next) => {
     }
     order.save();
     console.log(order);
+     
     const mailOptions = {
 	    from: 'giteshmedicento@gmail.com', // sender address
 	    to: 'giteshshastri100@gmail.com', // list of receivers
@@ -188,13 +190,14 @@ router.post('/order', (req, res, next) => {
             Person.update({_id: sales._id},
                 { Total_sales: sales.Total_sales+total, No_of_order: sales.No_of_order+1, Earnings: sales.commission*(sales.Total_sales+total)})
                 .exec().then((err, updated) => {
+
                   transporter.sendMail(mailOptions, function (err, info) {
                         if(err)
                           console.log(err)
                         else
                           console.log(info);
                      });
-		   
+	   
                               res.status(200).json({
                                 message: "Order has been placed successfully",
                                 delivery_date: order.delivery_date.toLocaleString(),
