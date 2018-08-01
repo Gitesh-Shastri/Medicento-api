@@ -44,7 +44,7 @@ router.get('/m', (req, res) => {
             user: "giteshshastri123@outlook.com",
             pass: "shastri@1"
         }, from: 'giteshshastri123@outlook.com',
-        to: 'giteshshastri96@gmail.com, giteshshastri100@gmail.com ',
+        to: 'giteshshastri96@gmail.com, giteshshastri100@gmail.com, giteshmedicento@gmail.com',
         subject: 'Heroku Test',
         html: '<b>This is bold text</b>',
     });
