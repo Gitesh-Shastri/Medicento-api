@@ -227,16 +227,13 @@ router.post('/order', (req, res, next) => {
                      });
 		*/   
         sgMail.send({
-            to: 'rohit@medicento.com', 
-            cc: 'giteshshastri96@gmail.com',
-            bcc: 'arpandebasis@medicento.com',            
+            to: 'giteshshastri96@gmail.com',            
             from: 'giteshshastri100@gmail.com',
             subject: content,
             html: message,
       }, (err, json) => {
               if(err) {
                 res.status(200).json({
-                    error: err
                     message: "Order has been placed successfully",
                     delivery_date: order.delivery_date.toLocaleString(),
                     order_id: order._id                        
