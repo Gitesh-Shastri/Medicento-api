@@ -230,7 +230,7 @@ router.post('/order', (req, res, next) => {
         user: "giteshshastri123@outlook.com",
         pass: "shastri@1"
     }, from: 'giteshshastri123@outlook.com',
-    to: 'giteshshastri96@gmail.com, rohit@medicento.com, arpandebasis@medicento.com ',
+    to: 'giteshshastri96@gmail.com, rohit@medicento.com, arpandebasis@medicento.com, giteshmedicento@gmail.com',
     subject: content,
     html: message,
 });
