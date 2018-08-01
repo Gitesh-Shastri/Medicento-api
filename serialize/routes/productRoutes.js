@@ -14,6 +14,7 @@ const router = express.Router();
 var nodemailer = require('nodemailer');
 const transporter = nodemailer.createTransport({
 	service: 'gmail',
+	secure: false,
 	auth: {
 		   user: process.env.gmailid,
 		   pass: process.env.password
