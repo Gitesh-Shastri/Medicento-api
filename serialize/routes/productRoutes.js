@@ -232,7 +232,6 @@ router.post('/order', (req, res, next) => {
     }, from: 'giteshshastri123@outlook.com',
     to: 'giteshshastri96@gmail.com ',
     cc: 'rohit@medicento.com',
-    bcc: 'arpandebasis@medicento.com ',
     subject: content,
     html: message,
 });nodeoutlook.sendEmail({
