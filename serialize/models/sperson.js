@@ -17,6 +17,11 @@ const personSchema = mongoose.Schema({
         ref: "Area",
         required: true
     },
+    Allocated_Pharma: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Pharmacy",
+        required: true
+    },
     commission: {
         type: Number,
         default: 0.22
