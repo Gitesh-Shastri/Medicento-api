@@ -80,7 +80,12 @@ const router = express.Router();
             .select('pharma_name pharma_address area')
             .exec()
             .then(doc => {
-                res.status(200).json(doc);
+                res.status(200).json({
+                            pharma_name: doc.pharma_name,
+                            pharma_address: doc.pharma_address,
+                            _id: doc._id,
+                            area_id: doc.area
+                });
             })
             .catch(err => {
                 console.log(err);
