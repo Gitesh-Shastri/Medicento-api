@@ -76,25 +76,33 @@ const router = express.Router();
     // Find Pharmacy By Name
     router.get('/:id', function (req, res) {
         const id = req.params.id;
-        Pharmacy.findById(id)
+        Pharmacy.find({_id: id})
             .select('pharma_name pharma_address area')
-            .exec()
-            .then(doc => {
-                res.status(200).json({
-                    "pharmas": {
+                .exec()
+                .then(docs => {
+                const response = {
+                    count: docs.length,
+                    pharmas: docs.map(doc => {
+                        return {
                             pharma_name: doc.pharma_name,
                             pharma_address: doc.pharma_address,
                             _id: doc._id,
-                            area_id: doc.area
+                            area_id: doc.area,
+                            request: {
+                                type: 'GET',
+                                url: 'https://medicento-api.herokuapp.com/pharma/' + doc._id
+                            }
+                        }
+                    })
                 }
-                });
+                res.status(200).json(response);
             })
             .catch(err => {
                 console.log(err);
-                res.status(404).json({
-                    message: "No Valid Entry for provided ID"
-                });
-            });
+                res.status(500).json({
+                    error: err
+                })
+            });   
     });
 
     // Update Pharmacy By Name
