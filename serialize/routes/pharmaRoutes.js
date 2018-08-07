@@ -81,10 +81,12 @@ const router = express.Router();
             .exec()
             .then(doc => {
                 res.status(200).json({
+                    "pharmas": {
                             pharma_name: doc.pharma_name,
                             pharma_address: doc.pharma_address,
                             _id: doc._id,
                             area_id: doc.area
+                }
                 });
             })
             .catch(err => {
