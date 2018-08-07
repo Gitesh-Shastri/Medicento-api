@@ -19,8 +19,7 @@ const personSchema = mongoose.Schema({
     },
     Allocated_Pharma: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Pharmacy",
-        required: true
+        ref: "Pharmacy"
     },
     commission: {
         type: Number,
