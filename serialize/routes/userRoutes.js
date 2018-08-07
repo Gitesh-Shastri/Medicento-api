@@ -38,6 +38,7 @@ router.post('/salesPerson', (req, res, next) => {
         user: req.body.userid,
         Name: req.body.name,
         Allocated_Area: req.body.areaid,
+        Allocated_Pharma: req.body.pid,
         Total_sales: req.body.tsales,
         No_of_order: req.body.orders,
         Returns: req.body.returns,
