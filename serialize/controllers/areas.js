@@ -1,4 +1,5 @@
 const Area = require('../models/area');
+const mongoose = require('mongoose');
 
 exports.area_get_all = function (req, res) {
     Area.find()
