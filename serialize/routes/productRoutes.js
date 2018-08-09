@@ -165,8 +165,8 @@ router.post('/order', (req, res, next) => {
     log.created_at = new Date();
     log.save();
     console.log(log);
-    Pharmacy.findOne({_id: req.body[0].pharma_id}).exec().then((docp) => { 
-    message = '<h3>Pharmacy Name :'+ docp.pharma_name +'</h3><h4>Area Name : Kormangla</h4>';
+    Pharmacy.findOne({_id: req.body[0].pharma_id}).populate('area_id').exec().then((docp) => { 
+    message = '<h3>Pharmacy Name:'+ docp.pharma_name +'</h3><h4>Area Name: '+ docp.area_id.area_name +'</h4>';
     message += '<table border="1" style="width:100%"><tr><th style="width:60%">Medicine Name</th><th style="width:20%">Quantity</th><th style="width:20%">Cost</th></tr>';
     var deliverdate = new Date();
     deliverdate.setDate(deliverdate.getDate() + 1);
