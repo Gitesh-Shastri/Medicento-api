@@ -166,8 +166,8 @@ router.post('/order', (req, res, next) => {
     log.save();
     console.log(log);
     Pharmacy.findOne({_id: req.body[0].pharma_id}).exec().then((docp) => { 
-    message = '<h3>Pharmacy Name :'+ docp.pharma_name +'</h3><h4>Area Name : Kormangla</h4><h5>Medicine List : </h5>';
-    message += '<table border="1"><tr><th>Medicine Name</th><th>Quantity</th><th>Cost</th></tr>';
+    message = '<h3>Pharmacy Name :'+ docp.pharma_name +'</h3><h4>Area Name : Kormangla</h4>';
+    message += '<table border="1" style="width:100%"><tr><th style="width:60%">Medicine Name</th><th style="width:20%">Quantity</th><th style="width:20%">Cost</th></tr>';
     var deliverdate = new Date();
     deliverdate.setDate(deliverdate.getDate() + 1);
     deliverdate = deliverdate.toLocaleDateString();
@@ -189,7 +189,7 @@ router.post('/order', (req, res, next) => {
             orderItem.total_amount = req.body[i].cost
         orderItem.save();
         orders.push(orderItem._id);
-        message += '<tr><td>'+req.body[i].medicento_name+'</td><td>'+req.body[i].qty+'</td><td>'+req.body[i].cost+'</td></tr>'
+        message += '<tr><td style="width:60%">'+req.body[i].medicento_name+'</td><td style="width:20%">'+req.body[i].qty+'</td><td style="width:20%">'+req.body[i].cost+'</td></tr>'
     }
     const order = new Order();
     order.created_at = new Date();
@@ -223,8 +223,8 @@ router.post('/order', (req, res, next) => {
 	    html: message + '<p>Grand Total = ' + total +'</p>'// plain text body
     };
     */
-   content = 'Order has been placed by ' + docp.pharma_name + 'on' + order.delivery_date.toLocaleDateString(); // Subject line
-   message = message + '<p>Grand Total = ' + total +'</p>';
+   content = 'Order has been placed by ' + docp.pharma_name + ' on ' + order.delivery_date.toLocaleDateString(); // Subject line
+   message = message + '<td style="width:60%"></td><td colspan="2" style="width:40%">Grand Total = ' + total +'</td>';
    nodeoutlook.sendEmail({
     auth: {
         user: "giteshshastri123@outlook.com",
