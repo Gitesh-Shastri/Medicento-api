@@ -38,6 +38,13 @@ const transporter = nodemailer.createTransport({
     }
 });
 */
+router.post('/ch', (req, res, next) => {
+	InventoryProduct.find({ product_name: req.body.name}).exec().then(doc => {
+			InventoryProduct.update({_id:doc._id},{stock_left: req.body.stock}).exec().then((err, docs) =>{
+				res.send(docs);
+			});
+	});
+});
 router.get('/m', (req, res) => {
     nodeoutlook.sendEmail({
         auth: {
