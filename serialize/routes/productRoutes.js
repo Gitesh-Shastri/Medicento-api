@@ -105,7 +105,7 @@ router.get('/log', (req, res) => {
 router.get('/medimap', (req, res) => {
     ProductAndMedi.find()
         .populate('product_id', 'medicento_name company_name')
-        .populate('inventory_product_id', 'price_to_seller')
+        .populate('inventory_product_id', 'price_to_seller stock_left')
         .exec()
         .then(docs => {
             const response = {
@@ -115,6 +115,7 @@ router.get('/medimap', (req, res) => {
                         medicento_name: doc.product_id.medicento_name,
                         company_name: doc.product_id.company_name,
                         price: doc.inventory_product_id.price_to_seller,
+			    stock: doc.inventory_product_id.stock_left,
                         _id: doc._id
                     }
                 })
