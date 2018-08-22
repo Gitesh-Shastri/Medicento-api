@@ -48,7 +48,7 @@ router.post('/ch', (req, res, next) => {
 router.get('/m', (req, res) => {
     nodeoutlook.sendEmail({
         auth: {
-            user: "giteshshastri123@outlook.com",
+            user: "medicento96@outlook.com",
             pass: "shastri@1"
         }, from: 'giteshshastri123@outlook.com',
         to: 'giteshshastri96@gmail.com, giteshshastri100@gmail.com, giteshmedicento@gmail.com',
