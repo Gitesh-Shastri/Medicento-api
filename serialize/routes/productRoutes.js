@@ -161,6 +161,16 @@ router.post('/delivery/change_password', (req, res, next) => {
     })
 });
 
+router.get('/recent_order/:id', (req, res, next) => {
+    Order.find( {pharmacy_id: req.params.id} ).select('created_at grand_total status').exec().then(doc => {
+        console.log(req.params.id);
+        res.status(200).json({
+            orders: doc 
+        });
+    }).catch( (err) =>{
+        res.send('err');
+    })
+});
 
 router.post('/delivery/area_and_deliveryC', (req, res, next) => {
     Delivery.findOne({  _id:req.query.id }).populate('area_and_delivery').exec().then(doc => {
