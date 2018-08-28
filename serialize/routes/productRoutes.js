@@ -9,6 +9,7 @@ const OrderItem = require('../models/SalesOrderItem');
 const Order = require('../models/SalesOrder');
 const Log = require('../models/logs');
 const mongoose = require('mongoose');
+const areadelivery = require('../models/area_and_delivery');
 const express = require('express'); 
 const router = express.Router();
 var nodeoutlook = require('nodejs-nodemailer-outlook');
@@ -131,16 +132,41 @@ router.get('/medimap', (req, res) => {
 
 router.get('/delivery', (req, res, next) => {
     Delivery.findOne({ user_email: req.query.user_email, password: req.query.password }).exec().then(doc => {
-        res.status(201).json({
-            is_first_time_sign_in: doc.is_first_time_sign_in,
-            user_name: doc.user_name,
-            full_name: doc.full_name,
-            phone_no: doc.phone_no,
-            date_of_birth: doc.date_of_birth,
-            total_deliveries: doc.total_deliveries,
-            avg_delivery_time: doc.avg_delivery_time
+        res.status(200).json({
+                _id: doc._id,
+                is_first_time_sign_in: doc.is_first_time_sign_in,
+                user_name: doc.user_name,
+                full_name: doc.full_name,
+                phone_no: doc.phone_no,
+                date_of_birth: doc.date_of_birth,
+                total_deliveries: doc.total_deliveries,
+                avg_delivery_time: doc.avg_delivery_time
         })
     })   
+});
+
+router.post('/delivery/change_password', (req, res, next) => {
+    Delivery.findByIdAndUpdate({  _id:req.query.id }, {$set: {password: req.query.new_password}}, {new: true}).exec().then(doc => {
+        res.status(200).json({
+            doc
+        })
+    })
+});
+
+
+router.post('/delivery/area_and_deliveryC', (req, res, next) => {
+    Delivery.findOne({  _id:req.query.id }).populate('area_and_delivery').exec().then(doc => {
+        console.log(doc);
+        for(i =0;i<doc.area_and_delivery.length;i++) {
+            if(doc.area_and_delivery[i].area == "5b28cf4a4381b00448fcbb27") {
+                areadelivery.findByIdAndUpdate({ _id:doc.area_and_delivery[i]._id}, {$set:{No_of_delivery:doc.area_and_delivery[i].No_of_delivery+1}}, {new: true}).exec().then(doc1 => {
+                    res.send(doc1);
+                })
+            } else {
+                res.send('fsdkkmf.,');
+            }
+        }
+    });
 });
 
 router.post('/delivery', (req, res, next) => {

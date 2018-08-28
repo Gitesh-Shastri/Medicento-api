@@ -30,7 +30,29 @@ const deliverySchema = mongoose.Schema({
 	},
 	avg_delivery_time: {
 		type: String
-	}
+	},
+	collected_amount: {
+		type: Number,
+		default: 0
+	},
+	points: {
+		type: Number,
+		default: 0
+	},
+	delivery_completed: {
+		type: Number,
+		default: 0
+	},
+	delivery_pending: {
+		type: Number,
+		default: 0
+	},
+	area_and_delivery: [
+		{
+			type: mongoose.Schema.Types.ObjectId,
+        	ref: 'areaanddelivery'
+		}
+	]
 });
 
 module.exports = mongoose.model('DeliveryPerson', deliverySchema);
