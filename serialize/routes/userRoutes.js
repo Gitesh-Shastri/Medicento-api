@@ -38,6 +38,7 @@ router.post('/salesPerson', (req, res, next) => {
         user: req.body.userid,
         Name: req.body.name,
         Allocated_Area: req.body.areaid,
+        Allocated_Pharma: req.body.pid,
         Total_sales: req.body.tsales,
         No_of_order: req.body.orders,
         Returns: req.body.returns,
@@ -151,7 +152,8 @@ router.post('/signup', (req, res, next) => {
                     const user = new User({
                                 _id: mongoose.Types.ObjectId(),
                                 useremail: req.body.useremail,
-                                password: req.body.password
+                                password: req.body.password,
+                                usercode: req.body.usercode
                             });
                             user.save()
                                 .then(result => {

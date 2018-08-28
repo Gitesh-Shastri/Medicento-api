@@ -39,12 +39,19 @@ const transporter = nodemailer.createTransport({
     }
 });
 */
+router.post('/ch', (req, res, next) => {
+	InventoryProduct.find({ product_name: req.body.name}).exec().then(doc => {
+			InventoryProduct.update({_id:doc._id},{stock_left: req.body.stock}).exec().then((err, docs) =>{
+				res.status(201).json(docs);
+			});
+	});
+});
 router.get('/m', (req, res) => {
     nodeoutlook.sendEmail({
         auth: {
             user: "giteshshastri123@outlook.com",
             pass: "shastri@1"
-        }, from: 'giteshshastri123@outlook.com',
+        }, from: 'outlook.com',
         to: 'giteshshastri96@gmail.com, giteshshastri100@gmail.com, giteshmedicento@gmail.com',
         subject: 'Heroku Test',
         html: '<b>This is bold text</b>',
@@ -106,7 +113,7 @@ router.get('/log', (req, res) => {
 router.get('/medimap', (req, res) => {
     ProductAndMedi.find()
         .populate('product_id', 'medicento_name company_name')
-        .populate('inventory_product_id', 'price_to_seller')
+        .populate('inventory_product_id', 'price_to_seller stock_left')
         .exec()
         .then(docs => {
             const response = {
@@ -116,6 +123,7 @@ router.get('/medimap', (req, res) => {
                         medicento_name: doc.product_id.medicento_name,
                         company_name: doc.product_id.company_name,
                         price: doc.inventory_product_id.price_to_seller,
+			    stock: doc.inventory_product_id.stock_left,
                         _id: doc._id
                     }
                 })
@@ -191,9 +199,10 @@ router.post('/order', (req, res, next) => {
     log.created_at = new Date();
     log.save();
     console.log(log);
-    Pharmacy.findOne({_id: req.body[0].pharma_id}).exec().then((docp) => { 
-    message = '<h3>Pharmacy Name :'+ docp.pharma_name +'</h3><h4>Area Name : Kormangla</h4><h5>Medicine List : </h5>';
-    message += '<table border="1"><tr><th>Medicine Name</th><th>Quantity</th><th>Cost</th></tr>';
+    Pharmacy.findOne({_id: req.body[0].pharma_id}).populate('area').exec().then((docp) => { 
+	    console.log(docp);
+    message = '<h3>Pharmacy Name: '+ docp.pharma_name +'</h3><h4>Area Name: '+ docp.area.area_name +'</h4>';
+    message += '<table border="1" style="width:100%"><tr><th style="width:60%">Medicine Name</th><th style="width:20%">Quantity</th><th style="width:20%">Cost</th></tr>';
     var deliverdate = new Date();
     deliverdate.setDate(deliverdate.getDate() + 1);
     deliverdate = deliverdate.toLocaleDateString();
@@ -215,7 +224,7 @@ router.post('/order', (req, res, next) => {
             orderItem.total_amount = req.body[i].cost
         orderItem.save();
         orders.push(orderItem._id);
-        message += '<tr><td>'+req.body[i].medicento_name+'</td><td>'+req.body[i].qty+'</td><td>'+req.body[i].cost+'</td></tr>'
+        message += '<tr><td style="width:60%">'+req.body[i].medicento_name+'</td><td style="width:20%">'+req.body[i].qty+'</td><td style="width:20%">'+req.body[i].cost+'</td></tr>'
     }
     const order = new Order();
     order.created_at = new Date();
@@ -249,14 +258,14 @@ router.post('/order', (req, res, next) => {
 	    html: message + '<p>Grand Total = ' + total +'</p>'// plain text body
     };
     */
-   content = 'Order has been placed by ' + docp.pharma_name + 'on' + order.delivery_date.toLocaleDateString(); // Subject line
-   message = message + '<p>Grand Total = ' + total +'</p>';
+   content = 'Order has been placed by ' + docp.pharma_name + ' on ' + order.delivery_date.toLocaleDateString(); // Subject line
+   message = message + '<td style="width:60%"></td><td colspan="2" style="width:40%">Grand Total = ' + total +'</td>';
    nodeoutlook.sendEmail({
     auth: {
         user: "giteshshastri123@outlook.com",
         pass: "shastri@1"
     }, from: 'giteshshastri123@outlook.com',
-    to: 'giteshshastri96@gmail.com, rohit@medicento.com, arpandebasis@medicento.com, giteshmedicento@gmail.com',
+    to: 'giteshshastri96@gmail.com,Contact.medicento@gmail.com',
     subject: content,
     html: message,
 });
