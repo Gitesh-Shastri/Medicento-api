@@ -18,7 +18,7 @@ const reviewSchema = mongoose.Schema({
     },
     sales: {
     	type:String
-    }
+    },
     dist_return: {
 		type:Number,
 		required: true
