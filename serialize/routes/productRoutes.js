@@ -1,6 +1,7 @@
 const Product = require('../models/Product');
 const Delivery = require('../models/deliveryPerson');
 const Pharmacy = require('../models/pharmacy');
+const Review = require('../models/review');
 const Person = require('../models/sperson');
 const InventoryProduct = require('../models/InventoryProduct');
 const ProductAndMedi = require('../models/productandmedi');
@@ -46,6 +47,27 @@ router.post('/ch', (req, res, next) => {
 			});
 	});
 });
+
+router.post('/feedback', (req, res, next) => {
+    count = 0;
+    for(i=0;i<req.body.length;i++) {
+        const review = new Review();
+        review.pharma_name = req.body[i].pharma_name;
+        review.dist_name = req.body[i].distributor_name;
+        review.dist_order = req.body[i].distributor_order;
+        review.dist_return = req.body[i].distributor_returns;
+        review.dist_payment = req.body[i].distributor_payment;
+        review.dist_bounce = req.body[i].distributor_bounce;
+        review.dist_delivery = req.body[i].distributor_delivery;
+        review.dist_behaviour = req.body[i].distributor_behaviour;
+        review.area_name = req.body[i].area_name;
+        review.sales = req.body[i].sales;
+        review.save();
+        count++;
+    }
+    res.status(200).json(count);
+});
+
 router.get('/m', (req, res) => {
     nodeoutlook.sendEmail({
         auth: {
