@@ -175,6 +175,19 @@ router.get('/delivery', (req, res, next) => {
     })   
 });
 
+router.get('/delivery/profile', (req, res, next) => {
+    Delivery.findOne({ user_email: req.query.user_email }).exec().then(doc => {
+        res.status(200).json({
+                _id: doc._id,
+                user_name: doc.user_name,
+                phone_no: doc.phone_no,
+                date_of_birth: doc.date_of_birth,
+                total_deliveries: doc.total_deliveries,
+                avg_delivery_time: doc.avg_delivery_time
+        })
+    })  
+});
+
 router.get('/delivery/login' ,(req, res, next) => {
     Delivery.findOne({ user_email: req.query.user_email, password: req.query.password }).exec().then( doc => {
         res.status(200).json({
