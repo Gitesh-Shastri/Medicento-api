@@ -175,12 +175,35 @@ router.get('/delivery', (req, res, next) => {
     })   
 });
 
-router.post('/delivery/change_password', (req, res, next) => {
-    Delivery.findByIdAndUpdate({  _id:req.query.id }, {$set: {password: req.query.new_password}}, {new: true}).exec().then(doc => {
+router.get('/delivery/login' ,(req, res, next) => {
+    Delivery.findOne({ user_email: req.query.user_email, password: req.query.password }).exec().then( doc => {
         res.status(200).json({
-            doc
+            is_first_time_sign_in: doc.is_first_time_sign_in,
+            message: "User Found"
+        })
+    }).catch(err => {
+        res.status(500).json({
+            message: "No User Found"
         })
     })
+});
+
+router.post('/delivery/update_password', (req, res, next) => {
+    Delivery.findOne({ user_email:req.body.user_email }).exec().then( doc => {
+        Delivery.findByIdAndUpdate({  _id: doc._id }, {$set: {password: req.body.new_password}}, {new: true}).exec().then(doc1 => {
+            res.status(200).json({
+                message: "Password Updated"
+            })
+        }).catch( err => {
+            res.status(200).json({
+                message: "Password Updation Failed"
+            })
+        }); 
+    }).catch( err => {
+        res.status(200).json({
+            message: "No User Found"
+        })
+    });
 });
 
 router.get('/recent_order/:id', (req, res, next) => {
