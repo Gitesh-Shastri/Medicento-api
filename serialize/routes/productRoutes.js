@@ -161,7 +161,7 @@ router.get('/medimap', (req, res) => {
 });
 
 router.get('/delivery', (req, res, next) => {
-    Delivery.findOne({ user_email: req.query.user_email, password: req.query.password }).populate('area_and_delivery').exec().then(doc => {
+    Delivery.findOne({ user_email: req.query.user_email}).populate('area_and_delivery').exec().then(doc => {
         res.status(200).json({
                 _id: doc._id,
                 delivery_pending: doc.delivery_pending,
