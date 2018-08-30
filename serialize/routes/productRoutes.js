@@ -161,16 +161,14 @@ router.get('/medimap', (req, res) => {
 });
 
 router.get('/delivery', (req, res, next) => {
-    Delivery.findOne({ user_email: req.query.user_email, password: req.query.password }).exec().then(doc => {
+    Delivery.findOne({ user_email: req.query.user_email, password: req.query.password }).populate('area_and_delivery').exec().then(doc => {
         res.status(200).json({
                 _id: doc._id,
-                is_first_time_sign_in: doc.is_first_time_sign_in,
-                user_name: doc.user_name,
-                full_name: doc.full_name,
-                phone_no: doc.phone_no,
-                date_of_birth: doc.date_of_birth,
-                total_deliveries: doc.total_deliveries,
-                avg_delivery_time: doc.avg_delivery_time
+                delivery_pending: doc.delivery_pending,
+                delivery_completed: doc.delivery_completed,
+                collected_amount: doc.collected_amount,
+                points: doc.points,
+                area_and_delivery: doc.area_and_delivery
         })
     })   
 });
