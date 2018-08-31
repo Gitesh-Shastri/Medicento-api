@@ -32,7 +32,7 @@ const jobsSchema = mongoose.Schema({
 	pick_up_type: {
 		type: String,
 		required: true
-	}
+	},
 	job_status: {
 		type: String,
 		required: true
