@@ -43,7 +43,7 @@ const transporter = nodemailer.createTransport({
 });
 */
 
-router.get('/jobs', (req, req, next) => {
+router.get('/jobs', (req, res, next) => {
     Jobs.findOne( { _id: req.query.jobid } ).populate('order').exec().then( doc => {
         res.status(200).json({
             pickup_point: {
@@ -65,7 +65,7 @@ router.get('/jobs', (req, req, next) => {
             order: doc.order
         })
     }).catch(err => {
-        res.status(500).json(err: err);
+        res.status(500).json({err: err});
     });
 });
 
@@ -87,7 +87,7 @@ router.post('/jobs', (req, res, next) => {
 
 router.get('/delivery_jobs', (req, res, next) => {
     Delivery.findOne( {user_email: req.query.user_email}).exec().then( doc => {
-        DeliveryJobs.findOne( {delivery_person: doc._id} )..populate('pending_jobs').populate('completed_jobs').exec().then( docs => {
+        DeliveryJobs.findOne( {delivery_person: doc._id} ).populate('pending_jobs').populate('completed_jobs').exec().then( docs => {
                 console.log(docs);
                 res.status(201).json(docs)      
         }).catch(err => {

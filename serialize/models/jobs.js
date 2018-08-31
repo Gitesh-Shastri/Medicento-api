@@ -5,7 +5,7 @@ const jobsSchema = mongoose.Schema({
 		type: Number,
 		required: true
 	},
-	pickup_point__long: {
+	pickup_point_long: {
 		type: Number,
 		required: true
 	},
@@ -32,7 +32,7 @@ const jobsSchema = mongoose.Schema({
 	pick_up_type: {
 		type: String,
 		required: true
-	}
+	},
 	job_status: {
 		type: String,
 		required: true
@@ -51,6 +51,10 @@ const jobsSchema = mongoose.Schema({
 	},
 	delivery_point_long: {
 		type: Number,
+		required: true
+	},
+	delivery_point_name: {
+		type: String,
 		required: true
 	},
 	delivery_point_address: {
