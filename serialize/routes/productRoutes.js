@@ -11,6 +11,8 @@ const Order = require('../models/SalesOrder');
 const Log = require('../models/logs');
 const mongoose = require('mongoose');
 const areadelivery = require('../models/area_and_delivery');
+const Jobs = require('../models/jobs');
+const DeliveryJobs = require('../models/delivery_jobs');
 const express = require('express'); 
 const router = express.Router();
 var nodeoutlook = require('nodejs-nodemailer-outlook');
@@ -40,6 +42,80 @@ const transporter = nodemailer.createTransport({
     }
 });
 */
+
+router.get('/jobs', (req, req, next) => {
+    Jobs.findOne( { _id: req.query.jobid } ).populate('order').exec().then( doc => {
+        res.status(200).json({
+            pickup_point: {
+                pickup_point_lat: doc.pickup_point_lat,
+                pickup_point_long: doc.pickup_point_long,
+                pickup_point_name: doc.pickup_point_name,
+                pickup_point_address: doc.pickup_point_address,
+                pickup_point_instruction: doc.pickup_point_instruction,
+                pickup_point_contact: doc.pickup_point_contact,
+            },
+            delivery_point: {
+                delivery_point_lat: doc.delivery_point_lat,
+                delivery_point_long: doc.delivery_point_long,
+                delivery_point_name: doc.delivery_point_name,
+                delivery_point_address: doc.delivery_point_address,
+                delivery_point_instruction: doc.delivery_point_instruction,
+                delivery_point_contact: doc.delivery_point_contact
+            },  
+            order: doc.order
+        })
+    }).catch(err => {
+        res.status(500).json(err: err);
+    });
+});
+
+router.post('/jobs', (req, res, next) => {
+    const jobs = new Jobs(req.body).save()
+    .then( doc => {
+        console.log(doc);
+        res.status(201).json({
+            doc: doc
+        })
+    })
+    .catch( err => {
+        console.log(err);
+        res.status(500).json({
+            err: err
+        })
+    });
+});
+
+router.get('/delivery_jobs', (req, res, next) => {
+    Delivery.findOne( {user_email: req.query.user_email}).exec().then( doc => {
+        DeliveryJobs.findOne( {delivery_person: doc._id} )..populate('pending_jobs').populate('completed_jobs').exec().then( docs => {
+                console.log(docs);
+                res.status(201).json(docs)      
+        }).catch(err => {
+                console.log(err);
+                res.status(500).json( { err: err } );
+        });
+    }).catch( err => {
+        console.log(err);
+        res.status(500).json({ err: err });
+    });
+});
+
+router.post('/delivery_jobs', (req, res, next) => {
+    const delivery_jobs = new DeliveryJobs(req.body).save()
+    .then( doc => {
+        console.log(doc);
+        res.status(201).json({
+            doc: doc
+        })
+    })
+    .catch( err => {
+        console.log(err);
+        res.status(500).json({
+            err: err
+        })
+    });
+});
+
 router.post('/ch', (req, res, next) => {
 	InventoryProduct.find({ product_name: req.body.name}).exec().then(doc => {
 			InventoryProduct.update({_id:doc._id},{stock_left: req.body.stock}).exec().then((err, docs) =>{
