@@ -295,7 +295,7 @@ router.post('/delivery/update_password', (req, res, next) => {
 });
 
 router.get('/recent_order/:id', (req, res, next) => {
-    Order.find( {pharmacy_id: req.params.id} ).select('created_at grand_total status').exec().then(doc => {
+    Order.find( {pharmacy_id: req.params.id} ).select('created_at grand_total status').populate('order_items').exec().then(doc => {
         console.log(req.params.id);
         res.status(200).json({
             orders: doc 
