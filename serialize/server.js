@@ -9,6 +9,8 @@ const morgan = require('morgan');
 const mongoose = require('mongoose');
 const MONGODB_URI = process.env.MONGODB_URI;
 const PORT = process.env.PORT || 3000;
+
+
 mongoose.connect(MONGODB_URI, function () {
     console.log('connected to DB');
 });

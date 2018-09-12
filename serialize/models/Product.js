@@ -7,8 +7,7 @@ const productSchema = mongoose.Schema({
 		required: true
 	},
 	product_code: {
-		type: String,
-		required: true
+		type: String
     },
     company_name: {
         type: String,
@@ -19,24 +18,19 @@ const productSchema = mongoose.Schema({
 		required: true
 	},
 	contents: {
-		type: String,
-		required: true
+		type: String
 	},
 	package_type: {
-		type: String,
-		required: true
+		type: String
 	},
 	description: {
-		type: String,
-		required: true 
+		type: String 
 	},
 	category: {
-		type: String,
-		required: true
+		type: String
 	},
 	box_quantity: {
-		type: Number,
-		required: true
+		type: Number
 	}
 });
 

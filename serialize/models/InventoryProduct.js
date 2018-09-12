@@ -11,53 +11,45 @@ const inventoryProductSchema = mongoose.Schema({
 		type: String,
 		required: true
 	},
+	offer: {
+		type: String
+	},
 	stock_left: {
 		type: Number,
 		required: true
 	},
 	discount: {
-		type: Number,
-		required: true
+		type: Number
 	},
 	cost_for_medicento: {
-		type: Number,
-		required: true
+		type: Number
 	},
 	manufacturing_date: {
-		type: Date,
-		required: true
+		type: Date
 	},
 	expiry_date: {
-		type: Date,
-		required: true
+		type: Date
 	},
 	price_to_seller: {
-		type: Number,
-		required: true
+		type: Number
 	},
 	price_to_retailer: {
-		type: Number,
-		required: true
+		type: Number
 	},
 	tax_price_to_retailer: {
-		type: Number,
-		required: true
+		type: Number
 	},
 	tax_percentage: {
-		type: Number,
-		required: true
+		type: Number
 	},
 	scheme: {
-		type: String,
-		required: true
+		type: String
 	},
 	percentage_scheme: {
-		type: Number,
-		required: true
-	},
+		type: Number
+		},
 	batch_number: {
-		type: String,
-		required: true
+		type: String
 	}
 });
 

@@ -118,12 +118,14 @@ router.post('/delivery_jobs', (req, res, next) => {
 });
 
 router.post('/ch', (req, res, next) => {
-	InventoryProduct.find({ product_name: req.body.name}).exec().then(doc => {
-			InventoryProduct.update({_id:doc._id},{stock_left: req.body.stock}).exec().then((err, docs) =>{
-				res.status(201).json(docs);
-			});
-	});
+	InventoryProduct.findOneAndUpdate({ product_name: req.body.name}, {$set:{stock_left:req.body.stock}}, {new: true}).exec().then((doc, err) => {
+        if (err) {
+            res.send(err);
+        }
+        res.send(doc);
+    });
 });
+
 
 router.post('/feedback', (req, res, next) => {
     count = 0;
@@ -158,6 +160,10 @@ router.get('/m', (req, res) => {
     res.send('felnke');
 });
 
+router.get('/update', (req, res, next) => {
+
+});
+
 router.get('/medi',(req, res) => {
     count = req.body.length;
     a = 0;
@@ -167,29 +173,13 @@ router.get('/medi',(req, res) => {
         inventoryProduct.inventory_id =  "5b2e2e31f739e00600387bdf";
         inventoryProduct.product_name = req.body[i].PrName;
         inventoryProduct.stock_left = req.body[i].Stock;
-        inventoryProduct.discount = "0";
-        inventoryProduct.cost_for_medicento = req.body[i].SaleRate;
-        inventoryProduct.manufacturing_date =  "2018-04-07T00:00:00.000Z";
-        inventoryProduct.expiry_date = "2018-12-12T00:00:00.000Z";
-        inventoryProduct.price_to_seller = req.body[i].SaleRate;
-        inventoryProduct.price_to_retailer = req.body[i].SaleRate;
-        inventoryProduct.tax_price_to_retailer = req.body[i].Mrp;
-        inventoryProduct.tax_percentage = "18";
-        inventoryProduct.scheme = "No";
-        inventoryProduct.percentage_scheme = "0";
-        inventoryProduct.batch_number = "0000";
+        inventoryProduct.offer = req.body[i].Offers;
     inventoryProduct.save();
     const product = new Product();
         product.product_id = new mongoose.Types.ObjectId();
         product.medicento_name = req.body[i].PrName;
-        product.product_code = req.body[i].Code;
         product.company_name = req.body[i].MfName;
         product.total_stock = req.body[i].Stock;
-        product.contents = "fkewnfkjenwfwk";
-        product.package_type = "Box";
-        product.description = "fekwnfkwe";
-        product.category = "Tab";
-        product.box_quantity = "10";
     product.save();
     const productandmedi = new ProductAndMedi({
         product_id: product._id,
@@ -209,10 +199,11 @@ router.get('/log', (req, res) => {
     log.save();
     res.send(log);
 });
+
 router.get('/medimap', (req, res) => {
     ProductAndMedi.find()
         .populate('product_id', 'medicento_name company_name')
-        .populate('inventory_product_id', 'price_to_seller stock_left')
+        .populate('inventory_product_id', 'stock_left')
         .exec()
         .then(docs => {
             const response = {
@@ -221,8 +212,8 @@ router.get('/medimap', (req, res) => {
                     return {
                         medicento_name: doc.product_id.medicento_name,
                         company_name: doc.product_id.company_name,
-                        price: doc.inventory_product_id.price_to_seller,
-			    stock: doc.inventory_product_id.stock_left,
+                        price: 0,
+			            stock: doc.inventory_product_id.stock_left,
                         _id: doc._id
                     }
                 })
@@ -295,10 +286,10 @@ router.post('/delivery/update_password', (req, res, next) => {
 });
 
 router.get('/recent_order/:id', (req, res, next) => {
-    Order.find( {pharmacy_id: req.params.id} ).select('created_at grand_total status').exec().then(doc => {
+    Order.find( {pharmacy_id: req.params.id} ).select('status created_at grand_total').populate('order_items').exec().then(doc => {
         console.log(req.params.id);
         res.status(200).json({
-            orders: doc 
+            order: doc
         });
     }).catch( (err) =>{
         res.send('err');
