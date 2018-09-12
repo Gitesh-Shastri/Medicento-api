@@ -5,6 +5,34 @@ const User = require('../models/user');
 const Area = require('../models/area');
 const Person = require('../models/sperson');
 const jwt = require('jsonwebtoken');
+const Message = require('../models/message');
+
+router.get('/message', (req, res, next) => {
+    Message.find()
+            .exec()
+            .then( doc => {
+                res.status(200).json({
+                    code: doc[0].code,
+                    count: doc[0].count 
+                })
+            })
+            .catch(err => {
+                res.status(500).json({
+                    error: err
+                });
+            });
+});
+
+router.post('/message', (req, res, next) => {
+    const message = new Message({
+        code: req.body.code,
+        count: req.body.count
+    }).save().then( doc => {
+        res.send(doc);
+    }).catch(err => {
+        res.send(err);
+    });
+});
 
 router.get('/', (req, res, next) => {
         User.find()
