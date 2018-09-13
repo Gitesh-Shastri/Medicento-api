@@ -15,6 +15,7 @@ const express = require('express');
 const Jobs = require('../models/jobs');
 const DeliveryJobs = require('../models/delivery_jobs');
 const router = express.Router();
+const moment = require('moments');
 var nodeoutlook = require('nodejs-nodemailer-outlook');
 
 /*
@@ -286,14 +287,28 @@ router.post('/delivery/update_password', (req, res, next) => {
 });
 
 router.get('/recent_order/:id', (req, res, next) => {
-    Order.find( {pharmacy_id: req.params.id} ).select('status created_at grand_total').populate('order_items').exec().then(doc => {
-        console.log(req.params.id);
-        res.status(200).json({
-            order: doc
+    Order.find( {pharmacy_id: req.params.id} )
+        .select('status created_at grand_total')
+        .populate('order_items')
+        .exec()
+        .then(docs => {
+            const response = {
+                orders: docs.map(doc => {
+                    return {
+                        order_id: doc._id,
+                        status: doc.status,
+                        created_at: doc.created_at,
+                        order_items: doc.order_items
+                    }    
+                })
+            }
+            res.status(200).json(response);
+        })
+        .catch(err => {
+            res.status(500).json({
+                error: err
+            });
         });
-    }).catch( (err) =>{
-        res.send('err');
-    })
 });
 
 router.post('/delivery/area_and_deliveryC', (req, res, next) => {

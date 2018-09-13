@@ -18,6 +18,7 @@
     "express": "^4.16.3",
     "firebase-admin": "^6.0.0",
     "jsonwebtoken": "^8.3.0",
+    "moments": "0.0.2",
     "mongoose": "^5.1.5",
     "mongoose-auto-increment": "^5.0.1",
     "mongoose-float": "^1.0.2",
