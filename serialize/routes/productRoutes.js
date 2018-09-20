@@ -16,6 +16,7 @@ const Jobs = require('../models/jobs');
 const DeliveryJobs = require('../models/delivery_jobs');
 const router = express.Router();
 const moment = require('moments');
+const Camp = require('../models/camp');
 var nodeoutlook = require('nodejs-nodemailer-outlook');
 
 /*
@@ -309,6 +310,24 @@ router.get('/recent_order/:id', (req, res, next) => {
                 error: err
             });
         });
+});
+
+router.get('/notification', (req, res, next) =>{
+    Camp.find()
+        .exec()
+        .then(doc => {
+            var doc1 = doc[doc.length-1];
+            res.status(200).json({
+                title: doc1.name,
+                type: doc1.type,
+                content: doc1.type
+            })
+        })
+        .catch(err => {
+            res.status(500).json({
+                error: err
+            })
+        })
 });
 
 router.post('/delivery/area_and_deliveryC', (req, res, next) => {
