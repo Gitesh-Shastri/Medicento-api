@@ -320,7 +320,7 @@ router.get('/notification', (req, res, next) =>{
             res.status(200).json({
                 title: doc1.name,
                 type: doc1.type,
-                content: doc1.type
+                content: doc1.content
             })
         })
         .catch(err => {
