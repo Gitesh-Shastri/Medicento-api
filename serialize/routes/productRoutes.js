@@ -257,7 +257,7 @@ router.get('/delivery/profile', (req, res, next) => {
 });
 
 router.get('/delivery/login' ,(req, res, next) => {
-    Delivery.findOne({ user_email: req.query.user_email, password: req.query.password }).exec().then( doc => {
+    Delivery.findOne({ user_email: req.query.user_email, password: req.query.password, }).exec().then( doc => {
         res.status(200).json({
             is_first_time_sign_in: doc.is_first_time_sign_in,
             message: "User Found"
@@ -271,7 +271,7 @@ router.get('/delivery/login' ,(req, res, next) => {
 
 router.post('/delivery/update_password', (req, res, next) => {
     Delivery.findOne({ user_email:req.body.user_email }).exec().then( doc => {
-        Delivery.findByIdAndUpdate({  _id: doc._id }, {$set: {password: req.body.new_password}}, {new: true}).exec().then(doc1 => {
+        Delivery.findByIdAndUpdate({  _id: doc._id }, {$set: {password: req.body.new_password, is_first_time_sign_in:false }}, {new: true}).exec().then(doc1 => {
             res.status(200).json({
                 message: "Password Updated"
             })
