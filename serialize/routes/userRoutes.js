@@ -94,7 +94,6 @@ router.get('/login', (req, res, next) => {
         .then(user => {
             console.log(user);
             Person.find({user: user._id})
-        .populate('Allocated_Area')
                   .exec()
                   .then(doc => {
                     res.status(200).json({
@@ -113,7 +112,7 @@ router.get('/login', (req, res, next) => {
         .then(user => {
             console.log(user);
             Person.find({user: user._id)
-        .populate('Allocated_Area')
+                    .populate('Allocated_Area')
                   .exec()
                   .then(doc => {
                     res.status(200).json({
