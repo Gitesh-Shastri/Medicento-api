@@ -73,6 +73,24 @@ const router = express.Router();
             });
     });
 
+    
+    router.get('/updateApp', (req, res) => {
+        res.status(200).json({
+            "Version": [
+                {
+                    "version": "2.0.3",
+                    "error": "01"
+                }
+            ],
+            "Controle": [
+                {
+                    "version": "2.0.3",
+                    "error": "01"    
+                }
+            ]
+        })
+    });
+    
     // Find Pharmacy By Name
     router.get('/:id', function (req, res) {
         const id = req.params.id;
@@ -139,20 +157,4 @@ const router = express.Router();
             });
     });
 
-    router.get('/updateApp', (req, res) => {
-        res.status(200).json({
-            "Version": [
-                {
-                    "version": "2.0.3",
-                    "error": "01"
-                }
-            ],
-            "Controle": [
-                {
-                    "version": "2.0.3",
-                    "error": "01"    
-                }
-            ]
-        })
-    });
 module.exports = router;
