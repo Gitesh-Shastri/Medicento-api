@@ -90,11 +90,11 @@ router.post('/salesPerson', (req, res, next) => {
 router.get('/login', (req, res, next) => {
     if(req.query.useremail != null) {
         User.findOne({ useremail: req.query.useremail, password: req.body.password })
-        
         .exec()
         .then(user => {
             console.log(user);
             Person.find({user: user._id})
+        .populate('Allocated_Area')
                   .exec()
                   .then(doc => {
                     res.status(200).json({
@@ -109,11 +109,11 @@ router.get('/login', (req, res, next) => {
         });
     } else {
         User.findOne({ usercode: req.query.usercode })
-        
         .exec()
         .then(user => {
             console.log(user);
-            Person.find({user: user._id})
+            Person.find({user: user._id)
+        .populate('Allocated_Area')
                   .exec()
                   .then(doc => {
                     res.status(200).json({
