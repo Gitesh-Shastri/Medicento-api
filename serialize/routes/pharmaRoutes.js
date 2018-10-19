@@ -139,7 +139,7 @@ const router = express.Router();
             });
     });
 
-    router.get('/update', (req, res) => {
+    router.get('/updateApp', (req, res) => {
         res.status(200).json({
             "Version": [
                 {
