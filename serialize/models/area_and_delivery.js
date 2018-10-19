@@ -2,8 +2,7 @@ const mongoose = require('mongoose');
 
 const areadeliverySchema = mongoose.Schema({
 	area: {
-		type: mongoose.Schema.Types.ObjectId,
-		ref: 'Area',
+		type: String,
 		required: true
     },
     No_of_delivery: {
