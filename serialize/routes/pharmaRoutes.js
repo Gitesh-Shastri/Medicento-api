@@ -138,4 +138,21 @@ const router = express.Router();
                 });
             });
     });
+
+    router.get('/update', (req, res) => {
+        res.status(200).json({
+            "Version": [
+                {
+                    "version": "2.0.3",
+                    "error": "01"
+                }
+            ],
+            "Controle": [
+                {
+                    "version": "2.0.3",
+                    "error": "01"    
+                }
+            ]
+        })
+    });
 module.exports = router;
