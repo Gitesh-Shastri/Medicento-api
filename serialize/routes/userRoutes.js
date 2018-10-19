@@ -111,7 +111,7 @@ router.get('/login', (req, res, next) => {
         .exec()
         .then(user => {
             console.log(user);
-            Person.find({user: user._id)
+            Person.find({user: user._id})
                   .exec()
                   .then(doc => {
                     res.status(200).json({
