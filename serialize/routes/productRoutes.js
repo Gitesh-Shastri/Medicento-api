@@ -288,7 +288,7 @@ router.post('/delivery/update_password', (req, res, next) => {
 });
 
 router.get('/recent_order/:id', (req, res, next) => {
-    Order.find( {pharmacy_id: req.params.id} )
+    Order.find( {pharmacy_id: req.params.id, status: req.query.status} )
         .select('status created_at grand_total')
         .populate('order_items')
         .exec()
@@ -297,9 +297,8 @@ router.get('/recent_order/:id', (req, res, next) => {
                 orders: docs.map(doc => {
                     return {
                         order_id: doc._id,
-                        status: doc.status,
                         created_at: doc.created_at,
-			    grand_total: doc.grand_total,
+			            grand_total: doc.grand_total,
                         order_items: doc.order_items
                     }    
                 })
