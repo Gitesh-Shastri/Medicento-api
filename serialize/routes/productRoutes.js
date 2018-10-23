@@ -17,6 +17,7 @@ const DeliveryJobs = require('../models/delivery_jobs');
 const router = express.Router();
 const moment = require('moments');
 const Camp = require('../models/camp');
+const vpiinventory = require('../models/vpimedicine');
 var nodeoutlook = require('nodejs-nodemailer-outlook');
 
 /*
@@ -203,23 +204,21 @@ router.get('/log', (req, res) => {
 });
 
 router.get('/medimap', (req, res) => {
-    ProductAndMedi.find()
-        .populate('product_id', 'medicento_name company_name')
-        .populate('inventory_product_id', 'stock_left')
-        .exec()
-        .then(docs => {
-            const response = {
-                count: docs.length,
-                products: docs.map(doc => {
-                    return {
-                        medicento_name: doc.product_id.medicento_name,
-                        company_name: doc.product_id.company_name,
-                        price: 0,
-			            stock: doc.inventory_product_id.stock_left,
-                        _id: doc._id
-                    }
-                })
-            }
+    vpiinventory.find().select('Item_name manfc_name mrp qty')
+                .exec()
+                .then(docs => {
+                    const response = {
+                    count: docs.length,
+                    products: docs.map(doc => {
+                        return {
+                            medicento_name: doc.Item_name,
+                            company_name: doc.manfc_name,
+                            price: doc.mrp,
+                            stock: doc.qty,
+                            _id: doc._id
+                        }
+                    })    
+                }    
             res.status(200).json(response);
         })
         .catch(err => {
