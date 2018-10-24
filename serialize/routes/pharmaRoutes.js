@@ -78,13 +78,13 @@ const router = express.Router();
         res.status(200).json({
             "Version": [
                 {
-                    "version": "2.0.4",
+                    "version": "2.0.7",
                     "error": "01"
                 }
             ],
             "Controle": [
                 {
-                    "version": "2.0.4",
+                    "version": "2.0.7",
                     "error": "01"    
                 }
             ]
