@@ -454,7 +454,8 @@ router.post('/order', (req, res, next) => {
                 res.status(200).json({
                     message: "Order has been placed successfully",
                     delivery_date: order.delivery_date.toLocaleString(),
-                    order_id: order._id                        
+                    order_id: order._id,
+			grand_total: total
                     });
                     });
                 });
