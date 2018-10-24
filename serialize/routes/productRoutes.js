@@ -16,6 +16,7 @@ const Jobs = require('../models/jobs');
 const DeliveryJobs = require('../models/delivery_jobs');
 const router = express.Router();
 const moment = require('moments');
+const OfferInventory = require('../models/offermedicine');
 const Camp = require('../models/camp');
 const vpiinventory = require('../models/vpimedicine');
 var nodeoutlook = require('nodejs-nodemailer-outlook');
@@ -165,6 +166,46 @@ router.get('/m', (req, res) => {
 
 router.get('/update', (req, res, next) => {
 
+});
+
+router.get('/offer', (req, res, next) => {
+    OfferInventory.find().select('Item_name manfc_name mrp qty')
+                          .exec()
+                          .then(docs => {
+                            if(docs.length > 0) {
+                            const response = {
+                            count: docs.length,
+                            products: docs.map(doc => {
+                                return {
+                                    medicento_name: doc.Item_name,
+                                    company_name: doc.manfc_name,
+                                    price: doc.mrp,
+                                    stock: doc.qty,
+                                    _id: doc._id
+                                }
+                            })    
+                        }    
+            res.status(200).json({message: 'Offer Available', offermedicine: response});        
+            }
+        res.status(200).json({message: 'Offer Not Available'});
+    }).catch( err=> {
+        res.status(400).json({message: 'Offer Not Available'});
+    });
+});
+
+router.post('/offer', (req, res, next) => {
+    var vpi = new OfferInventory();
+    vpi.Item_name= '-';
+    vpi.batch_no = '-';
+    vpi.expiry_date = '-';
+    vpi.qty = 0;
+    vpi.packing = '-';
+    vpi.item_code=  '-';
+    vpi.mrp = 0;
+    vpi.manfc_code = '-';
+    vpi.manfc_name = '-';
+    vpi.save();	
+    console.log(vpi);
 });
 
 router.get('/medi',(req, res) => {
@@ -455,7 +496,7 @@ router.post('/order', (req, res, next) => {
                     message: "Order has been placed successfully",
                     delivery_date: order.delivery_date.toLocaleString(),
                     order_id: order._id,
-			grand_total: order.grand_total
+			        grand_total: order.grand_total
                     });
                     });
                 });
