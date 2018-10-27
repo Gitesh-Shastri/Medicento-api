@@ -5,7 +5,7 @@ const express= require('express');
 const router = express.Router();
 const Area = require('../models/area');
 
-    router.get('/area', (req, res, next) => {
+    router.get('/area/area', (req, res, next) => {
         Area.find().exec().then( areas1 => {
             Pharmacy.find().exec().then( pharmas => {
                 res.status(200).json({
