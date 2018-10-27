@@ -3,8 +3,28 @@ const Pharmacy = require('../models/pharmacy');
 const Message = require('../models/message');
 const express= require('express');
 const router = express.Router();
+const Area = require('../models/area');
 
-
+    router.get('/area', (req, res, next) => {
+        Area.find().exec().then( areas1 => {
+            Pharmacy.find().exec().then( pharmas => {
+                res.status(200).json({
+                areas: areas1,
+                pharmas: pharmas
+            });
+        }).catch( err => {
+            console.log(err);
+            res.status(500).json({
+                error: err
+            });
+        });
+    }).catch( err => {
+        console.log(err);
+        res.status(500).json({
+            error: err
+        });
+    })
+    });
     //Fetch All The Pharmacy
     router.get('', function (req, res) {
         Pharmacy.find()
