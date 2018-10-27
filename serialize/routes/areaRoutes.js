@@ -3,6 +3,7 @@ const express= require('express');
 const router = express.Router();
 const checkAuth = require('../middleware/check-auth');
 const AreasController = require('../controllers/areas');
+const Pharma = require('../models/pharmacy');
 
 router.get('/', AreasController.area_get_all);
 router.post('/new', AreasController.orders_create_area);
@@ -37,6 +38,28 @@ router.post('/new', AreasController.orders_create_area);
                     res.status(500).json(err);
                 });
     });
+
+router.get('/pharma', (req, res, next) => {
+    Area.find().exec().then( area => {
+        Pharma.find().exec().then( pharm => {
+            res.status(200).json({
+                areas: area,
+                pharmas: pharm
+            })
+        }).catch(err => {
+            console.log(err);
+            res.status(500).json({
+                error: err
+            });            
+        });
+    }).catch( err => {
+        console.log(err);
+        res.status(500).json({
+            error: err
+        });
+    });
+});
+
 router.post('/delete/:areaName', function (req, res) {
         const area_name = req.params.areaName;
         Area.findOneAndRemove({area_name: area_name})
