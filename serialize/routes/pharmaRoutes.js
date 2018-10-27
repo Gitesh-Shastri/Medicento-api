@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Pharmacy = require('../models/pharmacy');
+const Message = require('../models/message');
 const express= require('express');
 const router = express.Router();
 
@@ -75,20 +76,31 @@ const router = express.Router();
 
     
     router.get('/updateApp', (req, res) => {
-        res.status(200).json({
-            "Version": [
-                {
-                    "version": "2.0.7",
-                    "error": "01"
-                }
-            ],
-            "Controle": [
-                {
-                    "version": "2.0.7",
-                    "error": "01"    
-                }
-            ]
-        })
+        Message.find()
+            .exec()
+            .then( doc => {
+                res.status(200).json({
+                    code: doc[0].code,
+                    count: doc[0].count,
+                    "Version": [
+                        {
+                            "version": "2.0.7",
+                            "error": "01"
+                        }
+                    ],
+                    "Controle": [
+                        {
+                            "version": "2.0.7",
+                            "error": "01"    
+                        }
+                    ]
+                })
+            })
+            .catch(err => {
+                res.status(500).json({
+                    error: err
+                });
+            });
     });
     
     // Find Pharmacy By Name
