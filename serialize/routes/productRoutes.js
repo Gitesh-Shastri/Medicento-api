@@ -352,15 +352,12 @@ router.post('/delivery', (req, res, next) => {
 });
 
 router.post('/order', (req, res, next) => {
-    const log = new Log();
+    /*const log = new Log();
     log.logd = JSON.stringify(req.body);
     log.created_at = new Date();
-    log.save();
-    console.log(log);
+    log.save(); */
     var date = new Date();
-    var time = moment(date).add(5, 'h');
-    var time1 = moment(time).add(30, 'm');
-    var date1 = moment(time1).format('LLLL');
+    console.log(date);
     Pharmacy.findOne({_id: req.body[0].pharma_id}).populate('area').exec().then((docp) => { 
 	message = '<h3>Pharmacy Name: '+ docp.pharma_name +'</h3><h4>Area Name: '+ docp.area.area_name +'</h4>';
     message += '<table border="1" style="width:100%"><tr><th style="width:60%">Medicine Name</th><th style="width:20%">Quantity</th><th style="width:20%">Cost</th></tr>';
@@ -380,7 +377,7 @@ router.post('/order', (req, res, next) => {
             orderItem.quantity = req.body[i].qty,
             orderItem.paid_price = req.body[i].rate,
             orderItem.code = req.body[i].code,
-            orderItem.created_at = date1,
+            orderItem.created_at = date,
             orderItem.medicento_name = req.body[i].medicento_name,
             orderItem.company_name = req.body[i].company_name,
             orderItem.total_amount = req.body[i].cost
@@ -389,7 +386,7 @@ router.post('/order', (req, res, next) => {
         message += '<tr><td style="width:60%">'+req.body[i].medicento_name+'</td><td style="width:20%">'+req.body[i].qty+'</td><td style="width:20%">'+req.body[i].cost+'</td></tr>'
     }
     const order = new Order();
-    order.created_at = date1;
+    order.created_at = date;
     order.pharmacy_id = req.body[0].pharma_id;
     order.sales_person_id = req.body[0].salesperson_id;
     order.grand_total = total;
@@ -420,7 +417,7 @@ router.post('/order', (req, res, next) => {
 	    html: message + '<p>Grand Total = ' + total +'</p>'// plain text body
     };
     */
-   content = 'Order has been placed by ' + docp.pharma_name + ' on ' + date1 // Subject line
+   content = 'Order has been placed by ' + docp.pharma_name + ' on ' + date.toLocaleString() // Subject line
    message = message + '<td style="width:60%"></td><td colspan="2" style="width:40%">Grand Total = ' + total +'</td>';
    nodeoutlook.sendEmail({
     auth: {
