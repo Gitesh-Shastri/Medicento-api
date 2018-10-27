@@ -21,31 +21,62 @@ const Camp = require('../models/camp');
 const vpiinventory = require('../models/vpimedicine');
 var nodeoutlook = require('nodejs-nodemailer-outlook');
 
-/*
-var email 	= require("emailjs");
-var server 	= email.server.connect({
-    user:	process.env.id,
-    port: 587, 
-    password: process.env.pass, 
-    host:	"smtp-mail.outlook.com", 
-    tls: {ciphers: "SSLv3"}
+router.get('/delivery', (req, res, next) => {
+    Delivery.findOne({ user_email: req.query.user_email}).populate('area_and_delivery', 'area No_of_delivery').exec().then(doc => {
+        res.status(200).json({
+                _id: doc._id,
+                delivery_pending: doc.delivery_pending,
+                delivery_completed: doc.delivery_completed,
+                collected_amount: doc.collected_amount,
+                points: doc.points,
+                area_and_delivery: doc.area_and_delivery
+        })
+    })   
 });
-*/
-/*var nodemailer = require('nodemailer');
-const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 465,
-    secure: true,
-    auth: {
-		   user: process.env.gmailid,
-		   pass: process.env.password
-       },
-       tls: {
-        // do not fail on invalid certs
-        rejectUnauthorized: false
-    }
+
+router.get('/delivery/profile', (req, res, next) => {
+    Delivery.findOne({ user_email: req.query.user_email }).exec().then(doc => {
+        res.status(200).json({
+                _id: doc._id,
+                user_name: doc.user_name,
+                phone_no: doc.phone_no,
+                date_of_birth: doc.date_of_birth,
+                total_deliveries: doc.total_deliveries,
+                avg_delivery_time: doc.avg_delivery_time
+        })
+    })  
 });
-*/
+
+router.get('/delivery/login' ,(req, res, next) => {
+    Delivery.findOne({ user_email: req.query.user_email, password: req.query.password, }).exec().then( doc => {
+        res.status(200).json({
+            is_first_time_sign_in: doc.is_first_time_sign_in,
+            message: "User Found"
+        })
+    }).catch(err => {
+        res.status(500).json({
+            message: "No User Found"
+        })
+    })
+});
+
+router.post('/delivery/update_password', (req, res, next) => {
+    Delivery.findOne({ user_email:req.body.user_email }).exec().then( doc => {
+        Delivery.findByIdAndUpdate({  _id: doc._id }, {$set: {password: req.body.new_password, is_first_time_sign_in:false }}, {new: true}).exec().then(doc1 => {
+            res.status(200).json({
+                message: "Password Updated"
+            })
+        }).catch( err => {
+            res.status(200).json({
+                message: "Password Updation Failed"
+            })
+        }); 
+    }).catch( err => {
+        res.status(200).json({
+            message: "No User Found"
+        })
+    });
+});
 
 router.get('/jobs', (req, res, next) => {
     Jobs.findOne( { _id: req.query.jobid } ).populate('order').exec().then( doc => {
@@ -151,23 +182,6 @@ router.post('/feedback', (req, res, next) => {
     res.status(200).json(count);
 });
 
-router.get('/m', (req, res) => {
-    nodeoutlook.sendEmail({
-        auth: {
-            user: "giteshshastri123@outlook.com",
-            pass: "shastri@1"
-        }, from: 'outlook.com',
-        to: 'giteshshastri96@gmail.com, giteshshastri100@gmail.com, giteshmedicento@gmail.com',
-        subject: 'Heroku Test',
-        html: '<b>This is bold text</b>',
-    });
-    res.send('felnke');
-});
-
-router.get('/update', (req, res, next) => {
-
-});
-
 router.get('/offer', (req, res, next) => {
     OfferInventory.find().select('Item_name manfc_name mrp qty')
                           .exec()
@@ -236,14 +250,6 @@ router.get('/medi',(req, res) => {
         arr: a    });
 });
 
-router.get('/log', (req, res) => {
-    const log = Log();
-    log.logd = 'fekjbfjebf';
-    log.created_at = new Date();
-    log.save();
-    res.send(log);
-});
-
 router.get('/medimap', (req, res) => {
     vpiinventory.find().select('Item_name manfc_name mrp qty item_code')
                 .exec()
@@ -269,63 +275,6 @@ router.get('/medimap', (req, res) => {
                 error: err
             })
         });
-});
-
-router.get('/delivery', (req, res, next) => {
-    Delivery.findOne({ user_email: req.query.user_email}).populate('area_and_delivery', 'area No_of_delivery').exec().then(doc => {
-        res.status(200).json({
-                _id: doc._id,
-                delivery_pending: doc.delivery_pending,
-                delivery_completed: doc.delivery_completed,
-                collected_amount: doc.collected_amount,
-                points: doc.points,
-                area_and_delivery: doc.area_and_delivery
-        })
-    })   
-});
-
-router.get('/delivery/profile', (req, res, next) => {
-    Delivery.findOne({ user_email: req.query.user_email }).exec().then(doc => {
-        res.status(200).json({
-                _id: doc._id,
-                user_name: doc.user_name,
-                phone_no: doc.phone_no,
-                date_of_birth: doc.date_of_birth,
-                total_deliveries: doc.total_deliveries,
-                avg_delivery_time: doc.avg_delivery_time
-        })
-    })  
-});
-
-router.get('/delivery/login' ,(req, res, next) => {
-    Delivery.findOne({ user_email: req.query.user_email, password: req.query.password, }).exec().then( doc => {
-        res.status(200).json({
-            is_first_time_sign_in: doc.is_first_time_sign_in,
-            message: "User Found"
-        })
-    }).catch(err => {
-        res.status(500).json({
-            message: "No User Found"
-        })
-    })
-});
-
-router.post('/delivery/update_password', (req, res, next) => {
-    Delivery.findOne({ user_email:req.body.user_email }).exec().then( doc => {
-        Delivery.findByIdAndUpdate({  _id: doc._id }, {$set: {password: req.body.new_password, is_first_time_sign_in:false }}, {new: true}).exec().then(doc1 => {
-            res.status(200).json({
-                message: "Password Updated"
-            })
-        }).catch( err => {
-            res.status(200).json({
-                message: "Password Updation Failed"
-            })
-        }); 
-    }).catch( err => {
-        res.status(200).json({
-            message: "No User Found"
-        })
-    });
 });
 
 router.get('/recent_order/:id', (req, res, next) => {
@@ -402,29 +351,20 @@ router.post('/delivery', (req, res, next) => {
     });
 });
 
-router.get('/vpi', (req, res, next) => {
-    vpiinventory.find({ mrp: 0 }).exec()
-    .then( doc => {
-        res.status(200).json(doc);
-    })
-    .catch(err => {
-        res.status(500).json({
-            err: err
-        })
-    })
-});
-
 router.post('/order', (req, res, next) => {
     const log = new Log();
     log.logd = JSON.stringify(req.body);
     log.created_at = new Date();
     log.save();
     console.log(log);
+    var date = new Date();
+    var time = moment(date).add(5, 'h');
+    var time1 = moment(time).add(30, 'm');
+    var date1 = moment(time1).format('LLLL');
     Pharmacy.findOne({_id: req.body[0].pharma_id}).populate('area').exec().then((docp) => { 
-	    console.log(docp);
-    message = '<h3>Pharmacy Name: '+ docp.pharma_name +'</h3><h4>Area Name: '+ docp.area.area_name +'</h4>';
+	message = '<h3>Pharmacy Name: '+ docp.pharma_name +'</h3><h4>Area Name: '+ docp.area.area_name +'</h4>';
     message += '<table border="1" style="width:100%"><tr><th style="width:60%">Medicine Name</th><th style="width:20%">Quantity</th><th style="width:20%">Cost</th></tr>';
-    var deliverdate = new Date();
+    var deliverdate = date;
     deliverdate.setDate(deliverdate.getDate() + 1);
     deliverdate = deliverdate.toLocaleDateString();
     count = req.body.length-1;
@@ -440,7 +380,7 @@ router.post('/order', (req, res, next) => {
             orderItem.quantity = req.body[i].qty,
             orderItem.paid_price = req.body[i].rate,
             orderItem.code = req.body[i].code,
-            orderItem.created_at = new Date(),
+            orderItem.created_at = date1,
             orderItem.medicento_name = req.body[i].medicento_name,
             orderItem.company_name = req.body[i].company_name,
             orderItem.total_amount = req.body[i].cost
@@ -449,7 +389,7 @@ router.post('/order', (req, res, next) => {
         message += '<tr><td style="width:60%">'+req.body[i].medicento_name+'</td><td style="width:20%">'+req.body[i].qty+'</td><td style="width:20%">'+req.body[i].cost+'</td></tr>'
     }
     const order = new Order();
-    order.created_at = new Date();
+    order.created_at = date1;
     order.pharmacy_id = req.body[0].pharma_id;
     order.sales_person_id = req.body[0].salesperson_id;
     order.grand_total = total;
@@ -480,7 +420,7 @@ router.post('/order', (req, res, next) => {
 	    html: message + '<p>Grand Total = ' + total +'</p>'// plain text body
     };
     */
-   content = 'Order has been placed by ' + docp.pharma_name + ' on ' + order.delivery_date.toLocaleDateString(); // Subject line
+   content = 'Order has been placed by ' + docp.pharma_name + ' on ' + date1 // Subject line
    message = message + '<td style="width:60%"></td><td colspan="2" style="width:40%">Grand Total = ' + total +'</td>';
    nodeoutlook.sendEmail({
     auth: {
