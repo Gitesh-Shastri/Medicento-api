@@ -5,6 +5,9 @@ const salesOrderItemsSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'SalesOrderItems'
     },
+    code: {
+        type: String
+    },
     company_name: {
         type: String
     },

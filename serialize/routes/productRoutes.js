@@ -245,7 +245,7 @@ router.get('/log', (req, res) => {
 });
 
 router.get('/medimap', (req, res) => {
-    vpiinventory.find().select('Item_name manfc_name mrp qty')
+    vpiinventory.find().select('Item_name manfc_name mrp qty item_code')
                 .exec()
                 .then(docs => {
                     const response = {
@@ -256,6 +256,7 @@ router.get('/medimap', (req, res) => {
                             company_name: doc.manfc_name,
                             price: doc.mrp,
                             stock: doc.qty,
+                            item_code: doc.item_code,
                             _id: doc._id
                         }
                     })    
@@ -401,6 +402,18 @@ router.post('/delivery', (req, res, next) => {
     });
 });
 
+router.get('/vpi', (req, res, next) => {
+    vpiinventory.find({ mrp: 0 }).exec()
+    .then( doc => {
+        res.status(200).json(doc);
+    })
+    .catch(err => {
+        res.status(500).json({
+            err: err
+        })
+    })
+});
+
 router.post('/order', (req, res, next) => {
     const log = new Log();
     log.logd = JSON.stringify(req.body);
@@ -426,6 +439,7 @@ router.post('/order', (req, res, next) => {
         const orderItem = new OrderItem();
             orderItem.quantity = req.body[i].qty,
             orderItem.paid_price = req.body[i].rate,
+            orderItem.code = req.body[i].code,
             orderItem.created_at = new Date(),
             orderItem.medicento_name = req.body[i].medicento_name,
             orderItem.company_name = req.body[i].company_name,
