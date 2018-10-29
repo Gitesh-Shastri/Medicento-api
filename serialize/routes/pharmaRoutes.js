@@ -123,6 +123,35 @@ const Area = require('../models/area');
             });
     });
     
+    router.get('/updateSalesApp', (req, res) => {
+        Message.find()
+            .exec()
+            .then( doc => {
+                res.status(200).json({
+                    code: doc[0].code,
+                    count: doc[0].count,
+                    "Version": [
+                        {
+                            "version": "2.0.7",
+                            "error": "01"
+                        }
+                    ],
+                    "Controle": [
+                        {
+                            "version": "2.0.7",
+                            "error": "01"    
+                        }
+                    ]
+                })
+            })
+            .catch(err => {
+                res.status(500).json({
+                    error: err
+                });
+            });
+    });
+
+
     // Find Pharmacy By Name
     router.get('/:id', function (req, res) {
         const id = req.params.id;
