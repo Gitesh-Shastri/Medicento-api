@@ -132,13 +132,13 @@ const Area = require('../models/area');
                     count: doc[0].count,
                     "Version": [
                         {
-                            "version": "2.0.7",
+                            "version": "1.0",
                             "error": "01"
                         }
                     ],
                     "Controle": [
                         {
-                            "version": "2.0.7",
+                            "version": "1.0",
                             "error": "01"    
                         }
                     ]
