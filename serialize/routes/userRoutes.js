@@ -89,7 +89,7 @@ router.post('/salesPerson', (req, res, next) => {
 
 router.get('/login', (req, res, next) => {
     if(req.query.useremail != null) {
-        User.findOne({ useremail: req.query.useremail, password: req.body.password })
+        User.findOne({ useremail: req.query.useremail })
         .exec()
         .then(user => {
             console.log(user);
