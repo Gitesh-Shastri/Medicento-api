@@ -7,6 +7,7 @@ const InventoryProduct = require('../models/InventoryProduct');
 const ProductAndMedi = require('../models/productandmedi');
 const Inventory = require('../models/Inventory');
 const OrderItem = require('../models/SalesOrderItem');
+const fs = require('fs');
 const Order = require('../models/SalesOrder');
 const Log = require('../models/logs');
 const mongoose = require('mongoose');
@@ -18,6 +19,7 @@ const router = express.Router();
 const moment = require('moments');
 const OfferInventory = require('../models/offermedicine');
 const Camp = require('../models/camp');
+const fast_csv = require('fast-csv');
 const vpiinventory = require('../models/vpimedicine');
 var nodeoutlook = require('nodejs-nodemailer-outlook');
 
@@ -356,6 +358,7 @@ router.post('/order', (req, res, next) => {
     log.logd = JSON.stringify(req.body);
     log.created_at = new Date();
     log.save(); */
+    var csv = 'Party Code, Item Code, Item Name, Qty\n';
     var date = new Date();
     console.log(date);
     Pharmacy.findOne({_id: req.body[0].pharma_id}).populate('area').exec().then((docp) => { 
@@ -381,8 +384,9 @@ router.post('/order', (req, res, next) => {
             orderItem.medicento_name = req.body[i].medicento_name,
             orderItem.company_name = req.body[i].company_name,
             orderItem.total_amount = req.body[i].cost
-        orderItem.save();
-        orders.push(orderItem._id);
+            orderItem.save(); 
+            orders.push(orderItem._id); 
+        csv += ',' + req.body[i].code + ',' + req.body[i].medicento_name + ',' + req.body[i].qty + '\n';
         message += '<tr><td style="width:60%">'+req.body[i].medicento_name+'</td><td style="width:20%">'+req.body[i].qty+'</td><td style="width:20%">'+req.body[i].cost+'</td></tr>'
     }
     const order = new Order();
@@ -395,7 +399,7 @@ router.post('/order', (req, res, next) => {
     for(i=0;i< count;i++){
         order.order_items.push(orders[i]);    
     }
-    order.save();
+    order.save(); 
     console.log(order);
  /*  var message1	= {
         text:	"i hope this works", 
@@ -417,16 +421,18 @@ router.post('/order', (req, res, next) => {
 	    html: message + '<p>Grand Total = ' + total +'</p>'// plain text body
     };
     */
-   content = 'Order has been placed by ' + docp.pharma_name + ' on ' + date.toLocaleString() // Subject line
+   console.log(csv);
+   content = 'Order has been placed by ' + docp.pharma_name + ' on ' + date.toISOString() // Subject line
    message = message + '<td style="width:60%"></td><td colspan="2" style="width:40%">Grand Total = ' + total +'</td>';
    nodeoutlook.sendEmail({
     auth: {
         user: "giteshshastri123@outlook.com",
         pass: "shastri@1"
     }, from: 'giteshshastri123@outlook.com',
-    to: 'giteshshastri96@gmail.com,Contact.medicento@gmail.com',
+    to: 'giteshshastri96@gmail.com,contact.medicento@gmail.com',
     subject: content,
     html: message,
+    attachments: [{'filename': 'SalesOrder_Medicento_'+docp.pharma_name+'_'+date.toISOString()+'.csv', 'content': csv }]
 });
    Person.findOne({ _id:req.body[0].salesperson_id })
         .exec()
@@ -453,6 +459,23 @@ router.post('/order', (req, res, next) => {
                 });
                     });
                 });
+
+router.get('/csv', (req, res, next) => {
+    content = 'Order has been placed by '; // Subject line
+   message = '<td style="width:60%"></td><td colspan="2" style="width:40%">Grand Total = </td>';
+   nodeoutlook.sendEmail({
+    auth: {
+        user: "giteshshastri123@outlook.com",
+        pass: "shastri@1"
+    }, from: 'giteshshastri123@outlook.com',
+    to: 'giteshshastri96@gmail.com',
+    subject: content,
+    html: message,
+    attachments: [{'filename': 'attachment.csv', 'content': 'bs, bs, bs, bs \n vs, vs, vs, vs' }]
+});
+res.send('Hie');
+});
+
 router.get('/order', (req, res, next) => {
     Order.find()
         .exec()
