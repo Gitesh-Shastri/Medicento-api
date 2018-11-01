@@ -60,7 +60,7 @@ const Area = require('../models/area');
     router.post('/new', function (req, res) {
         const pharma = new Pharmacy({
             _id: mongoose.Types.ObjectId(),
-            pharma_name: req.body.pharma_name,
+            pharma_name: req.body[i].pharma_name,
             area: req.body.area_id,
             pharma_address: req.body.pharma_address
         });
