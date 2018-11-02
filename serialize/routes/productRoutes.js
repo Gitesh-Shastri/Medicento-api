@@ -374,6 +374,10 @@ router.post('/order', (req, res, next) => {
         cost = Number(req.body[i].cost);
         total += cost;
     }
+    Person.findOne({ _id:req.body[0].salesperson_id })
+        .populate('user')
+        .exec()
+        .then(salesP => {
     orders = [];
     for (i = 0;i < count; i++) {
         const orderItem = new OrderItem();
@@ -386,7 +390,7 @@ router.post('/order', (req, res, next) => {
             orderItem.total_amount = req.body[i].cost
             orderItem.save(); 
             orders.push(orderItem._id); 
-        csv += ',' + req.body[i].code + ',' + req.body[i].medicento_name + ',' + req.body[i].qty + '\n';
+        csv += salesP.user.useremail +',' + req.body[i].code + ',' + req.body[i].medicento_name + ',' + req.body[i].qty + '\n';
         message += '<tr><td style="width:60%">'+req.body[i].medicento_name+'</td><td style="width:20%">'+req.body[i].code+'</td><td style="width:10%">'+req.body[i].qty+'</td><td style="width:10%">'+req.body[i].cost+'</td></tr>'
     }
     const order = new Order();
@@ -459,6 +463,7 @@ router.post('/order', (req, res, next) => {
                     });
                 });
                     });
+                });
                 });
 
 router.get('/csv', (req, res, next) => {
