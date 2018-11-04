@@ -362,7 +362,7 @@ router.post('/order', (req, res, next) => {
     var date = new Date();
     console.log(date);
     Pharmacy.findOne({_id: req.body[0].pharma_id}).populate('area').exec().then((docp) => { 
-    message = '<h3>Pharmacy Name: '+ docp.pharma_name +'</h3><h4>Area Name: '+ docp.area.area_name +'</h4><h4>Address : </h4>'+docp.pharma_address;
+    message = '<h3>Pharmacy Name: '+ docp.pharma_name +'</h3><h4>Area Name: '+ docp.area.area_name +'</h4><h4>Address : '+docp.pharma_address + "</h4>";
     message += '<table border="1" style="width:100%"><tr><th style="width:60%">Medicine Name</th><th style="width:20%">Medicine Code</th><th style="width:10%">Quantity</th><th style="width:10%">Cost</th></tr>';
     var deliverdate = date;
     deliverdate.setDate(deliverdate.getDate() + 1);
@@ -430,7 +430,7 @@ router.post('/order', (req, res, next) => {
         .populate('user')
         .exec()
         .then(sales => {
-            content = 'Order has been placed by ' + docp.pharma_name + ' code '+sales.user.useremail +' on ' + date.toISOString() // Subject line
+            content = 'Order has been placed by ' + docp.pharma_name + ' on ' + date.toISOString() // Subject line
    message = message + '<td style="width:60%"></td><td colspan="2" style="width:40%">Grand Total = ' + total +'</td>';
    nodeoutlook.sendEmail({
     auth: {
