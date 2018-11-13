@@ -476,7 +476,7 @@ router.post("/order", (req, res, next) => {
     log.save();
     var csv = "Party Code, Item Code, Item Name, Qty\n";
     var date = new Date();
-    console.log(date);
+    console.log(date.toISOString());
     OrderCode.find().exec().then(doc_order_code => {
         Pharmacy.findOne({
                 _id: req.body[0].pharma_id
@@ -542,6 +542,7 @@ router.post("/order", (req, res, next) => {
                                 req.body[i].cost +
                                 "</td></tr>";
                         }
+                        console.log(doc_order_code[0].code);
                         const order = new Order();
                         order.created_at = date;
                         order.pharmacy_id = req.body[0].pharma_id;
@@ -555,11 +556,15 @@ router.post("/order", (req, res, next) => {
                         }
                         order.save();
                         console.log(order);
-                        OrderCode.update({
-                            _id: doc_order_code._id
+                        OrderCode.findOneAndUpdate({
+                            _id: doc_order_code[0]._id
                         }, {
-                            code: doc_order_code.code + 1
-                        }).exec().then((error, update_code) => {
+                            $set: {
+                                code: doc_order_code[0].code + 1
+                            }
+                        }, {
+                            new: true
+                        }, (error, update_code) => {
                             /*  var message1	= {
                                          text:	"i hope this works", 
                                          from:	"Gitesh <giteshmedicento@gmail.com>", 
