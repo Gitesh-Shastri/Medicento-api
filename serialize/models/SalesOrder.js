@@ -5,6 +5,12 @@ const SalesOrderSchema = mongoose.Schema({
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'SalesOrder'
 	},
+	sales_order_code: {
+		type: String
+	},
+	sales_order_parent_code: {
+		type: String
+	},
 	order_items: [
 		{
 			type: mongoose.Schema.Types.ObjectId,
