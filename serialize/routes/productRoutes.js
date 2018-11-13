@@ -470,10 +470,10 @@ router.post("/delivery", (req, res, next) => {
 });
 
 router.post("/order", (req, res, next) => {
-    /*const log = new Log();
-      log.logd = JSON.stringify(req.body);
-      log.created_at = new Date();
-      log.save(); */
+    const log = new Log();
+    log.logd = JSON.stringify(req.body);
+    log.created_at = new Date();
+    log.save();
     var csv = "Party Code, Item Code, Item Name, Qty\n";
     var date = new Date();
     console.log(date);
