@@ -555,8 +555,13 @@ router.post("/order", (req, res, next) => {
                         }
                         order.save();
                         console.log(order);
-                        doc_order_code.code = doc_order_code.code + 1;
-                        doc_order_code.save();
+                        OrderCode.findByIdAndUpdate(doc_order_code._id, {
+                            $set: {
+                                code: doc_order_code.code + 1
+                            }
+                        }, {
+                            new: true
+                        }, (err, update) => {});
                         /*  var message1	= {
                                      text:	"i hope this works", 
                                      from:	"Gitesh <giteshmedicento@gmail.com>", 
