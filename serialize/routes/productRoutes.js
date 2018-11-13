@@ -559,7 +559,7 @@ router.post("/order", (req, res, next) => {
                             _id: doc_order_code._id
                         }, {
                             code: doc_order_code.code + 1
-                        }).exec().then(err, update_code => {
+                        }).exec().then((error, update_code) => {
                             /*  var message1	= {
                                          text:	"i hope this works", 
                                          from:	"Gitesh <giteshmedicento@gmail.com>", 
