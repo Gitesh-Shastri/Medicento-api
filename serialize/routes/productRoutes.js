@@ -555,96 +555,95 @@ router.post("/order", (req, res, next) => {
                         }
                         order.save();
                         console.log(order);
-                        OrderCode.findByIdAndUpdate(doc_order_code._id, {
-                            $set: {
-                                code: doc_order_code.code + 1
-                            }
+                        OrderCode.update({
+                            _id: doc_order_code._id
                         }, {
-                            new: true
-                        }, (err, update) => {});
-                        /*  var message1	= {
-                                     text:	"i hope this works", 
-                                     from:	"Gitesh <giteshmedicento@gmail.com>", 
-                                     to:		"Gitesh <giteshmedicento@gmail.com>",
-                                     subject:	"testing emailjs",
-                                     attachment: 
-                                     [
-                                        {data: message, alternative:true}
-                                     ]
-                                  };
-                                  
-                                  // send the message and get a callback with an error or details of the message that was sent
-                                  server.send(message1, function(err, message) { console.log(err || message); });
-                               */
-                        /*var nodemailer = require('nodemailer');
+                            code: doc_order_code.code + 1
+                        }).exec().then(err, update_code => {
+                            /*  var message1	= {
+                                         text:	"i hope this works", 
+                                         from:	"Gitesh <giteshmedicento@gmail.com>", 
+                                         to:		"Gitesh <giteshmedicento@gmail.com>",
+                                         subject:	"testing emailjs",
+                                         attachment: 
+                                         [
+                                            {data: message, alternative:true}
+                                         ]
+                                      };
+                                      
+                                      // send the message and get a callback with an error or details of the message that was sent
+                                      server.send(message1, function(err, message) { console.log(err || message); });
+                                   */
+                            /*var nodemailer = require('nodemailer');
  /*   const mailOptions = {
 	    from: 'giteshmedicento@gmail.com', // sender address
 	    to: 'giteshshastri100@gmail.com', // list of receivers
 	    html: message + '<p>Grand Total = ' + total +'</p>'// plain text body
     };
     */
-                        console.log(csv);
-                        Person.findOne({
-                                _id: req.body[0].salesperson_id
-                            })
-                            .populate("user")
-                            .exec()
-                            .then(sales => {
-                                content =
-                                    "Order has been placed by " +
-                                    docp.pharma_name +
-                                    " on " +
-                                    date.toISOString(); // Subject line
-                                message =
-                                    message +
-                                    '<td style="width:60%"></td><td colspan="2" style="width:40%">Grand Total = ' +
-                                    total +
-                                    "</td>";
-                                nodeoutlook.sendEmail({
-                                    auth: {
-                                        user: "giteshshastri123@outlook.com",
-                                        pass: "shastri@1"
-                                    },
-                                    from: "giteshshastri123@outlook.com",
-                                    to: "giteshshastri96@gmail.com,contact.medicento@gmail.com",
-                                    subject: content,
-                                    html: message,
-                                    attachments: [{
-                                        filename: "SalesOrder_Medicento_" +
-                                            docp.pharma_name +
-                                            "_" +
-                                            sales.user.useremail +
-                                            "_" +
-                                            date.toISOString() +
-                                            ".csv",
-                                        content: csv
-                                    }]
-                                });
-                                console.log("Sales id : ", sales);
-                                Person.update({
-                                        _id: sales._id
-                                    }, {
-                                        Total_sales: sales.Total_sales + total,
-                                        No_of_order: sales.No_of_order + 1,
-                                        Earnings: sales.commission * (sales.Total_sales + total)
-                                    })
-                                    .exec()
-                                    .then((err, updated) => {
-                                        /*             transporter.sendMail(mailOptions, function (err, info) {
+                            console.log(csv);
+                            Person.findOne({
+                                    _id: req.body[0].salesperson_id
+                                })
+                                .populate("user")
+                                .exec()
+                                .then(sales => {
+                                    content =
+                                        "Order has been placed by " +
+                                        docp.pharma_name +
+                                        " on " +
+                                        date.toISOString(); // Subject line
+                                    message =
+                                        message +
+                                        '<td style="width:60%"></td><td colspan="2" style="width:40%">Grand Total = ' +
+                                        total +
+                                        "</td>";
+                                    nodeoutlook.sendEmail({
+                                        auth: {
+                                            user: "giteshshastri123@outlook.com",
+                                            pass: "shastri@1"
+                                        },
+                                        from: "giteshshastri123@outlook.com",
+                                        to: "giteshshastri96@gmail.com,contact.medicento@gmail.com",
+                                        subject: content,
+                                        html: message,
+                                        attachments: [{
+                                            filename: "SalesOrder_Medicento_" +
+                                                docp.pharma_name +
+                                                "_" +
+                                                sales.user.useremail +
+                                                "_" +
+                                                date.toISOString() +
+                                                ".csv",
+                                            content: csv
+                                        }]
+                                    });
+                                    console.log("Sales id : ", sales);
+                                    Person.update({
+                                            _id: sales._id
+                                        }, {
+                                            Total_sales: sales.Total_sales + total,
+                                            No_of_order: sales.No_of_order + 1,
+                                            Earnings: sales.commission * (sales.Total_sales + total)
+                                        })
+                                        .exec()
+                                        .then((err, updated) => {
+                                            /*             transporter.sendMail(mailOptions, function (err, info) {
                         if(err)
                           console.log(err)
                         else
                           console.log(info);
                      });
 		*/
-                                        res.status(200).json({
-                                            message: "Order has been placed successfully",
-                                            delivery_date: order.delivery_date.toLocaleString(),
-                                            order_id: "" + order.sales_order_code,
-                                            grand_total: order.grand_total
+                                            res.status(200).json({
+                                                message: "Order has been placed successfully",
+                                                delivery_date: order.delivery_date.toLocaleString(),
+                                                order_id: "" + order.sales_order_code,
+                                                grand_total: order.grand_total
+                                            });
                                         });
-                                    });
-                            });
+                                });
+                        });
                     });
             });
     });
