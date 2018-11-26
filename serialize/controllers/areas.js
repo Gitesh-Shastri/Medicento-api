@@ -1,5 +1,6 @@
-const Area = require('../models/area');
 const mongoose = require('mongoose');
+
+const Area = require('../models/area');
 
 exports.area_get_all = function (req, res) {
     Area.find()
@@ -32,7 +33,7 @@ exports.area_get_all = function (req, res) {
         });
 }
 
-exports.orders_create_area = function(req, res) {
+exports.create_area = function(req, res) {
     const area = new Area({
         area_id: new mongoose.Types.ObjectId(),
         area_name: req.body.area_name,
@@ -61,3 +62,51 @@ exports.orders_create_area = function(req, res) {
             console.log(err);
         });
 }
+
+exports.area_get_by_id = function(req, res) {
+    const id = req.params.areaId;
+    Area.findById(id)
+        .select('area_city area_state area_pincode area_name')
+        .exec()
+        .then(doc => {
+            res.status(200).json(doc);
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(404).json({
+                message: "No Valid Entry for provided ID"
+            });
+        });
+    }
+
+exports.area_update_by_id = function(req, res) {
+    const id = req.params.areaId;
+    const updateOps = {};
+    for (const ops of req.body) {
+        updateOps[ops.propName] = ops.value;
+        }
+        Area.update({_id: id}, { $set: updateOps})
+            .exec()
+            .then(result => {
+                console.log(result);
+                res.status(200).json(result);
+            })
+            .catch(err => {
+                res.status(500).json(err);
+            });
+    }
+
+exports.area_delete_by_id = function (req, res) {
+    const area_name = req.params.areaName;
+    Area.findOneAndRemove({area_name: area_name})
+        .exec()
+        .then(result => {
+            res.status(200).json(result);
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                error: err
+            });
+        });
+    }
