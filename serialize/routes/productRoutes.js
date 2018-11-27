@@ -202,14 +202,14 @@ router.get("/recent_order/:id", (req, res, next) => {
             pharmacy_id: req.params.id,
             status: req.query.status
         })
-        .select("status created_at grand_total")
+        .select("created_at grand_total sales_order_code")
         .populate("order_items")
         .exec()
         .then(docs => {
             const response = {
                 orders: docs.map(doc => {
                     return {
-                        order_id: doc._id,
+                        order_id: doc.sales_order_code,
                         created_at: doc.created_at,
                         grand_total: doc.grand_total,
                         order_items: doc.order_items
