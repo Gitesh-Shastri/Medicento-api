@@ -171,6 +171,9 @@ router.get("/medi", (req, res) => {
 router.get("/medimap", (req, res) => {
     vpiinventory
         .find()
+        .sort({
+            Item_name: 1
+        })
         .select("Item_name manfc_name mrp qty item_code")
         .exec()
         .then(docs => {

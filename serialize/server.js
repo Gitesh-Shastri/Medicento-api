@@ -10,23 +10,24 @@ const mongoose = require('mongoose');
 const MONGODB_URI = process.env.MONGODB_URI;
 const PORT = process.env.PORT || 3000;
 
-
 mongoose.connect(MONGODB_URI, function () {
-    console.log('connected to DB');
+	console.log('connected to DB');
 });
-mongoose.Promise = global.Promise;
 
 app.use(morgan('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({
+	extended: true
+}));
 app.use(bodyParser.text());
-app.use(bodyParser.json({type: "application/vnd.api+json"}));
+app.use(bodyParser.json({
+	type: "application/vnd.api+json"
+}));
 
 app.use((req, res, next) => {
 	res.header('Access-Control-Allow-Origin', '*');
-	res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization'
-		);
-	if(req.method === 'OPTIONS') {
+	res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+	if (req.method === 'OPTIONS') {
 		res.header('Access-Control-Allow-Methods', 'PUT, POST, PATCH, DELETE, GET');
 		return res.status(200).json({});
 	}
@@ -60,5 +61,5 @@ app.use((error, req, res, next) => {
 });
 
 app.listen(PORT, function () {
-    console.log(`listening on PORT ${PORT}`);
+	console.log(`listening on PORT ${PORT}`);
 });
