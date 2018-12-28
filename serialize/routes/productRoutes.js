@@ -433,7 +433,7 @@ router.post("/order", (req, res, next) => {
                                             user: "Team.medicento@outlook.com",
                                             pass: "med4lyf@51"
                                         },
-                                        from: "giteshshastri123@outlook.com",
+                                        from: "Team.medicento@outlook.com",
                                         to: "giteshshastri96@gmail.com,contact.medicento@gmail.com",
                                         subject: content,
                                         html: message,
