@@ -299,7 +299,7 @@ router.post("/order", (req, res, next) => {
     log.logd = JSON.stringify(req.body);
     log.created_at = new Date();
     log.save();
-    var csv = "Party Code, Item Code, Item Name, Qty\n";
+    var csv = "Party_Code, Item_Code, Item_Name, Qty\n";
     var date = new Date();
     console.log(date.toISOString());
     OrderCode.find().exec().then(doc_order_code => {
@@ -318,7 +318,7 @@ router.post("/order", (req, res, next) => {
                     docp.pharma_address +
                     "</h4>";
                 message +=
-                    '<table border="1" style="width:100%"><tr><th style="width:60%">Medicine Name</th><th style="width:20%">Medicine Code</th><th style="width:10%">Quantity</th><th style="width:10%">Cost</th></tr>';
+                    '<table border="1" style="width:100%"><tr><th style="width:60%">Item_Name</th><th style="width:20%">Item_Code</th><th style="width:10%">Quantity</th><th style="width:10%">Cost</th></tr>';
                 var deliverdate = date;
                 deliverdate.setDate(deliverdate.getDate() + 1);
                 deliverdate = deliverdate.toLocaleDateString();
