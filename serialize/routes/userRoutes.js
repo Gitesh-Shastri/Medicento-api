@@ -35,22 +35,14 @@ router.get('/message', (req, res, next) => {
 });
 
 router.get('/salesLogin', (req, res, next) => {
-    User.findOne({
-            usercode: req.query.usercode,
-            password: req.query.password
+    console.log(req.query);
+    User.find({
+            useremail: req.query.email
         })
         .exec()
         .then(user => {
             console.log(user);
-            Person.find({
-                    user: user._id
-                })
-                .exec()
-                .then(doc => {
-                    res.status(200).json({
-                        Sales_Person: doc
-                    })
-                });
+            res.status(200).json(user);
         })
         .catch(err => {
             res.status(500).json({
