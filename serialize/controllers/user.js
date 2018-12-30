@@ -49,7 +49,10 @@ exports.create_user = function (req, res, next) {
                     .catch(err => {
                         console.log(err);
                         res.status(500).json({
-                            error: err
+                     
+    User.find().exec().then(doc => {
+        res.status(200).json(doc);
+    })       error: err
                         });
                     });
             }
