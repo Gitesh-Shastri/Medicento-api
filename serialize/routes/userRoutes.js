@@ -37,7 +37,8 @@ router.get('/message', (req, res, next) => {
 router.get('/salesLogin', (req, res, next) => {
     console.log(req.query);
     User.find({
-            useremail: req.query.email
+            useremail: req.query.email,
+            password: req.query.password
         })
         .exec()
         .then(user => {
