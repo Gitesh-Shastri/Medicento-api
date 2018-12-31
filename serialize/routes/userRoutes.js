@@ -44,7 +44,15 @@ router.get('/salesLogin', (req, res, next) => {
         .then(user => {
             console.log(user);
             if (user.length > 0) {
-                res.status(200).json(user[0]);
+                Person.find({
+                    user: user[0]._id
+                })
+                .exec()
+                .then(doc => {
+                    res.status(200).json({
+                        Sales_Person: doc
+                    })
+                });
             } else {
                 res.status(500).json({
                     message: "Invalid Useremail"
