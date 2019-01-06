@@ -315,7 +315,7 @@ router.post("/order", (req, res, next) => {
                     "</h4><h4>Address : " +
                     docp.pharma_address +
                     "</h4>" + 
-                    "<h4>Chosen Slot"+
+                    "<h4>Chosen Slot : "+
                     req.body[0].slot+
                     "</h4>";
                 message +=
