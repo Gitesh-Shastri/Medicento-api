@@ -6,6 +6,10 @@ const router = express.Router();
 
 const PharmaController = require('../controllers/pharma');
 
+const Area = require('../models/area');
+
+const Pharmacy = require('../models/pharmacy');
+
 router.get('/area/area', PharmaController.pharam_and_area);
 
 router.get('', PharmaController.get_all_pharmacy);
@@ -70,6 +74,17 @@ router.get('/updateSalesApp', (req, res) => {
             });
     });
 
+router.get('/updateAll', (req, res, next) => {
+    Pharmacy.find()
+    .exec()
+    .then( doc => {
+        res.status(200).json(doc);
+    })
+    .catch( err => {
+        console.log(err);
+        res.status(200).json(err);
+    });
+});
 
 // Find Pharmacy By Name
 router.get('/:id', PharmaController.get_pharmacy_by_id);

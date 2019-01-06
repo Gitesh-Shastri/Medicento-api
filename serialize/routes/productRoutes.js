@@ -312,10 +312,11 @@ router.post("/order", (req, res, next) => {
                 message =
                     "<h3>Pharmacy Name: " +
                     docp.pharma_name +
-                    "</h3><h4>Area Name: " +
-                    docp.area.area_name +
                     "</h4><h4>Address : " +
                     docp.pharma_address +
+                    "</h4>" + 
+                    "<h4>Chosen Slot"+
+                    req.body[0].slot+
                     "</h4>";
                 message +=
                     '<table border="1" style="width:100%"><tr><th style="width:60%">Item_Name</th><th style="width:20%">Item_Code</th><th style="width:10%">Quantity</th><th style="width:10%">Cost</th></tr>';
@@ -370,6 +371,7 @@ router.post("/order", (req, res, next) => {
                         console.log(doc_order_code[0].code);
                         const order = new Order();
                         order.created_at = date;
+                        order.order_slot = req.body[0].slot;
                         order.pharmacy_id = req.body[0].pharma_id;
                         order.sales_person_id = req.body[0].salesperson_id;
                         order.sales_order_code = doc_order_code[0].code;
@@ -607,6 +609,19 @@ router.post("/medimap", (req, res) => {
         res.status(201).json({
             productandmedi: result
         });
+    });
+});
+
+router.get('/fetchOrders', (req, res, next) => {
+    Order.find({ sales_person_id: req.query.id })
+    .populate('pharmacy_id')
+    .populate('order_items')     
+    .exec()
+    .then( doc => {
+        res.status(200).json(doc);
+    })
+    .catch( err => {
+        res.status(200).json(err);
     });
 });
 

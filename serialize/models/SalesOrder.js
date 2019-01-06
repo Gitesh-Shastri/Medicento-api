@@ -5,6 +5,10 @@ const SalesOrderSchema = mongoose.Schema({
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'SalesOrder'
 	},
+	order_slot: {
+		type: String,
+		default: "-"
+	},
 	sales_order_code: {
 		type: String
 	},
