@@ -22,6 +22,7 @@ const OfferInventory = require("../models/offermedicine");
 const Camp = require("../models/camp");
 const fast_csv = require("fast-csv");
 const vpiinventory = require("../models/vpimedicine");
+const tulsiinverntory = require("../models/tulsimedicines");
 var nodeoutlook = require("nodejs-nodemailer-outlook");
 
 const DeliveryController = require('../controllers/delivery');
@@ -169,7 +170,7 @@ router.get("/medi", (req, res) => {
 });
 
 router.get("/medimap", (req, res) => {
-    vpiinventory
+    tulsiinverntory
         .find()
         .sort({
             Item_name: 1
