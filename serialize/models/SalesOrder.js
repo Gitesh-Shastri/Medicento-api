@@ -12,6 +12,10 @@ const SalesOrderSchema = mongoose.Schema({
 	sales_order_code: {
 		type: String
 	},
+	source: {
+		type: String,
+		default: "-"
+	},
 	sales_order_parent_code: {
 		type: String
 	},
