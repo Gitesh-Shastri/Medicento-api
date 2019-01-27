@@ -394,7 +394,7 @@ router.post('/neworder', (req, res, next) => {
                             '<td style="width:60%"></td><td colspan="2" style="width:40%">Grand Total = ' +
                             total +
                             "</td>";
-                        nodeoutlook.sendEmail({
+                         nodeoutlook.sendEmail({
                             auth: {
                                 user: "Team.medicento@outlook.com",
                                 pass: "med4lyf@51"
@@ -414,12 +414,12 @@ router.post('/neworder', (req, res, next) => {
                                 content: csv
                             }]
                         });
-                        Person.update({
+                     Person.update({
                                 _id: sperson._id
                             }, {
-                                Total_sales: sales.Total_sales + total,
-                                No_of_order: sales.No_of_order + 1,
-                                Earnings: sales.commission * (sales.Total_sales + total)
+                                Total_sales: sperson.Total_sales + total,
+                                No_of_order: sperson.No_of_order + 1,
+                                Earnings: sperson.commission * (sperson.Total_sales + total)
                             })
                             .exec()
                             .then((err, updated) => {
