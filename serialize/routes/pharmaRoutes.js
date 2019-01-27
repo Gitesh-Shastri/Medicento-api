@@ -27,13 +27,13 @@ router.get('/updateApp', (req, res) => {
                     count: doc[0].count,
                     "Version": [
                         {
-                            "version": "2.0.8",
+                            "version": "2.1.0",
                             "error": "01"
                         }
                     ],
                     "Controle": [
                         {
-                            "version": "2.0.8",
+                            "version": "2.1.0",
                             "error": "01"    
                         }
                     ]
