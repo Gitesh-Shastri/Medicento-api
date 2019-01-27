@@ -323,7 +323,7 @@ router.post('/neworder', (req, res, next) => {
             req.body[0].slot+
             "</h4>";
             message +=
-            '<table border="1" style="width:100%"><tr><th style="width:60%">Item_Name</th><th style="width:20%">Item_Code</th><th style="width:10%">Quantity</th><th style="width:10%">Cost</th></tr>';
+            '<table width=\"100%\" style=\"border-collapse: collapse;\"><tr style=\"background-color: #1F3864;color:white;text-align:center\"><th style=\"border: 1px solid black;padding: 8px;text-align:center;width:60%;">Item_Name</th><th style="border: 1px solid black;padding: 8px;text-align:centerwidth:20%;\">Item_Code</th><th style="border: 1px solid black;padding: 8px;text-align:center;width:10%\">Quantity</th><th style="border: 1px solid black;padding: 8px;text-align:centerwidth:10%">Cost</th></tr>';
             var deliverdate = date;
             deliverdate.setDate(deliverdate.getDate() + 1);
             deliverdate = deliverdate.toLocaleDateString();
@@ -356,13 +356,13 @@ router.post('/neworder', (req, res, next) => {
                     req.body[i].qty +
                     "\n";
                 message +=
-                    '<tr><td style="width:60%">' +
+                    '<tr><td style=\"border: 1px solid black;padding: 8px;text-align:center;width:60%">' +
                     req.body[i].medicento_name +
-                    '</td><td style="width:20%">' +
+                    '</td><td style=\"border: 1px solid black;padding: 8px;text-align:center;width:20%">' +
                     req.body[i].code +
-                    '</td><td style="width:10%">' +
+                    '</td><td style=\"border: 1px solid black;padding: 8px;text-align:center;width:10%">' +
                     req.body[i].qty +
-                    '</td><td style="width:10%">' +
+                    '</td><td style=\"border: 1px solid black;padding: 8px;text-align:center;width:10%">' +
                     req.body[i].cost +
                     "</td></tr>";
             }
