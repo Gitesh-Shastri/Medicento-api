@@ -55,13 +55,13 @@ router.get('/updateSalesApp', (req, res) => {
                     count: doc[0].count,
                     "Version": [
                         {
-                            "version": "1.0",
+                            "version": "1.0.1",
                             "error": "01"
                         }
                     ],
                     "Controle": [
                         {
-                            "version": "1.0",
+                            "version": "1.0.1",
                             "error": "01"    
                         }
                     ]
