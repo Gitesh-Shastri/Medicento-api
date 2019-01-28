@@ -27,6 +27,17 @@ var nodeoutlook = require("nodejs-nodemailer-outlook");
 
 const DeliveryController = require('../controllers/delivery');
 
+var statedict = [];
+statedict['Andaman And Nicobar Islands'] = 'AN';
+statedict['Andhra Pradesh'] = 'AP';
+statedict['Arunachal Pradesh'] = 'AP';
+statedict['Assam'] = 'AP';
+statedict['Bihar'] = 'AP';
+statedict['Dadra And Nagar Haveli'] = 'AP';
+statedict['Delhi'] = 'AP';
+statedict['Goa'] = "GA";
+statedict['Gujarat'] = 'GJ';
+
 router.get("/delivery", DeliveryController.get_delivery_person_detals_by_id);
 
 router.get("/delivery/profile", DeliveryController.get_delivery_person_profile_by_id);
@@ -34,6 +45,10 @@ router.get("/delivery/profile", DeliveryController.get_delivery_person_profile_b
 router.get("/delivery/login", DeliveryController.delivery_person_login);
 
 router.post("/delivery/update_password", DeliveryController.change_delivery_person_password);
+
+router.get('/statedict', (req, res, next) => {
+    res.status(200).json(statedict['Gujarat']);
+});
 
 router.post("/orderCode", (req, res, next) => {
     const order = new OrderCode();

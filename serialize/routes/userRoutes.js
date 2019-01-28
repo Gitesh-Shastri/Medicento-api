@@ -207,6 +207,19 @@ router.get('/login', (req, res, next) => {
     }
 });
 
+router.get('/forget', (req, res, next) => {
+    User.find( { $or: [{ useremail: req.query.email }, { phone: req.query.email }]})
+    .exec()
+    .then( doc => {
+        console.log(doc[0]);
+        res.status(200).json({message: 'User Found', password: doc[0].password, phone: doc[0].phone});    
+    })
+    .catch( err => {
+        console.log(err);
+        res.status(200).json({message: 'No User Found'});
+    });
+});
+
 router.post('/login', UserController.find_user);
 
 router.post('/signup', UserController.create_user);
