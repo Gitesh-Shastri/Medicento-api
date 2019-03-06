@@ -361,7 +361,7 @@ router.post('/neworder', (req, res, next) => {
                 (orderItem.total_amount = req.body[i].cost);
                 orderItem.save();
                 orders.push(orderItem._id);
-                csv +=  docp.distributor_Code +
+                csv +=  sperson.Allocated_Pharma.distributor_Code +
                     "," +
                     req.body[i].code +
                     "," +
