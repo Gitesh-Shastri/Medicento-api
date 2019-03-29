@@ -33,6 +33,14 @@ const SalesOrderSchema = mongoose.Schema({
 	payment_id: {
 		type: String
 	},
+	distributor_order_id: {
+		type: String,
+		default: '-'
+	},
+	distributor_invoice_id: {
+		type: String,
+		default: '-'
+	},
 	order_code: {
 		type: String
 	},
