@@ -29,6 +29,10 @@ const pharmaSchema = mongoose.Schema({
 	},
 	pincode: {
 		type: String	
+	},
+	created_at:{
+		type: Date,
+		default: Date.now()
 	}
 });
 
