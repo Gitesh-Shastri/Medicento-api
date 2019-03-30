@@ -47,6 +47,10 @@ const deliverySchema = mongoose.Schema({
 		type: Number,
 		default: 0
 	},
+	ratings: {
+		type: Number,
+		Default: 0
+	},
 	area_and_delivery: [
 		{
 			type: mongoose.Schema.Types.ObjectId,
