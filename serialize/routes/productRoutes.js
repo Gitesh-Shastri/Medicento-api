@@ -17,7 +17,7 @@ const express = require("express");
 const Jobs = require("../models/jobs");
 const DeliveryJobs = require("../models/delivery_jobs");
 const router = express.Router();
-const moment = require("moments");
+const moment = require("moment");
 const OfferInventory = require("../models/offermedicine");
 const Camp = require("../models/camp");
 const fast_csv = require("fast-csv");
@@ -311,12 +311,18 @@ router.post("/delivery", (req, res, next) => {
         });
 });
 
+router.get('/date', (req, res, next) => {
+    var date = new Date();
+    res.status(200).json(moment().format('DD-MMM-YYYY'));
+});
+
 router.post('/neworder', (req, res, next) => {
     const log = new Log();
     log.logd = JSON.stringify(req.body);
     log.created_at = new Date();
     log.save();
     var csv = "Party_Code, Item_Code, Item_Name, Qty\n";
+    var txt = "";
     var date = new Date();
     OrderCode.find().exec().then(doc_order_code => {
         Person.findById(req.body[0].salesperson_id)
@@ -379,6 +385,7 @@ router.post('/neworder', (req, res, next) => {
                     '</td><td style=\"border: 1px solid black;padding: 8px;text-align:center;width:10%">' +
                     req.body[i].cost +
                     "</td></tr>";
+                txt +=  doc_order_code[0].code + "|"+moment().format('DD-MMM-YYYY')+"|"+sperson.Allocated_Pharma.distributor_Code+"|"+sperson.Allocated_Pharma.pharma_name+"|0"+req.body[i].code+"|"+req.body[i].medicento_name+"||"+req.body[i].qty+"|0|0|"+req.body[i].rate+"|"+req.body[i].mrp+"\n";
             }
             console.log(doc_order_code[0].code);
             const order = new Order();
@@ -398,7 +405,6 @@ router.post('/neworder', (req, res, next) => {
             console.log(order);
             doc_order_code[0].code = doc_order_code[0].code+1;
             doc_order_code[0].save();
-            console.log(csv);
             content =   "Order has been placed by " +
                             sperson.Allocated_Pharma.pharma_name +
                             " on " +
@@ -426,7 +432,18 @@ router.post('/neworder', (req, res, next) => {
                                     date.toISOString() +
                                     ".csv",
                                 content: csv
-                            }]
+                            },
+                            {
+                                filename: "SalesOrder_Medicento_" +
+                                    sperson.Allocated_Pharma.pharma_name +
+                                    "_" +
+                                    sperson.user.useremail +
+                                    "_" +
+                                    date.toISOString() +
+                                    ".txt",
+                                content: txt
+                            }
+                        ]
                         });
                      Person.update({
                                 _id: sperson._id
