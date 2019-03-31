@@ -48,8 +48,8 @@ const deliverySchema = mongoose.Schema({
 		default: 0
 	},
 	ratings: {
-		type: Number,
-		Default: 0
+		type: String,
+		Default: '0'
 	},
 	area_and_delivery: [
 		{
