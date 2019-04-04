@@ -219,10 +219,9 @@ router.get("/medimap", (req, res) => {
 
 router.get("/recent_order/:id", (req, res, next) => {
     Order.find({
-            pharmacy_id: req.params.id,
-            status: req.query.status
+            pharmacy_id: req.params.id
         })
-        .select("created_at grand_total sales_order_code")
+        .select("created_at grand_total sales_order_code status")
         .populate("order_items")
         .exec()
         .then(docs => {
@@ -232,6 +231,7 @@ router.get("/recent_order/:id", (req, res, next) => {
                         order_id: doc.sales_order_code,
                         created_at: doc.created_at,
                         grand_total: doc.grand_total,
+			status: doc.status,  
                         order_items: doc.order_items
                     };
                 })
