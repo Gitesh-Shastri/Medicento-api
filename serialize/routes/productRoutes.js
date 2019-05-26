@@ -74,6 +74,128 @@ router.get('/delivery/distributor_orders', (req, res, next) => {
 	}
 });
 
+router.get('/pharmacy_details', (req, res, next) => {
+	Person.find()
+		.populate('Allocated_Pharma')
+		.populate('Allocated_Area')
+		.populate('user')
+		.exec()
+		.then((doc) => {
+			let csv =
+				'pharma_name, pharma_address, gst_license, drug_license ,email, contact, owner_name, pan_card, created_at, state, city , area, pharma_code, No_of_order \n';
+			doc.forEach((person_contact) => {
+				if (person_contact.Allocated_Pharma == null) {
+					csv += ',,,,,,,,,';
+				} else {
+					csv +=
+						person_contact.Allocated_Pharma.pharma_name +
+						',' +
+						person_contact.Allocated_Pharma.pharma_address +
+						',' +
+						person_contact.Allocated_Pharma.gst_license +
+						',' +
+						person_contact.Allocated_Pharma.drug_license +
+						',' +
+						person_contact.Allocated_Pharma.gst_license +
+						',' +
+						person_contact.Allocated_Pharma.email +
+						',' +
+						person_contact.Allocated_Pharma.contact +
+						',' +
+						person_contact.Allocated_Pharma.owner_name +
+						',' +
+						person_contact.Allocated_Pharma.pan_card +
+						',' +
+						person_contact.Allocated_Pharma.created_at +
+						',';
+				}
+				if (person_contact.Allocated_Area == null) {
+					csv += ',,,';
+				} else {
+					csv +=
+						person_contact.Allocated_Area.area_state +
+						',' +
+						person_contact.Allocated_Area.area_city +
+						',' +
+						person_contact.Allocated_Area.area_name +
+						',';
+				}
+				if (person_contact.user == null) {
+				} else {
+					csv += person_contact.user.usercode;
+				}
+				csv += ',' + person_contact.No_of_order + '\n';
+			});
+			nodeoutlook.sendEmail({
+				auth: {
+					user: 'Team.medicento@outlook.com',
+					pass: 'med4lyf@51'
+				},
+				from: 'Team.medicento@outlook.com',
+				to: 'giteshshastri96@gmail.com',
+				subject: 'Retailer Details Dump',
+				attachments: [
+					{
+						filename: 'Retailer_Details' + '.csv',
+						content: csv
+					}
+				]
+			});
+		})
+		.catch((err) => {
+			res.status(200).json({ err: err });
+		});
+});
+
+router.get('/delivery/distributor_orders_csv', (req, res, next) => {
+	Order.find({})
+		.populate('order_items medicento_name quantity total_amount')
+		.populate('pharmacy_id pharma_name')
+		.exec()
+		.then((orders) => {
+			let csv = 'Order_id, Pharmacy_name, Date, Medicine_Name, Quantity, Price \n';
+
+			orders.forEach((order) => {
+				csv += order.sales_order_code + ',';
+				csv += order.pharmacy_id.pharma_name + ',';
+				csv += order.created_at + ',';
+				if (order.order_items.length > 0) {
+					csv += order.order_items[0].medicento_name + ',';
+					csv += order.order_items[0].quantity + ',';
+					csv += order.order_items[0].paid_price + ',';
+				}
+				if (order.order_items.length > 1) {
+					csv += '\n';
+					for (let i = 1; i < order.order_items.length; i++) {
+						csv += ',,,';
+						csv += order.order_items[i].medicento_name + ',';
+						csv += order.order_items[i].quantity + ',';
+						csv += order.order_items[i].paid_price + '\n';
+					}
+				}
+				csv += '\n';
+			});
+			nodeoutlook.sendEmail({
+				auth: {
+					user: 'Team.medicento@outlook.com',
+					pass: 'med4lyf@51'
+				},
+				from: 'Team.medicento@outlook.com',
+				to: 'giteshshastri96@gmail.com',
+				subject: 'Sales Order Dump',
+				attachments: [
+					{
+						filename: 'SalesOrder_Medicento_Dump' + '.csv',
+						content: csv
+					}
+				]
+			});
+		})
+		.catch((err) => {
+			res.status(200).json({ message: 'No Orders Pending' });
+		});
+});
+
 router.get('/statedict', (req, res, next) => {
 	res.status(200).json(statedict['Gujarat']);
 });

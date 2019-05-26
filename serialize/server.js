@@ -7,23 +7,28 @@ const userRoutes = require('./routes/userRoutes');
 const productRoutes = require('./routes/productRoutes');
 const distributorRoutes = require('./routes/distributor');
 const morgan = require('morgan');
+const api = require('./routes/api');
 const mongoose = require('mongoose');
 const MONGODB_URI = process.env.MONGODB_URI;
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3800;
 
-mongoose.connect(MONGODB_URI, function () {
+mongoose.connect(MONGODB_URI, function() {
 	console.log('connected to DB');
 });
 
 app.use(morgan('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({
-	extended: true
-}));
+app.use(
+	bodyParser.urlencoded({
+		extended: true
+	})
+);
 app.use(bodyParser.text());
-app.use(bodyParser.json({
-	type: "application/vnd.api+json"
-}));
+app.use(
+	bodyParser.json({
+		type: 'application/vnd.api+json'
+	})
+);
 
 app.use((req, res, next) => {
 	res.header('Access-Control-Allow-Origin', '*');
@@ -40,11 +45,12 @@ app.use('/product', productRoutes);
 app.use('/user', userRoutes);
 app.use('/pharma', pharmaRoutes);
 app.use('/distributor', distributorRoutes);
+app.use('/api', api);
 
 app.use('/', (req, res, next) => {
 	res.status(200).json({
-		message: "API Documentation"
-	})
+		message: 'API Documentation'
+	});
 });
 
 app.use((req, res, next) => {
@@ -62,6 +68,6 @@ app.use((error, req, res, next) => {
 	});
 });
 
-app.listen(PORT, function () {
+app.listen(PORT, function() {
 	console.log(`listening on PORT ${PORT}`);
 });
