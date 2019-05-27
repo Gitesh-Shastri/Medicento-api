@@ -41,7 +41,7 @@ router.get('/get_states', (req, res, next) => {
 		});
 });
 
-router.get('/get_city_by_state', (req, res, next) => {
+router.post('/get_city_by_state', (req, res, next) => {
 	City.find({ state: req.body.state_id })
 		.exec()
 		.then((cities) => {
