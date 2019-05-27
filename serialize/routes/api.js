@@ -41,4 +41,15 @@ router.get('/get_states', (req, res, next) => {
 		});
 });
 
+router.get('/get_city_by_state', (req, res, next) => {
+	City.find({ state: req.body.state_id })
+		.exec()
+		.then((cities) => {
+			res.status(200).json({ message: 'Cities Found', cities: cities });
+		})
+		.catch((err) => {
+			res.status(200).json({ message: 'Error Occured' });
+		});
+});
+
 module.exports = router;
