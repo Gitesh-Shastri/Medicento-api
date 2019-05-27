@@ -4,8 +4,8 @@ const router = express.Router();
 
 const Admin = require('../models/admin');
 
-const State = require('./models/medicento_state');
-const City = require('./models/medicento_city');
+const State = require('../models/medicento_state');
+const City = require('../models/medicento_city');
 
 router.post('/login', (req, res, next) => {
 	Admin.findOne({
