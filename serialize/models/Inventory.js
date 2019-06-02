@@ -29,6 +29,22 @@ const inventorySchema = mongoose.Schema({
 	email: {
 		type: String,
 		required: true
+	},
+	city: {
+		type: String,
+		deafult: ''
+	},
+	state: {
+		type: String,
+		deafult: ''
+	},
+	created_at: {
+		type: Date,
+		default: Date.now()
+	},
+	last_logged_in: {
+		type: Date,
+		default: Date.now()
 	}
 });
 
