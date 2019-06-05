@@ -10,6 +10,8 @@ const Tulsi = require('../models/tulsimedicines');
 const Inventory = require('../models/Inventory');
 const vpi = require('../models/vpimedicine');
 
+const tulsimedicines = require('../models/tulsimedicines');
+
 router.post('/login', (req, res, next) => {
 	Admin.findOne({
 		useremail: req.body.email,
@@ -55,35 +57,32 @@ router.get('/get_city_by_state', (req, res, next) => {
 		});
 });
 
-router.get('/get_distributor_by_city', (req, res, next) => {});
-
 router.post('/upload_csv', (req, res, next) => {
 	res.status(200).json('OK');
 });
 
-router.get('/inventory', (req, res, next) => {
-	var inventory = new Inventory();
-	inventory.inventory_name = '';
-	inventory.contact_person = '';
-	inventory.phone_number = '';
-	inventory.Address = '';
-	inventory.GST_Number = '';
-	inventory.DL_Number = '';
-	inventory.email = '';
-	inventory.city = '';
-	inventory.state = '';
+router.get('/getDistributorbyCity', (req, res, next) => {
+	Inventory.find()
+		.exec()
+		.then((distributors) => {
+			res.status(200).json({ message: 'Distributors Found', distributors: distributors });
+		})
+		.catch((err) => {
+			res.status(200).json({ message: 'Error Occured' });
+		});
 });
 
 router.get('/get_medicines_of_distributor/:name', (req, res, next) => {
 	var term = '';
 	term = req.params.name;
 	vpi
-		.find({ Item_name: new RegExp('' + term + '', 'i') })
+		.find({ Item_name: new RegExp('' + term + '', 'i'), distributor: req.query.name })
 		.limit(10)
 		.skip(10 * req.query.pagno)
 		.sort({ Item_name: 1 })
 		.exec()
 		.then((response) => {
+			console.log(response);
 			res.status(200).json({ medicines: response });
 		})
 		.catch((err) => {
@@ -91,25 +90,21 @@ router.get('/get_medicines_of_distributor/:name', (req, res, next) => {
 		});
 });
 
-router.get('/total_unmapped', (req, res, next) => {
-	vpi.find({}).count().exec().then((count) => {
+router.get('/total_unmapped/:name', (req, res, next) => {
+	vpi.find({ distributor: req.params.name, unmapped: 'NotMapped' }).count().exec().then((count) => {
 		res.status(200).json({ count: count });
 	});
 });
 
-// router.get('/update', (req, res, next) => {
-// 	vpi.find({}).exec().then((count) => {
-// 		for (var i = 0; i < count.length; i++) {
-// 			count[i].unmapped = 'NotMapped';
-// 			count[i].save();
-// 		}
-// 	});
-// });
-
-router.get('/get_unmapped/:unmapped', (req, res, next) => {
-	vpi.find({ unmapped: req.params.unmapped }).exec().then((count) => {
-		res.status(200).json({ medicines: count });
-	});
+router.get('/get_unmapped/:unmapped/:name', (req, res, next) => {
+	vpi
+		.find({ unmapped: req.params.unmapped, distributor: req.params.name })
+		.limit(10)
+		.skip(10 * req.query.pagno)
+		.exec()
+		.then((count) => {
+			res.status(200).json({ medicines: count });
+		});
 });
 
 router.get('/updateMedicines', (req, res, next) => {
@@ -118,6 +113,20 @@ router.get('/updateMedicines', (req, res, next) => {
 		count.save();
 		res.status(200).json({ medicines: count });
 	});
+});
+
+router.get('/addMedicines/:name', (req, res, next) => {
+	let tulsipharma1 = new tulsimedicines();
+	tulsipharma1.Item_name = req.params.name;
+	tulsipharma1.item_code = '-';
+	tulsipharma1.manfc_name = 'Medi';
+	tulsipharma1.packing = '';
+	tulsipharma1.qty = 0;
+	tulsipharma1.mrp = 0;
+	tulsipharma1.ptr = 0;
+	tulsipharma1.scheme = '';
+	tulsipharma1.save();
+	res.status(200).json(tulsipharma1);
 });
 
 router.get('/get_medicines_of_master/:name', (req, res, next) => {

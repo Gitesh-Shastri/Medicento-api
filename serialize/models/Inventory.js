@@ -32,11 +32,11 @@ const inventorySchema = mongoose.Schema({
 	},
 	city: {
 		type: String,
-		deafult: ''
+		deafult: '-'
 	},
 	state: {
 		type: String,
-		deafult: ''
+		deafult: '-'
 	},
 	created_at: {
 		type: Date,
@@ -45,7 +45,11 @@ const inventorySchema = mongoose.Schema({
 	last_logged_in: {
 		type: Date,
 		default: Date.now()
+	},
+	medi_code: {
+		type: String,
+		deafult: '-'
 	}
 });
 
-module.exports = mongoose.model('Inventory', inventorySchema);
+module.exports = mongoose.model('inventories', inventorySchema);
