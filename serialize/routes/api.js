@@ -72,13 +72,30 @@ router.get('/getDistributorbyCity', (req, res, next) => {
 		});
 });
 
-router.get('/get_medicines_of_distributor/:name', (req, res, next) => {
+router.post('/get_medicines_of_master', (req, res, next) => {
 	var term = '';
-	term = req.params.name;
-	vpi
-		.find({ Item_name: new RegExp('' + term + '', 'i'), distributor: req.query.name })
+	term = req.body.term;
+	Tulsi.find({ Item_name: new RegExp('' + term + '', 'i') })
 		.limit(10)
-		.skip(10 * req.query.pagno)
+		.skip(10 * req.body.pagno)
+		.sort({ Item_name: 1 })
+		.exec()
+		.then((response) => {
+			console.log(response);
+			res.status(200).json({ medicines: response });
+		})
+		.catch((err) => {
+			res.status(200).json({ message: 'Error Occured' });
+		});
+});
+
+router.post('/get_medicines_of_distributor', (req, res, next) => {
+	var term = '';
+	term = req.body.term;
+	vpi
+		.find({ Item_name: new RegExp('' + term + '', 'i'), distributor: req.body.name })
+		.limit(10)
+		.skip(10 * req.body.pagno)
 		.sort({ Item_name: 1 })
 		.exec()
 		.then((response) => {
@@ -108,37 +125,39 @@ router.get('/get_unmapped/:unmapped/:name', (req, res, next) => {
 });
 
 router.get('/updateMedicines', (req, res, next) => {
-	vpi.findOne({ item_code: req.query.mapped_id }).exec().then((count) => {
-		count.unmapped = 'Mapped';
-		count.save();
-		res.status(200).json({ medicines: count });
-	});
-});
-
-router.get('/addMedicines/:name', (req, res, next) => {
-	let tulsipharma1 = new tulsimedicines();
-	tulsipharma1.Item_name = req.params.name;
-	tulsipharma1.item_code = '-';
-	tulsipharma1.manfc_name = 'Medi';
-	tulsipharma1.packing = '';
-	tulsipharma1.qty = 0;
-	tulsipharma1.mrp = 0;
-	tulsipharma1.ptr = 0;
-	tulsipharma1.scheme = '';
-	tulsipharma1.save();
-	res.status(200).json(tulsipharma1);
-});
-
-router.get('/get_medicines_of_master/:name', (req, res, next) => {
-	var term = '';
-	term = req.params.name;
-	Tulsi.find({ Item_name: new RegExp('' + term + '', 'i') })
-		.limit(10)
-		.skip(10 * req.query.pagno)
-		.sort({ Item_name: 1 })
+	vpi
+		.findOne({ item_code: req.query.mapped_id })
 		.exec()
-		.then((response) => {
-			res.status(200).json({ medicines: response });
+		.then((count) => {
+			count.unmapped = 'Mapped';
+			count.save();
+			res.status(200).json({ medicines: count });
+		})
+		.catch((err) => {
+			res.status(200).json({ message: 'Error Occured' });
+		});
+});
+
+router.post('/addMedicines/', (req, res, next) => {
+	tulsimedicines
+		.find({ Item_name: req.body.name })
+		.exec()
+		.then((doc) => {
+			if (doc.length > 0) {
+				res.status(200).json({ message: 'Already Exists', medicines: doc[0] });
+			} else {
+				let tulsipharma1 = new tulsimedicines();
+				tulsipharma1.Item_name = req.body.name;
+				tulsipharma1.item_code = '-';
+				tulsipharma1.manfc_name = 'Medi';
+				tulsipharma1.packing = '';
+				tulsipharma1.qty = 0;
+				tulsipharma1.mrp = 0;
+				tulsipharma1.ptr = 0;
+				tulsipharma1.scheme = '';
+				tulsipharma1.save();
+				res.status(200).json({ message: 'Created New Medicine ', medicines: tulsipharma1 });
+			}
 		})
 		.catch((err) => {
 			res.status(200).json({ message: 'Error Occured' });
