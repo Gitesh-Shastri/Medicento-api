@@ -124,17 +124,31 @@ router.get('/get_unmapped/:unmapped/:name', (req, res, next) => {
 		});
 });
 
-router.get('/updateMedicines', (req, res, next) => {
+router.post('/updateMedicines', (req, res, next) => {
 	vpi
-		.findOne({ item_code: req.query.mapped_id })
+		.findOne({ item_code: req.body.mapped_id, distributor: req.body.name })
 		.exec()
 		.then((count) => {
 			count.unmapped = 'Mapped';
-			count.save();
-			res.status(200).json({ medicines: count });
+			tulsimedicines
+				.findOne({ _id: req.body.master })
+				.exec()
+				.then((medi) => {
+					let id = {
+						item_id: req.body.mapped_id,
+						distributor: req.body.name
+					};
+					medi.mapped.push(id);
+					medi.save();
+					count.save();
+					res.status(200).json({ medicines: medi });
+				})
+				.catch((err) => {
+					res.status(200).json({ message: 'Error Occured from master' });
+				});
 		})
 		.catch((err) => {
-			res.status(200).json({ message: 'Error Occured' });
+			res.status(200).json({ message: 'Error Occured from inventory' });
 		});
 });
 
