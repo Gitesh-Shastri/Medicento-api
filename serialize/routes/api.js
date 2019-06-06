@@ -57,6 +57,46 @@ router.get('/get_city_by_state', (req, res, next) => {
 		});
 });
 
+router.get('/get_all_master_medicines', (req, res, next) => {
+	tulsimedicines
+		.find({})
+		.limit(10)
+		.exec()
+		.then((response) => {
+			console.log(response);
+			res.status(200).json({ medicines: response });
+		})
+		.catch((err) => {
+			res.status(200).json({ message: 'Error Occured' });
+		});
+});
+
+router.post('/get_medicines_for_key', (req, res, next) => {
+	term = req.body.term;
+	vpi
+		.find({ Item_name: new RegExp('' + term + '', 'i'), distributor: req.body.name })
+		.limit(10)
+		.skip(10 * req.body.pagno)
+		.sort({ Item_name: 1 })
+		.exec()
+		.then((response) => {
+			Tulsi.find({ Item_name: new RegExp('' + term + '', 'i') })
+				.limit(10)
+				.skip(10 * req.body.pagno)
+				.sort({ Item_name: 1 })
+				.exec()
+				.then((inventory_master) => {
+					res.status(200).json({ medicines: response, inventory_master: inventory_master });
+				})
+				.catch((err) => {
+					res.status(200).json({ message: 'Error Occured' });
+				});
+		})
+		.catch((err) => {
+			res.status(200).json({ message: 'Error Occured' });
+		});
+});
+
 router.post('/upload_csv', (req, res, next) => {
 	res.status(200).json('OK');
 });
