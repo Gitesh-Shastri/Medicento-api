@@ -10,6 +10,32 @@ const Area = require('../models/area');
 
 const Pharmacy = require('../models/pharmacy');
 
+router.get('/area', (req, res, next) => {
+	Area.find({ area_state: 'Karnataka', area_city: 'Bangalore' })
+		.exec()
+		.then((areas1) => {
+			Pharmacy.find()
+				.exec()
+				.then((pharmas) => {
+					res.status(200).json({
+						areas: areas1,
+						pharmas: pharmas
+					});
+				})
+				.catch((err) => {
+					res.status(500).json({
+						error: err
+					});
+				});
+		})
+		.catch((err) => {
+			console.log(err);
+			res.status(500).json({
+				error: err
+			});
+		});
+});
+
 router.get('/area/area', PharmaController.pharam_and_area);
 
 router.get('', PharmaController.get_all_pharmacy);
