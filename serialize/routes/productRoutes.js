@@ -23,6 +23,7 @@ const Camp = require('../models/camp');
 const fast_csv = require('fast-csv');
 const vpiinventory = require('../models/vpimedicine');
 const tulsiinverntory = require('../models/tulsimedicines');
+const SalesAppUser = require('../models/SalesAppUser');
 var nodeoutlook = require('nodejs-nodemailer-outlook');
 
 const DeliveryController = require('../controllers/delivery');
@@ -797,26 +798,157 @@ router.post('/order', (req, res, next) => {
 		});
 });
 
+router.post('/order_sales', (req, res, next) => {
+	const log = new Log();
+	log.logd = JSON.stringify(req.body);
+	log.created_at = new Date();
+	log.save();
+	var csv = 'Party_Code, Item_Code, Item_Name, Qty\n';
+	var date = new Date();
+	console.log(date.toISOString());
+	OrderCode.find()
+		.exec()
+		.then((doc_order_code) => {
+			Pharmacy.findOne({
+				_id: req.body[0].pharma_id
+			})
+				.populate('area')
+				.exec()
+				.then((docp) => {
+					message =
+						'<h3>Pharmacy Name: ' +
+						docp.pharma_name +
+						'</h4><h4>Address : ' +
+						docp.pharma_address +
+						'</h4>' +
+						'<h4>Chosen Slot : ' +
+						req.body[0].slot +
+						'</h4>';
+					message +=
+						'<table border="1" style="width:100%"><tr><th style="width:60%">Item_Name</th><th style="width:20%">Item_Code</th><th style="width:10%">Quantity</th><th style="width:10%">Cost</th></tr>';
+					var deliverdate = date;
+					deliverdate.setDate(deliverdate.getDate() + 1);
+					deliverdate = deliverdate.toLocaleDateString();
+					count = req.body.length - 1;
+					total = 0;
+					orderid = '';
+					for (i = 0; i < count; i++) {
+						cost = Number(req.body[i].cost);
+						total += cost;
+					}
+					SalesAppUser.findOne({
+						_id: req.body[0].salesperson_id
+					})
+						.populate()
+						.exec()
+						.then((salesP) => {
+							(salesP.Total_sales = salesP.Total_sales + total),
+								(salesP.No_of_order = salesP.No_of_order + 1),
+								(salesP.Earnings = salesP.commission * (salesP.Total_sales + total));
+							salesP.save();
+							orders = [];
+							for (i = 0; i < count; i++) {
+								const orderItem = new OrderItem();
+								(orderItem.quantity = req.body[i].qty),
+									(orderItem.paid_price = req.body[i].rate),
+									(orderItem.code = req.body[i].code),
+									(orderItem.created_at = date),
+									(orderItem.medicento_name = req.body[i].medicento_name),
+									(orderItem.company_name = req.body[i].company_name),
+									(orderItem.total_amount = req.body[i].cost);
+								orderItem.save();
+								orders.push(orderItem._id);
+								csv +=
+									docp.distributor_Code +
+									',' +
+									req.body[i].code +
+									',' +
+									req.body[i].medicento_name +
+									',' +
+									req.body[i].qty +
+									'\n';
+								message +=
+									'<tr><td style="width:60%">' +
+									req.body[i].medicento_name +
+									'</td><td style="width:20%">' +
+									req.body[i].code +
+									'</td><td style="width:10%">' +
+									req.body[i].qty +
+									'</td><td style="width:10%">' +
+									req.body[i].cost +
+									'</td></tr>';
+							}
+							console.log(doc_order_code[0].code);
+							const order = new Order();
+							order.created_at = date;
+							order.order_slot = req.body[0].slot;
+							order.pharmacy_id = req.body[0].pharma_id;
+							order.sales_person_id = req.body[0].salesperson_id;
+							order.sales_order_code = doc_order_code[0].code;
+							order.grand_total = total;
+							order.delivery_date = deliverdate;
+							order.status = 'Active';
+							for (i = 0; i < count; i++) {
+								order.order_items.push(orders[i]);
+							}
+							order.save();
+							console.log(order);
+							doc_order_code[0].code = doc_order_code[0].code + 1;
+							doc_order_code[0].save();
+							console.log(csv);
+							content = 'Order has been placed by ' + docp.pharma_name + ' on ' + date.toISOString(); // Subject line
+							message =
+								message +
+								'<td style="width:60%"></td><td colspan="2" style="width:40%">Grand Total = ' +
+								total +
+								'</td>';
+							nodeoutlook.sendEmail({
+								auth: {
+									user: 'Team.medicento@outlook.com',
+									pass: 'med4lyf@51'
+								},
+								from: 'Team.medicento@outlook.com',
+								to: 'giteshshastri96@gmail.com,contact.medicento@gmail.com',
+								subject: content,
+								html: message,
+								attachments: [
+									{
+										filename:
+											'SalesOrder_Medicento_' +
+											docp.pharma_name +
+											'_' +
+											date.toISOString() +
+											'.csv',
+										content: csv
+									}
+								]
+							});
+							res.status(200).json({
+								message: 'Order has been placed successfully',
+								delivery_date: order.delivery_date.toLocaleString(),
+								order_id: '' + order.sales_order_code,
+								grand_total: order.grand_total
+							});
+						});
+				});
+		})
+		.catch((err) => {
+			res.status(200).json({ error: err });
+		});
+});
+
 router.get('/csv', (req, res, next) => {
-	content = 'Order has been placed by '; // Subject line
-	message = '<td style="width:60%"></td><td colspan="2" style="width:40%">Grand Total = </td>';
-	nodeoutlook.sendEmail({
-		auth: {
-			user: 'giteshshastri123@outlook.com',
-			pass: 'shastri@1'
-		},
-		from: 'giteshshastri123@outlook.com',
-		to: 'giteshshastri96@gmail.com',
-		subject: content,
-		html: message,
-		attachments: [
-			{
-				filename: 'attachment.csv',
-				content: 'bs, bs, bs, bs \n vs, vs, vs, vs'
-			}
-		]
-	});
-	res.send('Hie');
+	Person.findOne({
+		_id: '5cfd56d66c503311ddde6e04'
+	})
+		.populate()
+		.exec()
+		.then((salesP) => {
+			res.status(200).json({ salesP: salesP });
+		})
+		.catch((err) => {
+			res.status(200).json({ err: err });
+		});
 });
 
 router.get('/order', (req, res, next) => {
