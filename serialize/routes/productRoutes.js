@@ -938,8 +938,9 @@ router.post('/order_sales', (req, res, next) => {
 });
 
 router.get('/csv', (req, res, next) => {
-	Person.findOne({
-		_id: '5cfd56d66c503311ddde6e04'
+	SalesAppUser.findOne({
+		useremail: 'medisidd',
+		password: 'sidd@123'
 	})
 		.populate()
 		.exec()
