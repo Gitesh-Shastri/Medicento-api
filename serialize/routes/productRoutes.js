@@ -339,11 +339,8 @@ router.get('/medi', (req, res) => {
 });
 
 router.get('/medimap', (req, res) => {
-	tulsiinverntory
-		.find()
-		.sort({
-			Item_name: 1
-		})
+	vpiinventory
+		.find({ distributor: 'mercury' })
 		.select('Item_name manfc_name mrp qty item_code packing')
 		.exec()
 		.then((docs) => {
