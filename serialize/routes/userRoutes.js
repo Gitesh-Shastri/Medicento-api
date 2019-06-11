@@ -18,6 +18,8 @@ const Message = require('../models/message');
 
 const UserController = require('../controllers/user');
 
+const SalesPerson = require('../models/SalesAppUser');
+
 router.get('/message', (req, res, next) => {
 	Message.find()
 		.exec()
@@ -32,6 +34,24 @@ router.get('/message', (req, res, next) => {
 				error: err
 			});
 		});
+});
+
+router.get('/signup', (req, res, next) => {
+	let salesPerson = new SalesPerson({
+		Name: 'Arpan',
+		commission: 0,
+		Return_value: 0,
+		Total_sales: 0,
+		No_of_order: 0,
+		Returns: 0,
+		Earnings: 0,
+		useremail: 'arpanmedi',
+		password: 'arpan123',
+		usercode: '0001',
+		phone: '9900408994'
+	});
+	salesPerson.save();
+	res.status(200).json({ salesPerson: salesPerson });
 });
 
 router.post('/salesLogin', (req, res, next) => {
