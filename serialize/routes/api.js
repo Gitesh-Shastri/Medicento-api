@@ -221,7 +221,7 @@ router.post('/addMedicines/', (req, res, next) => {
 		});
 });
 
-router.get('/get_orders', (Req, res, next) => {
+router.get('/get_orders', (req, res, next) => {
 	SalesOrder.find({})
 		.sort({ created_at: -1 })
 		.limit(10)
@@ -234,6 +234,12 @@ router.get('/get_orders', (Req, res, next) => {
 		.catch((err) => {
 			res.status(200).json({ error: err });
 		});
+});
+
+router.get('/get_order_count', (req, res, next) => {
+	SalesOrder.find({}).count().exec().then((total_orders) => {
+		res.status(200).json({ total_orders: total_orders });
+	});
 });
 
 module.exports = router;
