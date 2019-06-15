@@ -11,6 +11,7 @@ const Inventory = require('../models/Inventory');
 const vpi = require('../models/vpimedicine');
 
 const SalesOrder = require('../models/SalesOrder');
+const SalesOrderItems = require('../models/SalesOrderItem');
 
 const tulsimedicines = require('../models/tulsimedicines');
 
@@ -225,6 +226,7 @@ router.get('/get_orders', (Req, res, next) => {
 		.sort({ created_at: -1 })
 		.limit(10)
 		.populate('pharmacy_id')
+		.populate('order_items')
 		.exec()
 		.then((doc) => {
 			res.status(200).json({ orders: doc });
