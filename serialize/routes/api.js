@@ -224,6 +224,7 @@ router.get('/get_orders', (Req, res, next) => {
 	SalesOrder.find({})
 		.sort({ created_at: -1 })
 		.limit(10)
+		.populate('pharmacy_id')
 		.exec()
 		.then((doc) => {
 			res.status(200).json({ orders: doc });
