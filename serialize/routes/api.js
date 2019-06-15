@@ -238,7 +238,22 @@ router.get('/get_orders', (req, res, next) => {
 
 router.get('/get_order_count', (req, res, next) => {
 	SalesOrder.find({}).count().exec().then((total_orders) => {
-		res.status(200).json({ total_orders: total_orders });
+		SalesOrder.find({ status: 'Active' }).count().exec().then((active_orders) => {
+			res.status(200).json({ total_orders: total_orders });
+			SalesOrder.find({ status: 'Canceled' }).count().exec().then((cancel_orders) => {
+				res.status(200).json({ total_orders: total_orders });
+				SalesOrder.find({ status: 'Delivered' }).count().exec().then((delivered_orders) => {
+					res
+						.status(200)
+						.json({
+							total_orders: total_orders,
+							active_orders: active_orders,
+							cancel_orders: cancel_orders,
+							delivered_orders: delivered_orders
+						});
+				});
+			});
+		});
 	});
 });
 
