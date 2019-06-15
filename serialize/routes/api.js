@@ -10,6 +10,8 @@ const Tulsi = require('../models/tulsimedicines');
 const Inventory = require('../models/Inventory');
 const vpi = require('../models/vpimedicine');
 
+const SalesOrder = require('../models/SalesOrder');
+
 const tulsimedicines = require('../models/tulsimedicines');
 
 router.post('/login', (req, res, next) => {
@@ -215,6 +217,19 @@ router.post('/addMedicines/', (req, res, next) => {
 		})
 		.catch((err) => {
 			res.status(200).json({ message: 'Error Occured' });
+		});
+});
+
+router.get('/get_orders', (Req, res, next) => {
+	SalesOrder.find({})
+		.sort({ created_at: -1 })
+		.limit(10)
+		.exec()
+		.then((doc) => {
+			res.status(200).json({ orders: doc });
+		})
+		.catch((err) => {
+			res.status(200).json({ error: err });
 		});
 });
 
