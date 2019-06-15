@@ -241,11 +241,17 @@ router.get('/get_order_count', (req, res, next) => {
 		SalesOrder.find({ status: 'Active' }).count().exec().then((active_orders) => {
 			SalesOrder.find({ status: 'Canceled' }).count().exec().then((cancel_orders) => {
 				SalesOrder.find({ status: 'Delivered' }).count().exec().then((delivered_orders) => {
-					res.status(200).json({
-						total_orders: total_orders,
-						active_orders: active_orders,
-						cancel_orders: cancel_orders,
-						delivered_orders: delivered_orders
+					SalesOrder.find({ status: 'Returns' }).count().exec().then((un_delivered_orders) => {
+						SalesOrder.find({ status: 'Not Delivered' }).count().exec().then((returned_orders) => {
+							res.status(200).json({
+								total_orders: total_orders,
+								active_orders: active_orders,
+								cancel_orders: cancel_orders,
+								delivered_orders: delivered_orders,
+								returned_orders: returned_orders,
+								un_delivered_orders: un_delivered_orders
+							});
+						});
 					});
 				});
 			});
