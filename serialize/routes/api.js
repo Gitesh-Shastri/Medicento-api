@@ -12,6 +12,7 @@ const vpi = require('../models/vpimedicine');
 
 const SalesOrder = require('../models/SalesOrder');
 const SalesOrderItems = require('../models/SalesOrderItem');
+const Area = require('../models/area');
 
 const tulsimedicines = require('../models/tulsimedicines');
 
@@ -257,6 +258,17 @@ router.get('/get_order_count', (req, res, next) => {
 			});
 		});
 	});
+});
+
+router.get('/get_areas_by_city', (req, res, next) => {
+	Area.find({ area_city: 'Banglore' })
+		.exec()
+		.then((areas) => {
+			res.status(200).json({ areas: areas });
+		})
+		.catch((err) => {
+			res.status(200).json({ err: err });
+		});
 });
 
 module.exports = router;
