@@ -261,7 +261,7 @@ router.get('/get_order_count', (req, res, next) => {
 });
 
 router.get('/get_areas_by_city', (req, res, next) => {
-	Area.find({ area_city: 'Banglore' })
+	Area.find({ area_city: 'Bangalore' })
 		.exec()
 		.then((areas) => {
 			res.status(200).json({ areas: areas });
