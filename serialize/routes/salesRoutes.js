@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 
 const App_version = require('../models/app_versions');
+const Pharmacy = require('../models/pharmacy');
 
 router.post('/update_app_version', (req, res, next) => {
 	App_version.findOne({ name: 'SalesApp' })
@@ -25,6 +26,22 @@ router.get('/update_app_version', (req, res, next) => {
 		})
 		.catch((err) => {
 			res.status(200).json({ message: 'error occured' });
+		});
+});
+
+router.get('/get_pharmacy', (req, res, next) => {
+	Pharmacy.find()
+		.exec()
+		.then((pharmas) => {
+			res.status(200).json({
+				message: 'Pharmacy Found',
+				pharmas: pharmas
+			});
+		})
+		.catch((err) => {
+			res.status(200).json({
+				message: 'error occured'
+			});
 		});
 });
 
