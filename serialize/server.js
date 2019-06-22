@@ -6,6 +6,7 @@ const pharmaRoutes = require('./routes/pharmaRoutes');
 const userRoutes = require('./routes/userRoutes');
 const productRoutes = require('./routes/productRoutes');
 const distributorRoutes = require('./routes/distributor');
+const salesrRoutes = require('./routes/salesRoutes');
 const morgan = require('morgan');
 const api = require('./routes/api');
 const mongoose = require('mongoose');
@@ -46,6 +47,7 @@ app.use('/user', userRoutes);
 app.use('/pharma', pharmaRoutes);
 app.use('/distributor', distributorRoutes);
 app.use('/api', api);
+app.use('/sales_app', salesrRoutes);
 
 app.use('/', (req, res, next) => {
 	res.status(200).json({
