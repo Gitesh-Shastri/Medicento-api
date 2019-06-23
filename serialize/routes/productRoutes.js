@@ -596,7 +596,7 @@ router.post('/neworder', (req, res, next) => {
 							pass: 'med4lyf@51'
 						},
 						from: 'Team.medicento@outlook.com',
-						to: 'giteshshastri96@gmail.com,contact.medicento@gmail.com',
+						to: 'giteshshastri96@gmail.com,sale.medicento@gmail.com',
 						subject: content,
 						html: message,
 						attachments: [
@@ -769,7 +769,7 @@ router.post('/order', (req, res, next) => {
 									pass: 'med4lyf@51'
 								},
 								from: 'Team.medicento@outlook.com',
-								to: 'giteshshastri96@gmail.com,contact.medicento@gmail.com',
+								to: 'giteshshastri96@gmail.com,sale.medicento@gmail.com',
 								subject: content,
 								html: message,
 								attachments: [
@@ -908,7 +908,7 @@ router.post('/order_sales', (req, res, next) => {
 									pass: 'med4lyf@51'
 								},
 								from: 'Team.medicento@outlook.com',
-								to: 'giteshshastri96@gmail.com,contact.medicento@gmail.com',
+								to: 'giteshshastri96@gmail.com,sale.medicento@gmail.com',
 								subject: content,
 								html: message,
 								attachments: [
