@@ -4,7 +4,8 @@ const pharmaSchema = mongoose.Schema({
 	pharma_id: mongoose.Schema.Types.ObjectId,
 	area: {
 		type: mongoose.Schema.Types.ObjectId,
-		ref: 'Area'
+		ref: 'Area',
+		default: '5c4b5e7bed743008af76ef0e'
 	},
 	pharma_name: {
 		type: String,
