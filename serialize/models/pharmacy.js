@@ -8,50 +8,54 @@ const pharmaSchema = mongoose.Schema({
 	},
 	pharma_name: {
 		type: String,
-		default: "-"
+		default: '-'
 	},
 	pharma_address: {
 		type: String,
-		default: "-"
+		default: '-'
 	},
 	gst_license: {
 		type: String,
-		default: "-"
+		default: '-'
 	},
 	drug_license: {
 		type: String,
-		default: "-"
+		default: '-'
 	},
 	email: {
 		type: String,
-		default: "-"
+		default: '-'
 	},
 	contact: {
 		type: String,
-		default: "-"
+		default: '-'
 	},
 	owner_name: {
 		type: String,
-		default: "-"
+		default: '-'
 	},
 	pincode: {
-		type: String	
+		type: String
 	},
-	created_at:{
+	created_at: {
 		type: Date,
 		default: Date.now()
 	},
 	pan_card: {
 		type: String,
-		default: "-"	
+		default: '-'
 	},
 	distributor: {
 		type: String,
-		default: "-"
+		default: '-'
 	},
 	distributor_Code: {
 		type: String,
-		default: "-"
+		default: '-'
+	},
+	credits: {
+		type: Number,
+		default: 0
 	}
 });
 

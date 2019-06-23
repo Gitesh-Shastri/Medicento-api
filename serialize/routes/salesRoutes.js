@@ -18,7 +18,7 @@ router.post('/update_app_version', (req, res, next) => {
 		});
 });
 
-router.get('/update_app_version', (req, res, next) => {
+router.get('/app_version', (req, res, next) => {
 	App_version.findOne({ name: 'SalesApp' })
 		.exec()
 		.then((app_version) => {
@@ -34,7 +34,7 @@ router.get('/get_pharmacy', (req, res, next) => {
 		.exec()
 		.then((pharmas) => {
 			res.status(200).json({
-				message: 'Pharmacy Found',
+				message: 'Pharmacies Found',
 				pharmas: pharmas
 			});
 		})
