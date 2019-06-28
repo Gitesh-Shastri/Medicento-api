@@ -333,7 +333,7 @@ router.get('/get_csv', (req, res, next) => {
 	});
 });
 
-router.get('get_all_pharmacy', (req, res, next) => {
+router.get('/get_all_pharmacy', (req, res, next) => {
 	Pharmacy.find({})
 		.exec()
 		.then((pharmas) => {
