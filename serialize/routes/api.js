@@ -13,8 +13,11 @@ const vpi = require('../models/vpimedicine');
 const SalesOrder = require('../models/SalesOrder');
 const SalesOrderItems = require('../models/SalesOrderItem');
 const Area = require('../models/area');
+var nodeoutlook = require('nodejs-nodemailer-outlook');
 
 const tulsimedicines = require('../models/tulsimedicines');
+const Pharmacy = require('../models/pharmacy');
+const Person = require('../models/sperson');
 
 router.post('/login', (req, res, next) => {
 	Admin.findOne({
@@ -265,6 +268,76 @@ router.get('/get_areas_by_city', (req, res, next) => {
 		.exec()
 		.then((areas) => {
 			res.status(200).json({ areas: areas });
+		})
+		.catch((err) => {
+			res.status(200).json({ err: err });
+		});
+});
+
+router.get('/get_csv', (req, res, next) => {
+	var date = new Date();
+	var csv = 'Pharmacy_Name, Pharmacy_email, Pharmacy_no, City, State, Created_At, Drug_Licesnse, GST\n';
+	Person.find({}).populate('user').populate('Allocated_Pharma').populate('Allocated_Area').exec().then((persons) => {
+		persons.map((person) => {
+			if (person.Allocated_Pharma != null && person.user != null) {
+				if (person.Allocated_Area == null) {
+					csv +=
+						person.Allocated_Pharma.pharma_name +
+						', ' +
+						person.Allocated_Pharma.pharma_address +
+						', ' +
+						person.user.phone +
+						', - , -, ' +
+						person.Allocated_Pharma.created_at +
+						', ' +
+						person.Allocated_Pharma.drug_license +
+						', ' +
+						person.Allocated_Pharma.gst_license +
+						'\n';
+				} else {
+					csv +=
+						person.Allocated_Pharma.pharma_name +
+						', ' +
+						person.Allocated_Pharma.pharma_address +
+						', ' +
+						person.user.phone +
+						', ' +
+						person.Allocated_Area.area_city +
+						person.Allocated_Area.area_state +
+						', ' +
+						person.Allocated_Pharma.created_at +
+						', ' +
+						person.Allocated_Pharma.drug_license +
+						', ' +
+						person.Allocated_Pharma.gst_license +
+						'\n';
+				}
+			}
+		});
+		nodeoutlook.sendEmail({
+			auth: {
+				user: 'Team.medicento@outlook.com',
+				pass: 'med4lyf@51'
+			},
+			from: 'Team.medicento@outlook.com',
+			to: 'giteshshastri96@gmail.com',
+			subject: 'Order Details',
+			html: 'Order Details',
+			attachments: [
+				{
+					filename: 'SalesOrder_Medicento_' + date.toISOString() + '.csv',
+					content: csv
+				}
+			]
+		});
+	});
+});
+
+router.get('get_all_pharmacy', (req, res, next) => {
+	Pharmacy.find({})
+		.exec()
+		.then((pharmas) => {
+			res.status(200).json({ pharmas: pharmas });
 		})
 		.catch((err) => {
 			res.status(200).json({ err: err });
