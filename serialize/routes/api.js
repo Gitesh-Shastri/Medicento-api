@@ -335,6 +335,7 @@ router.get('/get_csv', (req, res, next) => {
 
 router.get('/get_all_pharmacy', (req, res, next) => {
 	Pharmacy.find({})
+		.populate('area')
 		.exec()
 		.then((pharmas) => {
 			res.status(200).json({ pharmas: pharmas });
