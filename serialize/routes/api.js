@@ -154,9 +154,11 @@ router.post('/get_medicines_of_distributor', (req, res, next) => {
 		});
 });
 
-router.get('/total_unmapped/:name', (req, res, next) => {
-	vpi.find({ distributor: req.params.name, unmapped: 'NotMapped' }).count().exec().then((count) => {
-		res.status(200).json({ count: count });
+router.body('/total_unmapped', (req, res, next) => {
+	vpi.find({ distributor: req.body.name, unmapped: 'NotMapped' }).count().exec().then((count) => {
+		vpi.find({ distributor: req.body.name, unmapped: 'pending' }).count().exec().then((pending) => {
+			res.status(200).json({ count_of_unmappped: count, count_of_pending: pending });
+		});
 	});
 });
 
