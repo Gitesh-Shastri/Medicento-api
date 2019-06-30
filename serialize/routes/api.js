@@ -154,7 +154,7 @@ router.post('/get_medicines_of_distributor', (req, res, next) => {
 		});
 });
 
-router.body('/total_unmapped', (req, res, next) => {
+router.post('/total_unmapped', (req, res, next) => {
 	vpi.find({ distributor: req.body.name, unmapped: 'NotMapped' }).count().exec().then((count) => {
 		vpi.find({ distributor: req.body.name, unmapped: 'pending' }).count().exec().then((pending) => {
 			res.status(200).json({ count_of_unmappped: count, count_of_pending: pending });
@@ -227,10 +227,11 @@ router.post('/addMedicines/', (req, res, next) => {
 		});
 });
 
-router.get('/get_orders', (req, res, next) => {
-	SalesOrder.find({})
+router.post('/get_orders', (req, res, next) => {
+	SalesOrder.find({ status: req.body.status })
 		.sort({ created_at: -1 })
 		.limit(10)
+		.skip(10 * req.body.pagno)
 		.populate('pharmacy_id')
 		.populate('order_items')
 		.exec()
