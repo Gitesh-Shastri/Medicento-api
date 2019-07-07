@@ -56,7 +56,7 @@ const pharmaSchema = mongoose.Schema({
 	},
 	credits: {
 		type: Number,
-		default: 20000
+		default: 400000
 	}
 });
 
