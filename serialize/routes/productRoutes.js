@@ -341,7 +341,7 @@ router.get('/medi', (req, res) => {
 
 router.get('/medimap', (req, res) => {
 	vpiinventory
-		.find({ distributor: 'mercury' })
+		.find({ distributor: 'parshva' })
 		.select('Item_name manfc_name mrp qty item_code packing')
 		.exec()
 		.then((docs) => {
@@ -803,7 +803,7 @@ router.post('/order_sales', (req, res, next) => {
 	log.logd = JSON.stringify(req.body);
 	log.created_at = new Date();
 	log.save();
-	var csv = 'Party_Code, Item_Code, Item_Name, Qty\n';
+	var csv = 'ORDER NO, CUSOMER CODE, REP, 1, N, DISC, BLACK, REP, PRODUCT CODE, S,QTY,OFFER,SCH_DISC,100,502,1\n';
 	var date = new Date();
 	console.log(date.toISOString());
 	OrderCode.find()
@@ -859,14 +859,14 @@ router.post('/order_sales', (req, res, next) => {
 								orderItem.save();
 								orders.push(orderItem._id);
 								csv +=
+									doc_order_code[0].code +
+									',' +
 									docp.distributor_Code +
-									',' +
+									',,1,N,,,,' +
 									req.body[i].code +
-									',' +
-									req.body[i].medicento_name +
-									',' +
+									',S,' +
 									req.body[i].qty +
-									'\n';
+									',0,0,100,502,1\n';
 								message +=
 									'<tr><td style="width:60%">' +
 									req.body[i].medicento_name +
