@@ -862,7 +862,7 @@ router.post('/order_sales', (req, res, next) => {
 									doc_order_code[0].code +
 									',' +
 									docp.distributor_Code +
-									',,1,N,,,,' +
+									',40,1,N,3,,40,' +
 									req.body[i].code +
 									',S,' +
 									req.body[i].qty +
