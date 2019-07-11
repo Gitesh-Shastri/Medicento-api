@@ -44,6 +44,14 @@ const vpiMedicineSchema = mongoose.Schema({
 	unmapped: {
 		type: String,
 		default: 'NotMapped'
+	},
+	discount: {
+		type: String,
+		default: '-'
+	},
+	offer_qty: {
+		type: String,
+		default: '-'
 	}
 });
 

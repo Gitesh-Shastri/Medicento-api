@@ -342,7 +342,7 @@ router.get('/medi', (req, res) => {
 router.get('/medimap', (req, res) => {
 	vpiinventory
 		.find({ distributor: 'parshva' })
-		.select('Item_name manfc_name mrp qty item_code packing')
+		.select('Item_name manfc_name mrp qty item_code packing discount offer_qty')
 		.exec()
 		.then((docs) => {
 			const response = {
@@ -355,7 +355,9 @@ router.get('/medimap', (req, res) => {
 						stock: doc.qty,
 						item_code: doc.item_code,
 						_id: doc._id,
-						packing: doc.packing
+						packing: doc.packing,
+						discount: discount,
+						offer_qty: offer_qty
 					};
 				})
 			};
