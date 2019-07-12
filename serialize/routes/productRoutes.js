@@ -905,7 +905,7 @@ router.post('/order_sales', (req, res, next) => {
 								'Order has been placed by ' +
 								docp.pharma_name +
 								' | ' +
-								'Bangalore' +
+								'Bangalore | ' +
 								moment().format('DD-MMM-YYYY HH:mm:ss'); // Subject line
 							message =
 								message +
