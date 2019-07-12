@@ -818,14 +818,14 @@ router.post('/order_sales', (req, res, next) => {
 				.exec()
 				.then((docp) => {
 					message =
-						'<h3>Pharmacy Name: ' +
+						'<strong>Pharmacy Name: </strong>' +
 						docp.pharma_name +
-						'</h4><h4>Address : ' +
+						'<br/><strong>Address : </strong>' +
 						docp.pharma_address +
-						'</h4>' +
-						'<h4>Chosen Slot : ' +
+						'<br/><strong>Order Mode: </strong> Sales App' +
+						'<br/><strong>Chosen Slot : </strong>' +
 						req.body[0].slot +
-						'</h4>';
+						'<br/>';
 					message +=
 						'<table border="1" style="width:100%"><tr><th style="width:60%">Item_Name</th><th style="width:20%">Item_Code</th><th style="width:10%">Quantity</th><th style="width:10%">Cost</th></tr>';
 					var deliverdate = date;
