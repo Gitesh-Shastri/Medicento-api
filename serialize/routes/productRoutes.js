@@ -263,6 +263,7 @@ router.post('/feedback', (req, res, next) => {
 
 router.get('/offer', (req, res, next) => {
 	OfferInventory.find()
+		.sort({ Item_name: 1 })
 		.select('Item_name manfc_name mrp qty')
 		.exec()
 		.then((docs) => {
@@ -817,12 +818,14 @@ router.post('/order_sales', (req, res, next) => {
 				.populate('area')
 				.exec()
 				.then((docp) => {
-					message = '<strong>Pharmacy Name: </strong>' +
+					message =
+						'<strong>Pharmacy Name: </strong>' +
 						docp.pharma_name +
 						'<br/><strong>Address : </strong>' +
 						docp.pharma_address +
 						'<br/><strong>Order Mode: </strong> Sales App' +
-						'<br/><strong>Order ID : </strong>' doc_order_code[0].code +
+						'<br/><strong>Order ID : </strong>' +
+						doc_order_code[0].code +
 						'<br/><strong>Chosen Slot : </strong>' +
 						req.body[0].slot +
 						'<br/><br/><br/>';
@@ -898,7 +901,12 @@ router.post('/order_sales', (req, res, next) => {
 							doc_order_code[0].code = doc_order_code[0].code + 1;
 							doc_order_code[0].save();
 							console.log(csv);
-							content = 'Order has been placed by ' + docp.pharma_name + ' on ' + moment().format('DD-MMM-YYYY HH:mm:ss') // Subject line
+							content =
+								'Order has been placed by ' +
+								docp.pharma_name +
+								' | ' +
+								'Bangalore' +
+								moment().format('DD-MMM-YYYY HH:mm:ss'); // Subject line
 							message =
 								message +
 								'<td style="width:60%"></td><td colspan="2" style="width:40%">Grand Total = ' +
