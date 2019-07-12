@@ -822,9 +822,10 @@ router.post('/order_sales', (req, res, next) => {
 						'<br/><strong>Address : </strong>' +
 						docp.pharma_address +
 						'<br/><strong>Order Mode: </strong> Sales App' +
+						'<br/><strong>Order ID : </strong>' doc_order_code[0].code +
 						'<br/><strong>Chosen Slot : </strong>' +
 						req.body[0].slot +
-						'<br/>';
+						'<br/><br/><br/>';
 					message +=
 						'<table border="1" style="width:100%"><tr><th style="width:60%">Item_Name</th><th style="width:20%">Item_Code</th><th style="width:10%">Quantity</th><th style="width:10%">Cost</th></tr>';
 					var deliverdate = date;
@@ -897,7 +898,7 @@ router.post('/order_sales', (req, res, next) => {
 							doc_order_code[0].code = doc_order_code[0].code + 1;
 							doc_order_code[0].save();
 							console.log(csv);
-							content = 'Order has been placed by ' + docp.pharma_name + ' on ' + date.toISOString(); // Subject line
+							content = 'Order has been placed by ' + docp.pharma_name + ' on ' + moment().format('DD-MMM-YYYY HH:mm:ss') // Subject line
 							message =
 								message +
 								'<td style="width:60%"></td><td colspan="2" style="width:40%">Grand Total = ' +
