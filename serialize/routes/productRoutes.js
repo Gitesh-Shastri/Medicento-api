@@ -817,8 +817,7 @@ router.post('/order_sales', (req, res, next) => {
 				.populate('area')
 				.exec()
 				.then((docp) => {
-					message =
-						'<strong>Pharmacy Name: </strong>' +
+					message = '<strong>Pharmacy Name: </strong>' +
 						docp.pharma_name +
 						'<br/><strong>Address : </strong>' +
 						docp.pharma_address +
