@@ -343,6 +343,7 @@ router.get('/medi', (req, res) => {
 router.get('/medimap', (req, res) => {
 	vpiinventory
 		.find({ distributor: 'parshva' })
+		.sort({ Item_name: 1 })
 		.select('Item_name manfc_name mrp qty item_code packing discount offer_qty')
 		.exec()
 		.then((docs) => {
