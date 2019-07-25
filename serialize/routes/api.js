@@ -279,7 +279,7 @@ router.get('/get_areas_by_city', (req, res, next) => {
 
 router.get('/get_csv', (req, res, next) => {
 	var date = new Date();
-	var csv = 'Pharmacy_Name, Pharmacy_email, Pharmacy_no, City, State, Created_At, Drug_Licesnse, GST\n';
+	var csv = 'Pharmacy_Name, Pharmacy_email, Pharmacy_no, Pharma_code, City, State, Created_At, Drug_Licesnse, GST\n';
 	Person.find({}).populate('user').populate('Allocated_Pharma').populate('Allocated_Area').exec().then((persons) => {
 		persons.map((person) => {
 			if (person.Allocated_Pharma != null && person.user != null) {
@@ -290,6 +290,8 @@ router.get('/get_csv', (req, res, next) => {
 						person.Allocated_Pharma.pharma_address +
 						', ' +
 						person.user.phone +
+						',' +
+						person.user.user_code +
 						', - , -, ' +
 						person.Allocated_Pharma.created_at +
 						', ' +
@@ -304,6 +306,8 @@ router.get('/get_csv', (req, res, next) => {
 						person.Allocated_Pharma.pharma_address +
 						', ' +
 						person.user.phone +
+						',' +
+						person.user.user_code +
 						', ' +
 						person.Allocated_Area.area_city +
 						person.Allocated_Area.area_state +
