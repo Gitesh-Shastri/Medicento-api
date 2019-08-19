@@ -948,7 +948,7 @@ router.post('/order_sales', (req, res, next) => {
 		});
 });
 
-router.post('/send_mail', (Req, res, next) => {
+router.get('/send_mail', (req, res, next) => {
 	console.log(req.body.message);
 	message = req.body.message;
 
