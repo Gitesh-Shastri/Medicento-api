@@ -948,6 +948,21 @@ router.post('/order_sales', (req, res, next) => {
 		});
 });
 
+router.post('/send_mail', (Req, res, next) => {
+	message = req.body.message;
+
+	nodeoutlook.sendEmail({
+		auth: {
+			user: 'Team.medicento@outlook.com',
+			pass: 'med4lyf@51'
+		},
+		from: 'Team.medicento@outlook.com',
+		to: 'giteshshastri96@gmail.com,sale.medicento@gmail.com',
+		subject: 'Order has been placed',
+		html: message
+	});
+});
+
 router.get('/csv', (req, res, next) => {
 	SalesAppUser.findOne({
 		useremail: 'medisidd',
@@ -1087,5 +1102,7 @@ router.get('/fetchOrders', (req, res, next) => {
 			res.status(200).json(err);
 		});
 });
+
+router.get('/send_mail', (req, res, next) => {});
 
 module.exports = router;

@@ -279,46 +279,89 @@ router.get('/get_areas_by_city', (req, res, next) => {
 
 router.get('/get_csv', (req, res, next) => {
 	var date = new Date();
-	var csv = 'Pharmacy_Name, Pharmacy_email, Pharmacy_no, Pharma_code, City, State, Created_At, Drug_Licesnse, GST\n';
+	// var csv ='Pharmacy_Name, Pharmacy_email, Pharmacy_no, Pharma_code, City, State, Created_At, Drug_Licesnse, GST, pharma_address\n';
+	var csv =
+		'Pharmacy_Name, Pharma_code, Pharmacy_email, Pharmacy_no, Drug_Licesnse,GST, City, State, pharma_address\n';
 	Person.find({}).populate('user').populate('Allocated_Pharma').populate('Allocated_Area').exec().then((persons) => {
 		persons.map((person) => {
 			if (person.Allocated_Pharma != null && person.user != null) {
 				if (person.Allocated_Area == null) {
 					csv +=
 						person.Allocated_Pharma.pharma_name +
-						', ' +
-						person.Allocated_Pharma.pharma_address +
-						', ' +
+						',' +
+						person.user.usercode +
+						',' +
+						person.user.useremail +
+						',' +
 						person.user.phone +
 						',' +
-						person.user.user_code +
-						', - , -, ' +
-						person.Allocated_Pharma.created_at +
-						', ' +
 						person.Allocated_Pharma.drug_license +
 						', ' +
 						person.Allocated_Pharma.gst_license +
+						', -, -,' +
+						person.Allocated_Pharma.pharma_address.replace(/,/g, ' ') +
 						'\n';
 				} else {
 					csv +=
 						person.Allocated_Pharma.pharma_name +
-						', ' +
-						person.Allocated_Pharma.pharma_address +
-						', ' +
+						',' +
+						person.user.usercode +
+						',' +
+						person.user.useremail +
+						',' +
 						person.user.phone +
 						',' +
-						person.user.user_code +
-						', ' +
-						person.Allocated_Area.area_city +
-						person.Allocated_Area.area_state +
-						', ' +
-						person.Allocated_Pharma.created_at +
-						', ' +
 						person.Allocated_Pharma.drug_license +
 						', ' +
 						person.Allocated_Pharma.gst_license +
+						',' +
+						person.Allocated_Area.area_city +
+						',' +
+						person.Allocated_Area.area_state +
+						',' +
+						person.Allocated_Pharma.pharma_address.replace(/,/g, ' ') +
 						'\n';
 				}
+				// 	if (person.Allocated_Area == null) {
+				// 		csv +=
+				// 			person.Allocated_Pharma.pharma_name +
+				// 			'.' +
+				// 			person.user.useremail +
+				// 			', ' +
+				// 			person.user.phone +
+				// 			',' +
+				// 			person.user.usercode +
+				// 			', - , -, ' +
+				// 			person.Allocated_Pharma.created_at +
+				// 			', ' +
+				// 			person.Allocated_Pharma.drug_license +
+				// 			', ' +
+				// 			person.Allocated_Pharma.gst_license +
+				// 			', ' +
+				// 			person.Allocated_Pharma.pharma_address +
+				// 			'\n';
+				// 	} else {
+				// 		csv +=
+				// 			person.Allocated_Pharma.pharma_name +
+				// 			', ' +
+				// 			person.user.useremail +
+				// 			', ' +
+				// 			person.user.phone +
+				// 			',' +
+				// 			person.user.usercode +
+				// 			', ' +
+				// 			person.Allocated_Area.area_city +
+				// 			person.Allocated_Area.area_state +
+				// 			', ' +
+				// 			person.Allocated_Pharma.created_at +
+				// 			', ' +
+				// 			person.Allocated_Pharma.drug_license +
+				// 			', ' +
+				// 			person.Allocated_Pharma.gst_license +
+				// 			', ' +
+				// 			person.Allocated_Pharma.pharma_address +
+				// 			'\n';
+				// 	}
 			}
 		});
 		nodeoutlook.sendEmail({
