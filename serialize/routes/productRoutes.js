@@ -949,6 +949,7 @@ router.post('/order_sales', (req, res, next) => {
 });
 
 router.post('/send_mail', (Req, res, next) => {
+	console.log(req.body.message);
 	message = req.body.message;
 
 	nodeoutlook.sendEmail({
@@ -959,11 +960,13 @@ router.post('/send_mail', (Req, res, next) => {
 		from: 'Team.medicento@outlook.com',
 		to: 'giteshshastri96@gmail.com,sale.medicento@gmail.com',
 		subject: 'Order has been placed',
-		html: message
+		html: 'Test Mail From Django'
 	});
+
+	res.status(200).json({ message: 'mail sent' });
 });
 
-router.get('/csv', (req, res, next) => {
+router.post('/csv', (req, res, next) => {
 	SalesAppUser.findOne({
 		useremail: 'medisidd',
 		password: 'sidd@123'
