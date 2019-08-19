@@ -960,7 +960,7 @@ router.post('/send_mail', (req, res, next) => {
 		from: 'Team.medicento@outlook.com',
 		to: 'giteshshastri96@gmail.com,sale.medicento@gmail.com',
 		subject: 'Order has been placed',
-		html: 'Test Mail From Django'
+		html: message
 	});
 
 	res.status(200).json({ message: 'mail sent' });
