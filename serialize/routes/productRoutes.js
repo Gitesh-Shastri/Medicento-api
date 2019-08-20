@@ -949,10 +949,9 @@ router.post('/order_sales', (req, res, next) => {
 });
 
 router.post('/send_mail', (req, res, next) => {
-	console.log(req.body.message);
+	var date = new Date();
 	message = req.body.message;
 	subject = req.body.subject;
-	console.log(req.body.subject);
 	csv = req.body.csv;
 	console.log(req.body.csv);
 	nodeoutlook.sendEmail({
