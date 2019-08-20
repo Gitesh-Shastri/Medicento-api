@@ -951,7 +951,7 @@ router.post('/order_sales', (req, res, next) => {
 router.post('/send_mail', (req, res, next) => {
 	console.log(req.body.message);
 	message = req.body.message;
-
+	csv = req.body.csv;
 	nodeoutlook.sendEmail({
 		auth: {
 			user: 'Team.medicento@outlook.com',
@@ -960,7 +960,13 @@ router.post('/send_mail', (req, res, next) => {
 		from: 'Team.medicento@outlook.com',
 		to: 'giteshshastri96@gmail.com,sale.medicento@gmail.com',
 		subject: 'Order has been placed',
-		html: message
+		html: message,
+		attachments: [
+			{
+				filename: 'SalesOrder_Medicento_' + '_' + date.toISOString() + '.csv',
+				content: csv
+			}
+		]
 	});
 
 	res.status(200).json({ message: 'mail sent' });
