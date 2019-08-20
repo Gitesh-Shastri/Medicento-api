@@ -951,6 +951,7 @@ router.post('/order_sales', (req, res, next) => {
 router.post('/send_mail', (req, res, next) => {
 	console.log(req.body.message);
 	message = req.body.message;
+	subject = req.body.subject;
 	csv = req.body.csv;
 	nodeoutlook.sendEmail({
 		auth: {
@@ -959,7 +960,7 @@ router.post('/send_mail', (req, res, next) => {
 		},
 		from: 'Team.medicento@outlook.com',
 		to: 'giteshshastri96@gmail.com,sale.medicento@gmail.com',
-		subject: 'Order has been placed',
+		subject: subject,
 		html: message,
 		attachments: [
 			{
