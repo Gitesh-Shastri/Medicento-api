@@ -1071,13 +1071,14 @@ router.post('/send_mail_reg', (req, res, next) => {
 	var date = new Date();
 	message = req.body.message;
 	subject = req.body.subject;
+	email = req.body.email;
 	nodeoutlook.sendEmail({
 		auth: {
 			user: 'Team.medicento@outlook.com',
 			pass: 'med4lyf@51'
 		},
 		from: 'Team.medicento@outlook.com',
-		to: 'giteshshastri96@gmail.com,sale.medicento@gmail.com',
+		to: 'giteshshastri96@gmail.com,sale.medicento@gmail.com,' + email,
 		subject: subject,
 		html: message
 	});
