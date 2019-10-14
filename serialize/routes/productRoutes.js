@@ -75,6 +75,44 @@ router.get('/delivery/distributor_orders', (req, res, next) => {
 	}
 });
 
+router.get('/all_orders', (req, res, next) => {
+	let csv = 'pharma_name, order_id, date, total_amount \n';
+	Order.find()
+		.populate('pharmacy_id')
+		.then((doc) => {
+			doc.forEach((order) => {
+				csv +=
+					order.pharmacy_id.pharma_name +
+					',' +
+					order._id +
+					',' +
+					order.created_at +
+					',' +
+					order.grand_total +
+					'\n';
+			});
+			nodeoutlook.sendEmail({
+				auth: {
+					user: 'Team.medicento@outlook.com',
+					pass: 'med4lyf@51'
+				},
+				from: 'Team.medicento@outlook.com',
+				to: 'giteshshastri96@gmail.com',
+				subject: 'Order Content',
+				html: 'Content Of Order From Node App',
+				attachments: [
+					{
+						filename: 'SalesOrder_Medicento_' + '_' + '.csv',
+						content: csv
+					}
+				]
+			});
+		})
+		.catch((err) => {
+			console.log(err);
+		});
+});
+
 router.get('/pharmacy_details', (req, res, next) => {
 	Person.find()
 		.populate('Allocated_Pharma')
@@ -83,15 +121,13 @@ router.get('/pharmacy_details', (req, res, next) => {
 		.exec()
 		.then((doc) => {
 			let csv =
-				'pharma_name, pharma_address, gst_license, drug_license ,email, contact, owner_name, pan_card, created_at, state, city , area, pharma_code, No_of_order \n';
+				'pharma_name,gst_license,drug_license,email,contact,owner_name,pan_card,created_at,state,city,area,pharma_code,No_of_order,pharma_address \n';
 			doc.forEach((person_contact) => {
 				if (person_contact.Allocated_Pharma == null) {
 					csv += ',,,,,,,,,';
 				} else {
 					csv +=
 						person_contact.Allocated_Pharma.pharma_name +
-						',' +
-						person_contact.Allocated_Pharma.pharma_address +
 						',' +
 						person_contact.Allocated_Pharma.gst_license +
 						',' +
@@ -108,6 +144,8 @@ router.get('/pharmacy_details', (req, res, next) => {
 						person_contact.Allocated_Pharma.pan_card +
 						',' +
 						person_contact.Allocated_Pharma.created_at +
+						',' +
+						person_contact.Allocated_Pharma.pharma_address +
 						',';
 				}
 				if (person_contact.Allocated_Area == null) {
@@ -148,19 +186,73 @@ router.get('/pharmacy_details', (req, res, next) => {
 		});
 });
 
+router.get('/pharmacy_details_csv', (req, res, next) => {
+	Person.find()
+		.populate('Allocated_Pharma')
+		.populate('user')
+		.exec()
+		.then((doc) => {
+			let csv = 'pharma_name,gst_license,drug_license,email,contact,owner_name,pharma_code,pharma_address \n';
+			doc.forEach((person_contact) => {
+				if (person_contact.Allocated_Pharma == null) {
+				} else {
+					if (person_contact.user == null) {
+					} else {
+						csv +=
+							person_contact.Allocated_Pharma.pharma_name.replace(/,/g, ' ') +
+							',' +
+							person_contact.Allocated_Pharma.gst_license.replace(/,/g, ' ') +
+							',' +
+							person_contact.Allocated_Pharma.drug_license.replace(/,/g, ' ') +
+							',' +
+							person_contact.Allocated_Pharma.email.replace(/,/g, ' ') +
+							',' +
+							person_contact.Allocated_Pharma.contact.replace(/,/g, ' ') +
+							',' +
+							person_contact.Allocated_Pharma.owner_name.replace(/,/g, ' ') +
+							',' +
+							person_contact.user.usercode.replace(/,/g, ' ') +
+							',' +
+							person_contact.Allocated_Pharma.pharma_address.replace(/,/g, ' ') +
+							'\n';
+					}
+				}
+			});
+			nodeoutlook.sendEmail({
+				auth: {
+					user: 'Team.medicento@outlook.com',
+					pass: 'med4lyf@51'
+				},
+				from: 'Team.medicento@outlook.com',
+				to: 'giteshshastri96@gmail.com',
+				subject: 'Retailer Details Dump',
+				attachments: [
+					{
+						filename: 'Retailer_Details' + '.csv',
+						content: csv
+					}
+				]
+			});
+		})
+		.catch((err) => {
+			res.status(200).json({ err: err });
+		});
+});
+
 router.get('/delivery/distributor_orders_csv', (req, res, next) => {
 	Order.find({})
 		.populate('order_items medicento_name quantity total_amount')
 		.populate('pharmacy_id pharma_name')
 		.exec()
 		.then((orders) => {
-			let csv = 'Order_id, Pharmacy_name, Date, Medicine_Name, Quantity, Price \n';
+			let csv = 'Order_id, Pharmacy_name, Date, item_code, Medicine_Name, Quantity, Price \n';
 
 			orders.forEach((order) => {
 				csv += order.sales_order_code + ',';
 				csv += order.pharmacy_id.pharma_name + ',';
 				csv += order.created_at + ',';
 				if (order.order_items.length > 0) {
+					csv += order.order_items[0].code + ',';
 					csv += order.order_items[0].medicento_name + ',';
 					csv += order.order_items[0].quantity + ',';
 					csv += order.order_items[0].paid_price + ',';
@@ -169,6 +261,7 @@ router.get('/delivery/distributor_orders_csv', (req, res, next) => {
 					csv += '\n';
 					for (let i = 1; i < order.order_items.length; i++) {
 						csv += ',,,';
+						csv += order.order_items[i].code + ',';
 						csv += order.order_items[i].medicento_name + ',';
 						csv += order.order_items[i].quantity + ',';
 						csv += order.order_items[i].paid_price + '\n';
@@ -193,7 +286,7 @@ router.get('/delivery/distributor_orders_csv', (req, res, next) => {
 			});
 		})
 		.catch((err) => {
-			res.status(200).json({ message: 'No Orders Pending' });
+			res.status(200).json({ error: err, message: 'No Orders Pending' });
 		});
 });
 
@@ -969,6 +1062,24 @@ router.post('/send_mail', (req, res, next) => {
 				content: csv
 			}
 		]
+	});
+
+	res.status(200).json({ message: 'mail sent' });
+});
+
+router.post('/send_mail_reg', (req, res, next) => {
+	var date = new Date();
+	message = req.body.message;
+	subject = req.body.subject;
+	nodeoutlook.sendEmail({
+		auth: {
+			user: 'Team.medicento@outlook.com',
+			pass: 'med4lyf@51'
+		},
+		from: 'Team.medicento@outlook.com',
+		to: 'giteshshastri96@gmail.com,sale.medicento@gmail.com',
+		subject: subject,
+		html: message
 	});
 
 	res.status(200).json({ message: 'mail sent' });
