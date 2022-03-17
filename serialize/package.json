@@ -31,6 +31,6 @@
     "sequelize": "^4.37.10",
     "sequelize-cli": "^4.0.0",
     "swagger-ui": "^3.17.1",
-    "swagger-ui-dist": "^3.17.1"
+    "swagger-ui-dist": "^4.1.3"
   }
 }
